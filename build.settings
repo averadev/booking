@@ -11,8 +11,11 @@ settings =
 		-- Supported values for orientation:
 		-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
 
-		default = "portrait",
-		supported = { "portrait", }
+		--default = "portrait",
+		--supported = { "portrait", }
+		
+		default = "landscape",
+		supported = { "landscape", }
 	},
 	
 	excludeFiles =
@@ -65,8 +68,13 @@ settings =
 				}
 			}
 			--]]
-		}
+		},
+		
+        UIAppFonts = {
+            "Lato-Bold.ttf"
+        },
 	},
+	
 	
 	--
 	-- Android Section
@@ -76,6 +84,8 @@ settings =
 		usesPermissions =
 		{
 			"android.permission.INTERNET",
+			"android.permission.CAMERA",
+            "android.permission.WRITE_EXTERNAL_STORAGE",
 		},
 	},
 }

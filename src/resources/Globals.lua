@@ -1,0 +1,6 @@
+
+return {
+    
+	numCondominium = 0,
+	
+}

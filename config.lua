@@ -4,7 +4,7 @@
 -- GeekBucket Software Factory
 ---------------------------------------------------------------------------------
 
-local mediaRes = display.pixelWidth  / 480
+local mediaRes = display.pixelWidth  / 768
 
 application =
 {
