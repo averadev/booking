@@ -5,10 +5,15 @@
 -- Geek Bucket
 -----------------------------------------------------------------------------------------
 
---componentes 
+--componentes
+local DBManager = require('src.resources.DBManager')
+local RestManager = require('src.resources.RestManager')
+local Globals = require('src.resources.Globals')
 local composer = require( "composer" )
 local widget = require( "widget" )
 local scene = composer.newScene()
+
+local settings = DBManager.getSettings()
 
 -------variables
 --grupos
@@ -20,7 +25,7 @@ local intW = display.contentWidth
 local intH = display.contentHeight
 local h = display.topStatusBarContentHeight
 
-fontDefault = "native.systemFont"
+fontDefault = native.systemFont
 
 ----elementos
 local txtSignPasswordGuard
@@ -32,22 +37,127 @@ local currentGuard = nil
 
 local GuardCondo = {}
 
+local itemsGuard
+
 ---------------------------------------------------
 ------------------ Funciones ----------------------
 ---------------------------------------------------
 
-function doSignInGuard()
+function gotoHome(idGuard)
+	Globals.idGuard = idGuard
 	composer.removeScene("src.Home")
 	composer.gotoScene("src.Home")
+end
+
+function setItemsGuard(items)
+	itemsGuard = items
+	if #itemsGuard > 0 then
+		LoadImageGuard(1)
+	end
+end
+
+--carga las imagenes de los guardias
+function LoadImageGuard(posc)
+	-- Determinamos si la imagen existe
+	local path = system.pathForFile( itemsGuard[posc].foto, system.TemporaryDirectory )
+	local fhd = io.open( path )
+	if fhd then
+		fhd:close()
+		--if itemsGuard[posc].callback == Globals.noCallbackGlobal then
+			--imageLogos[posc] = display.newImage( itemsGuard[posc].partnerImage, system.TemporaryDirectory )
+			--imageLogos[posc].alpha = 0
+			if posc < #itemsGuard then
+				posc = posc + 1
+				LoadImageGuard(posc)
+			else
+				buildItemsGuard()
+				--loadImage({posc = 1, screen = 'MainScreen'})
+			end
+		--end
+	else
+		-- Listener de la carga de la imagen del servidor
+		local function loadImageListener( event )
+			if ( event.isError ) then
+				native.showAlert( "Go Deals", "Network error :(", { "OK"})
+			else
+				event.target.alpha = 0
+				--if itemsGuard[posc].callback == Globals.noCallbackGlobal then
+					--imageLogos[posc] = event.target
+					if posc < #itemsGuard then
+						posc = posc + 1
+						LoadImageGuard(posc)
+					else
+						buildItemsGuard()
+					end
+				--end
+			end
+		end
+		-- Descargamos de la nube
+		display.loadRemoteImage( settings.url..itemsGuard[posc].path..itemsGuard[posc].foto, 
+		"GET", loadImageListener, itemsGuard[posc].foto, system.TemporaryDirectory )
+	end
+end
+
+--crea los guardias
+function buildItemsGuard()
+	
+	local lastY = intH/2.3
+	
+	--local nameGuarda = {'Guardia'}
+	
+	--local groupGuardList = display.newGroup()
+	
+	for i = 1, #itemsGuard, 1 do
+	
+		GuardCondo[i] = display.newImage( itemsGuard[i].foto, system.TemporaryDirectory )
+		GuardCondo[i].x = intW/5.7 * i - 50
+		GuardCondo[i].y = lastY
+		GuardCondo[i].height = 120
+		GuardCondo[i].width = 120
+		GuardCondo[i].id = itemsGuard[i].id
+		GuardCondo[i].num = i
+		loginGuardScreen:insert(GuardCondo[i])
+		GuardCondo[i]:addEventListener( 'tap', SelecGuard )
+		
+		local labelNameGuard = display.newText( {   
+			x = intW/5.7 * i - 45, y = lastY + 85,
+			text = itemsGuard[i].nombre,  font = fontDefault, fontSize = 24
+		})
+		labelNameGuard:setFillColor( 0 )
+		loginGuardScreen:insert(labelNameGuard)
+	
+	end
+	
+end
+
+function doSignInGuard( event )
+	if txtSignPasswordGuard.text ~= '' and currentGuard ~= nil then
+		RestManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
+	else
+		native.showAlert( "Booking", "La contraseña esta vacia", { "OK"})
+	end
+end
+
+
+--regresa a la pantalla de login
+function signOut()
+
+	if txtSignPasswordGuard then txtSignPasswordGuard:removeSelf() txtSignPasswordGuard = nil end
+	if txtSignPasswordChangeCondo then txtSignPasswordChangeCondo:removeSelf() txtSignPasswordChangeCondo = nil end
+	
+	composer.removeScene("src.Login")
+	composer.gotoScene("src.Login")
+
 end
 
 --regresa a la pantalla de login
 function changeCondo( event )
 	
-	if txtSignPasswordGuard then txtSignPasswordGuard:removeSelf() txtSignPasswordGuard = nil end
-	if txtSignPasswordChangeCondo then txtSignPasswordChangeCondo:removeSelf() txtSignPasswordChangeCondo = nil end
-	composer.removeScene("src.Login")
-	composer.gotoScene("src.Login")
+	if txtSignPasswordChangeCondo.text ~= "" then
+		RestManager.signOut(txtSignPasswordChangeCondo.text)
+	else
+		native.showAlert( "Booking", "La contraseña esta vacia", { "OK"})
+	end
 	
 end
 
@@ -198,7 +308,7 @@ function scene:create( event )
 	
 	--local groupGuardList = display.newGroup()
 	
-	for i = 1, 4, 1 do
+	--[[for i = 1, 4, 1 do
 	
 		GuardCondo[i] = display.newImage( "img/btn/avatarUser.png" )
 		GuardCondo[i].x = intW/5.7 * i - 50
@@ -217,7 +327,7 @@ function scene:create( event )
 		labelNameGuard:setFillColor( 0 )
 		loginGuardScreen:insert(labelNameGuard)
 	
-	end
+	end]]
 	
 	--btn view more
 	
@@ -303,6 +413,8 @@ function scene:create( event )
 	})
 	labelChangeCodo:setFillColor( 1 )
 	loginGuardScreen:insert(labelChangeCodo)
+	
+	RestManager.getInfoGuard()
 
 end
 

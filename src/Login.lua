@@ -6,8 +6,10 @@
 -----------------------------------------------------------------------------------------
 
 --componentes 
-local composer = require( "composer" )
+local DBManager = require('src.resources.DBManager')
+local RestManager = require('src.resources.RestManager')
 local widget = require( "widget" )
+local composer = require( "composer" )
 local scene = composer.newScene()
 
 --variables
@@ -28,15 +30,36 @@ local labelComboOpcionCity
 local txtSignEmail, txtSignPassword
 --scroll
 local svOptionCombo
+local itemsCity
 
 ---------------------------------------------------
 ------------------ Funciones ----------------------
 ---------------------------------------------------
 
+function setItemsCity(items)
+	itemsCity = items
+end
+
+function gotoLoginGuard()
+
+	composer.removeScene( "src.LoginGuard" )
+	composer.gotoScene( "src.LoginGuard" )
+	
+end
+
 --funcion de logeo
 function doSignIn( event )
-	composer.removeScene("src.LoginGuard")
-	composer.gotoScene("src.LoginGuard")
+	
+	--RestManager.validateAdmin('','123','alfredo',1)
+	if txtSignEmail.text == "" or txtSignPassword.text == "" or labelComboOpcionCity.id == 0 then
+		native.showAlert( "Booking", "Los campos son requeridos.", { "OK"})
+	else
+		RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text, labelComboOpcionCity.id)
+		RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
+	end
+	
+	--RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
+	
 	return true
 end
 
@@ -50,7 +73,6 @@ function getOptionComboCity( event )
 	return true
 end
 
-
 --llena las optiones del combobox
 function setOptionComboCity()
 
@@ -59,17 +81,19 @@ function setOptionComboCity()
 
 	local lastY = 30
 	
-	for i = 1, #city, 1 do
+	for i = 1, #itemsCity, 1 do
+	
+		--print(itemsCity[i].nombre)
 		
 		optionCity[i] = display.newRect( svOptionCombo.contentWidth/2, lastY, intW/2, 80 )
 		optionCity[i]:setFillColor( 1 )
-		optionCity[i].name = city[i]
-		optionCity[i].id = i
+		optionCity[i].name = itemsCity[i].nombre
+		optionCity[i].id = itemsCity[i].id
 		svOptionCombo:insert(optionCity[i])
 		optionCity[i]:addEventListener( 'tap', getOptionComboCity )
 		
 		local labelOpcion = display.newText( {
-        text = city[i],     
+        text = itemsCity[i].nombre,     
         x = svOptionCombo.contentWidth/2, y = lastY + 10, width = svOptionCombo.contentWidth - 40,
         font = fontDefault, fontSize = 28, align = "left"
 		})
@@ -84,9 +108,9 @@ function setOptionComboCity()
 	
 	local lastY2 = 80
 	
-	for i = 1, #city, 1 do
+	for i = 1, #itemsCity, 1 do
 	
-		if i ~= #city then
+		if i ~= #itemsCity then
 		
 			local lineOptioCombo = display.newLine( 0, lastY2, svOptionCombo.contentWidth, lastY2 )
 			lineOptioCombo:setStrokeColor( 0 )
@@ -120,12 +144,18 @@ function showComboBoxCity( event )
 	groupOptionCombo:insert(bgOptionCombo)
 	bgOptionCombo:addEventListener( 'tap', hideComboBoxCity )
 	
+	local heightScroll = intH/2
+	
+	if #itemsCity < 5 then
+		heightScroll = #itemsCity * 80
+	end
+	
 	svOptionCombo = widget.newScrollView
 	{
 		x = intW/2,
 		y = h + intH/2,
 		width = intW/2,
-		height = intH/2,
+		height = heightScroll,
 		horizontalScrollDisabled = true,
         verticalScrollDisabled = false,
 		isBounceEnabled = true,
@@ -291,6 +321,8 @@ function scene:create( event )
 	})
 	labelSignLogin:setFillColor( 1 )
 	loginScreen:insert(labelSignLogin)
+	
+	RestManager.getCity()
 
 end
 
