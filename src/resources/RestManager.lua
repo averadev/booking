@@ -163,4 +163,38 @@ local RestManager = {}
        network.request( url, "GET", callback ) 
     end
 	
+	--envia el mensaje a admistracion
+	RestManager.SendMessageGuard = function(subject,message,dateS)
+	
+        local settings = DBManager.getSettings()
+        -- Set url
+        local url = settings.url
+        url = url.."api/getInfoGuard/format/json"
+		url = url.."/idApp/"..settings.idApp
+		url = url.."/idGuard/"..Globals.idGuard
+		url = url.."/subject/"..urlencode(subject)
+		url = url.."/message/"..urlencode(message)
+		url = url.."/dateS/"..urlencode(dateS)
+		
+		--Globals
+		
+		--print(url)
+    
+        local function callback(event)
+            if ( event.isError ) then
+            else
+                --hideLoadLogin()
+                local data = json.decode(event.response)
+                if data.success then
+					setItemsGuard(data.items)
+                else
+                    native.showAlert( "Booking", data.message, { "OK"})
+                end
+            end
+            return true
+        end
+        -- Do request
+      -- network.request( url, "GET", callback ) 
+    end
+	
 return RestManager

@@ -131,7 +131,7 @@ function scene:create( event )
 	imgLogo:setFillColor( 0 )
 	listCondominiumScreen:insert(imgLogo)]]
 	
-	local imgArrowBack = display.newImage( "img/btn/arrowBack.png" )
+	local imgArrowBack = display.newImage( "img/btn/REGRESAR.png" )
 	imgArrowBack.x = 50
 	imgArrowBack.height = 60
 	imgArrowBack.width = 90

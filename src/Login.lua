@@ -54,7 +54,7 @@ function doSignIn( event )
 	if txtSignEmail.text == "" or txtSignPassword.text == "" or labelComboOpcionCity.id == 0 then
 		native.showAlert( "Booking", "Los campos son requeridos.", { "OK"})
 	else
-		RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text, labelComboOpcionCity.id)
+		--RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text, labelComboOpcionCity.id)
 		RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
 	end
 	

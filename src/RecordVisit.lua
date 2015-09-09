@@ -121,40 +121,75 @@ function scene:create( event )
 	local bgRecordVisit = display.newRect( 0, h, intW, intH )
 	bgRecordVisit.anchorX = 0
 	bgRecordVisit.anchorY = 0
-	bgRecordVisit:setFillColor( 214/255, 226/255, 225/255 )
+	bgRecordVisit:setFillColor( 222/255, 222/255, 222/255 )
 	recordVisitScreen:insert(bgRecordVisit)
 	
-	local imgLogo = display.newRect( intW/4, h + 100, 150, 150 )
-	imgLogo:setFillColor( 0 )
+	local imgLogo = display.newCircle( intW/3, h + 115, 90 )
+	imgLogo:setFillColor( 1 )
 	recordVisitScreen:insert(imgLogo)
 	
-	local labelRecord = display.newText( {   
-        x = intW/2 + 100, y = h + 100,
-        text = "Guardia en turno:",  font = fontDefault, fontSize = 34
-	})
-	labelRecord:setFillColor( 0 )
-	recordVisitScreen:insert(labelRecord)
+	local bgfringeDown = display.newRect( 0, intH - 20, intW, 20 )
+	bgfringeDown.anchorX = 0
+	bgfringeDown.anchorY = 0
+	bgfringeDown:setFillColor( 96/255, 96/255, 96/255 )
+	recordVisitScreen:insert(bgfringeDown)
 	
-	local imgArrowBack = display.newImage( "img/btn/arrowBack.png" )
-	imgArrowBack.x = intW - 50
-	imgArrowBack.height = 60
-	imgArrowBack.width = 90
-	imgArrowBack.y = h + imgArrowBack.contentHeight/2
+	local bgfringeField = display.newRect( 0, intH - 490, intW, 470 )
+	bgfringeField.anchorX = 0
+	bgfringeField.anchorY = 0
+	bgfringeField:setFillColor( 54/255, 80/255, 131/255 )
+	recordVisitScreen:insert(bgfringeField)
+	
+	local imgArrowBack = display.newImage( "img/btn/REGRESAR.png" )
+	imgArrowBack.x = 50
+	imgArrowBack.height = 50
+	imgArrowBack.width = 50
+	imgArrowBack.y = h + 40
 	recordVisitScreen:insert(imgArrowBack)
 	imgArrowBack:addEventListener( 'tap', returnHomeRecordVisit)
 	
+	local labelArrowBack = display.newText( {   
+        x = 140, y = h + 40,
+        text = "REGRESAR",  font = fontDefault, fontSize = 18
+	})
+	labelArrowBack:setFillColor( 64/255, 90/255, 139/255 )
+	recordVisitScreen:insert(labelArrowBack)
+	
+	local imgGuardTurn = display.newRoundedRect( intW/1.3, h + 105, 150, 150, 10 )
+	imgGuardTurn:setFillColor( 1 )
+	recordVisitScreen:insert(imgGuardTurn)
+	
+	local imgGuardTurn = display.newImage( Globals.photoGuard, system.TemporaryDirectory )
+	imgGuardTurn.x = intW/1.3
+	imgGuardTurn.height = 100
+	imgGuardTurn.width = 100
+	imgGuardTurn.y = h + 90
+	recordVisitScreen:insert(imgGuardTurn)
+	
+	local labelGuardTurn = display.newText( {   
+        x = intW/1.3, y = h + 155,
+        text = Globals.nameGuard,  font = fontDefault, fontSize = 20
+	})
+	labelGuardTurn:setFillColor( 64/255, 90/255, 139/255 )
+	recordVisitScreen:insert(labelGuardTurn)
+	
+	local lineRecordVisit = display.newLine( intW/2, 330, intW/2, intH - 150 )
+	lineRecordVisit:setStrokeColor( 1 )
+	lineRecordVisit.strokeWidth = 4
+	recordVisitScreen:insert(lineRecordVisit)
+	
 	---- campo nombre del visitante
 	
-	lastY = intH/2.3
+	lastY = intH/2.1
 	
-	local bgTextRecordVisitName = display.newRect( intW/4, lastY, 400, 60 )
+	local bgTextRecordVisitName = display.newRoundedRect( intW/4, lastY, 400, 60, 10 )
 	bgTextRecordVisitName:setFillColor( 1 )
 	recordVisitScreen:insert(bgTextRecordVisitName)
 	
 	txtRecordVisitName = native.newTextField( intW/4, lastY, 400, 60 )
     txtRecordVisitName.inputType = "email"
     txtRecordVisitName.hasBackground = false
-	txtRecordVisitName.placeholder = "Nombre del visitante"
+	txtRecordVisitName.placeholder = "ASUNTO"
  -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtRecordVisitName.size = 20
@@ -162,9 +197,9 @@ function scene:create( event )
 	
 	---- campo motivo del visitante
 	
-	lastY = intH/1.65
+	lastY = intH/1.6
 	
-	local bgTextRecordVisitReason = display.newRect( intW/4, lastY, 400, 120 )
+	local bgTextRecordVisitReason = display.newRoundedRect( intW/4, lastY, 400, 120, 10 )
 	bgTextRecordVisitReason:setFillColor( 1 )
 	recordVisitScreen:insert(bgTextRecordVisitReason)
 	
@@ -179,16 +214,24 @@ function scene:create( event )
 	
 	----- campo num. condominio
 	
-	lastY = intH/1.28
+	lastY = intH/1.3
 	
-	local bgTextRecordNumCondo = display.newRect( intW/4, lastY, 400, 60 )
+	local bgTextRecordNumCondo = display.newRoundedRect( intW/4, lastY, 400, 60, 10 )
 	bgTextRecordNumCondo:setFillColor( 1 )
 	recordVisitScreen:insert(bgTextRecordNumCondo)
 	
-	txtRecordNumCondo = native.newTextField( intW/4, lastY, 400, 60 )
-    txtRecordNumCondo.inputType = "email"
+	local imgNumCondo = display.newImage( "img/btn/optionCondo.png" )
+	imgNumCondo.x = intW/4 + 170
+	imgNumCondo.y = lastY
+	imgNumCondo.height = 35
+	imgNumCondo.width = 40
+	recordVisitScreen:insert(imgNumCondo)
+	imgNumCondo:addEventListener( 'tap', showListCondominium)
+	
+	txtRecordNumCondo = native.newTextField( intW/4 - 30, lastY, 340, 60 )
+    txtRecordNumCondo.inputType = "number"
     txtRecordNumCondo.hasBackground = false
-	txtRecordNumCondo.placeholder = "Nombre del visitante"
+	txtRecordNumCondo.placeholder = "SELECCIONAR CONDOMINIO"
  -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtRecordNumCondo.size = 20
@@ -196,47 +239,57 @@ function scene:create( event )
 	
 	----- fotos -----
 	
-	lastY = intH/2.04
+	lastY = intH/1.8
 	
-	local btnRecordCamaraFrontal = display.newRect( intW/1.65, lastY, 200, 150 )
+	local btnRecordCamaraFrontal = display.newRoundedRect( intW/1.55, lastY, 190, 190, 10 )
 	btnRecordCamaraFrontal:setFillColor( 1 )
 	btnRecordCamaraFrontal.type = 1
 	recordVisitScreen:insert(btnRecordCamaraFrontal)
 	btnRecordCamaraFrontal:addEventListener( 'tap', takePhotography )
 	
-	local labelRecordCamaraFrontal= display.newText( {   
-        x = intW/1.7, y = lastY - 105, width = 200,
-        text = "Frente",  font = fontDefault, fontSize = 28, align = "right",
-	})
-	labelRecordCamaraFrontal:setFillColor( 0 )
-	recordVisitScreen:insert(labelRecordCamaraFrontal)
-	
-	local imgRecordCamaraFrontal = display.newImage( "img/btn/iconCamera.png" )
-	imgRecordCamaraFrontal.x = intW/1.65
+	local imgRecordCamaraFrontal = display.newImage( "img/btn/CAMARA.png" )
+	imgRecordCamaraFrontal.x = intW/1.55
 	imgRecordCamaraFrontal.y = lastY
 	recordVisitScreen:insert(imgRecordCamaraFrontal)
 	
-	local btnRecordCamaraBack = display.newRect( intW/1.18, lastY, 200, 150 )
+	local bgRecordCamaraFrontal = display.newRoundedRect( intW/1.55, lastY + 140, 120, 35, 10 )
+	bgRecordCamaraFrontal:setFillColor( 1 )
+	bgRecordCamaraFrontal.type = 1
+	recordVisitScreen:insert(bgRecordCamaraFrontal)
+	
+	local labelRecordCamaraFrontal= display.newText( {   
+        x = intW/1.55, y = lastY + 140, width = 120,
+        text = "Frente",  font = fontDefault, fontSize = 20, align = "center",
+	})
+	labelRecordCamaraFrontal:setFillColor( 64/255, 90/255, 139/255 )
+	recordVisitScreen:insert(labelRecordCamaraFrontal)
+	
+	local btnRecordCamaraBack = display.newRoundedRect( intW/1.15, lastY, 190, 190, 10 )
 	btnRecordCamaraBack:setFillColor( 1 )
 	btnRecordCamaraBack.type = 2
 	recordVisitScreen:insert(btnRecordCamaraBack)
 	btnRecordCamaraBack:addEventListener( 'tap', takePhotography )
 	
-	local labelRecordCamaraFrontal= display.newText( {   
-        x =  intW/1.21, y = lastY - 105, width = 200,
-        text = "Vuelta",  font = fontDefault, fontSize = 28, align = "right",
-	})
-	labelRecordCamaraFrontal:setFillColor( 0 )
-	recordVisitScreen:insert(labelRecordCamaraFrontal)
-	
-	local imgRecordCamaraBack = display.newImage( "img/btn/iconCamera.png" )
-	imgRecordCamaraBack.x = intW/1.18
+	local imgRecordCamaraBack = display.newImage( "img/btn/CAMARA.png" )
+	imgRecordCamaraBack.x = intW/1.15
 	imgRecordCamaraBack.y = lastY
 	recordVisitScreen:insert(imgRecordCamaraBack)
 	
+	local bgRecordCamaraBack = display.newRoundedRect( intW/1.15, lastY + 140, 120, 35, 10 )
+	bgRecordCamaraBack:setFillColor( 1 )
+	bgRecordCamaraBack.type = 1
+	recordVisitScreen:insert(bgRecordCamaraBack)
+	
+	local labelRecordCamaraFrontal= display.newText( {   
+        x =  intW/1.15, y = lastY + 140, width = 120,
+        text = "Vuelta",  font = fontDefault, fontSize = 20, align = "center",
+	})
+	labelRecordCamaraFrontal:setFillColor( 64/255, 90/255, 139/255 )
+	recordVisitScreen:insert(labelRecordCamaraFrontal)
+	
 	lastY = intH/1.28
 	
-	local imgArrowLeftCondo = display.newImage( "img/btn/btnBackward.png" )
+	--[[local imgArrowLeftCondo = display.newImage( "img/btn/btnBackward.png" )
 	imgArrowLeftCondo.x = intW/1.9
 	--imgArrowBack.height = 40
 	--imgArrowBack.width = 40
@@ -256,18 +309,18 @@ function scene:create( event )
         text = "Selecionar condominio",  font = fontDefault, fontSize = 28, align = "center",
 	})
 	labelRecordCamaraFrontal:setFillColor( 0 )
-	recordVisitScreen:insert(labelRecordCamaraFrontal)
+	recordVisitScreen:insert(labelRecordCamaraFrontal)]]
 	
 	lastY = intH/1.2
 	
-	local btnRegisterVisit = display.newRect( intW/2, intH - 60, 400, 65 )
-	btnRegisterVisit:setFillColor( .2 )
+	local btnRegisterVisit = display.newRoundedRect( intW/2, intH - 70, 280, 70, 10 )
+	btnRegisterVisit:setFillColor( 205/255, 69/255, 69/255 )
 	recordVisitScreen:insert(btnRegisterVisit)
 	btnRegisterVisit:addEventListener( 'tap', sendRecordVisit )
 	
 	local labelRegisterVisit = display.newText( {   
-        x = intW/2, y = intH - 60,
-        text = "Registrar visita",  font = fontDefault, fontSize = 28
+        x = intW/2, y = intH - 70,
+        text = "REGISTRAR VISITA",  font = fontDefault, fontSize = 24
 	})
 	labelRegisterVisit:setFillColor( 1 )
 	recordVisitScreen:insert(labelRegisterVisit)
