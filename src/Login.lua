@@ -21,7 +21,7 @@ local intW = display.contentWidth
 local intH = display.contentHeight
 local h = display.topStatusBarContentHeight
 
-fontDefault = "native.systemFont"
+fontDefault = native.systemFont
 
 ----elementos
 --texto
@@ -30,7 +30,7 @@ local labelComboOpcionCity
 local txtSignEmail, txtSignPassword
 --scroll
 local svOptionCombo
-local itemsCity
+local itemsCity = {'Cancun', 'Merida', 'Chetumal', 'Villahermosa', 'tuxtla', 'Narnia'}
 
 ---------------------------------------------------
 ------------------ Funciones ----------------------
@@ -51,14 +51,14 @@ end
 function doSignIn( event )
 	
 	--RestManager.validateAdmin('','123','alfredo',1)
-	if txtSignEmail.text == "" or txtSignPassword.text == "" or labelComboOpcionCity.id == 0 then
+	--[[if txtSignEmail.text == "" or txtSignPassword.text == "" or labelComboOpcionCity.id == 0 then
 		native.showAlert( "Booking", "Los campos son requeridos.", { "OK"})
 	else
 		--RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text, labelComboOpcionCity.id)
 		RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
-	end
+	end]]
 	
-	--RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
+	RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
 	
 	return true
 end
@@ -87,13 +87,16 @@ function setOptionComboCity()
 		
 		optionCity[i] = display.newRect( svOptionCombo.contentWidth/2, lastY, intW/2, 80 )
 		optionCity[i]:setFillColor( 1 )
-		optionCity[i].name = itemsCity[i].nombre
-		optionCity[i].id = itemsCity[i].id
+		--optionCity[i].name = itemsCity[i].nombre
+		--optionCity[i].id = itemsCity[i].id
+		optionCity[i].name = itemsCity[i]
+		optionCity[i].id = i
 		svOptionCombo:insert(optionCity[i])
 		optionCity[i]:addEventListener( 'tap', getOptionComboCity )
 		
 		local labelOpcion = display.newText( {
-        text = itemsCity[i].nombre,     
+       -- text = itemsCity[i].nombre, 
+		text = itemsCity[i], 
         x = svOptionCombo.contentWidth/2, y = lastY + 10, width = svOptionCombo.contentWidth - 40,
         font = fontDefault, fontSize = 28, align = "left"
 		})
@@ -172,8 +175,8 @@ end
 
 --esconde el combobox de ciudad
 function hideComboBoxCity( event )
-	txtSignEmail.x = intW/2 + 170
-	txtSignPassword.x = intW/2 + 170
+	txtSignEmail.x = intW/2
+	txtSignPassword.x = intW/1.25
 	groupOptionCombo:removeSelf()
 	groupOptionCombo = nil
 	groupOptionCombo = display.newGroup()
@@ -198,73 +201,82 @@ function scene:create( event )
 	local bgLogin = display.newRect( 0, h, intW, intH )
 	bgLogin.anchorX = 0
 	bgLogin.anchorY = 0
-	bgLogin:setFillColor( 214/255, 226/255, 225/255 )
+	bgLogin:setFillColor( 222/255, 222/255, 222/255 )
 	loginScreen:insert(bgLogin)
 	
-	local imgLogo = display.newRect( intW/2, h + 100, 150, 150 )
-	imgLogo:setFillColor( 0 )
+	local bgfringeDown = display.newRect( 0, intH - 20, intW, 20 )
+	bgfringeDown.anchorX = 0
+	bgfringeDown.anchorY = 0
+	bgfringeDown:setFillColor( 96/255, 96/255, 96/255 )
+	loginScreen:insert(bgfringeDown)
+	
+	--[[local bgfringeHeader = display.newRect( 0, h, intW, 380 )
+	bgfringeHeader.anchorX = 0
+	bgfringeHeader.anchorY = 0
+	bgfringeHeader:setFillColor( 54/255, 80/255, 131/255 )
+	loginScreen:insert(bgfringeHeader)]]
+	
+	local bgfringeHeader = display.newImage( "img/btn/bg.png" )
+	bgfringeHeader.anchorX = 0
+	bgfringeHeader.anchorY = 0
+	bgfringeHeader.x = 0
+	bgfringeHeader.y = h
+	bgfringeHeader.width = intW
+	loginScreen:insert(bgfringeHeader)
+	
+	local bgfringeField = display.newRect( 0, h + 380, intW, 120 )
+	bgfringeField.anchorX = 0
+	bgfringeField.anchorY = 0
+	bgfringeField:setFillColor( 1 )
+	loginScreen:insert(bgfringeField)
+	
+	local imgLogo = display.newCircle( intW/2, h + 180, 110 )
+	imgLogo:setFillColor( 1 )
 	loginScreen:insert(imgLogo)
 	
-	local lastY = intH/2.2
+	local lastY = 440 + h
 	
 	--combobox ciudad
 	
-	local labelLoginCity = display.newText( {   
-        --x = intW/3, y = lastY,
-		x = intW/2 - 170, y = lastY,
-		width = 200,
-        text = "Ciudad:",  font = fontDefault, fontSize = 32,
-	})
-	labelLoginCity:setFillColor( 0 )
-	loginScreen:insert(labelLoginCity)
-	
-	local bgComboCity = display.newRect( intW/2 + 170, lastY, 300, 60 )
+	local bgComboCity = display.newRoundedRect( intW/5, lastY, 260, 60, 10 )
 	bgComboCity:setFillColor( 1 )
 	loginScreen:insert(bgComboCity)
-	bgComboCity:setStrokeColor( 0 )
+	bgComboCity:setStrokeColor( 54/255, 80/255, 131/255 )
 	bgComboCity.strokeWidth = 2
-	bgComboCity:addEventListener( 'tap', showComboBoxCity)
 	
-	local lineLeftComboCity = display.newRect( intW/2 + 260, lastY, 2, 60 )
-	lineLeftComboCity:setFillColor( 0 )
-	loginScreen:insert(lineLeftComboCity)
-	
-	local imgArrowDownCombo = display.newImage( "img/btn/arrowDownCombo.png" )
-	imgArrowDownCombo.x = intW/2 + 290
-	imgArrowDownCombo.y = lastY + 1
-	imgArrowDownCombo.height = 70
-	imgArrowDownCombo.width = 70
+	local imgArrowDownCombo = display.newImage( "img/btn/optionCondo.png" )
+	imgArrowDownCombo.x = intW/5 + 100
+	imgArrowDownCombo.y = lastY
+	imgArrowDownCombo.height = 30
+	imgArrowDownCombo.width = 30
 	loginScreen:insert(imgArrowDownCombo)
+	imgArrowDownCombo:addEventListener( 'tap', showComboBoxCity)
 	
 	labelComboOpcionCity = display.newText( {   
         --x = intW/3, y = lastY,
-		x = intW/2 + 140, y = lastY,
+		x = intW/5, y = lastY,
 		width = 200,
-        text = "Seleccionar ciudad",  font = fontDefault, fontSize = 20, align = "left"
+        text = "CIUDAD",  font = fontDefault, fontSize = 20, align = "left"
 	})
-	labelComboOpcionCity:setFillColor( 0 )
+	labelComboOpcionCity:setFillColor( 64/255, 90/255, 139/255 )
 	labelComboOpcionCity.id = 0
 	loginScreen:insert(labelComboOpcionCity)
 	
 	------campos usuario
 	
-	lastY = intH/1.7
+	--lastY = intH/1.7
 	
-	local labelLoginUser = display.newText( {   
-        x = intW/2 - 170, y = lastY,
-		width = 200,
-        text = "Usuario:",  font = fontDefault, fontSize = 32
-	})
-	labelLoginUser:setFillColor( 0 )
-	loginScreen:insert(labelLoginUser)
-	
-	local bgTextFieldUser = display.newRect( intW/2 + 170, lastY, 300, 60 )
+	local bgTextFieldUser = display.newRoundedRect( intW/2, lastY, 250, 60, 10 )
 	bgTextFieldUser:setFillColor( 1 )
+	bgTextFieldUser:setStrokeColor( 54/255, 80/255, 131/255 )
+	bgTextFieldUser.strokeWidth = 2
 	loginScreen:insert(bgTextFieldUser)
 	
-	txtSignEmail = native.newTextField( intW/2 + 170, lastY, 300, 60 )
+	txtSignEmail = native.newTextField( intW/2, lastY, 250, 60 )
     txtSignEmail.inputType = "email"
     txtSignEmail.hasBackground = false
+	txtSignEmail.placeholder = "USUARIO"
+	txtSignEmail:setTextColor( 64/255, 90/255, 139/255 )
  -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtSignEmail.size = 24
@@ -272,23 +284,19 @@ function scene:create( event )
 	
 	-----campos password
 	
-	lastY = intH/1.4
+	--lastY = intH/1.4
 	
-	local labelLoginPassword = display.newText( {   
-        x = intW/2 - 170, y = lastY,
-		width = 200,
-        text = "Contraseña:",  font = fontDefault, fontSize = 32,
-	})
-	labelLoginPassword:setFillColor( 0 )
-	loginScreen:insert(labelLoginPassword)
-	
-	local bgTextFieldPassword = display.newRect( intW/2 + 170, lastY, 300, 60 )
+	local bgTextFieldPassword = display.newRoundedRect( intW/1.25, lastY, 250, 60, 10 )
 	bgTextFieldPassword:setFillColor( 1 )
+	bgTextFieldPassword:setStrokeColor( 54/255, 80/255, 131/255 )
+	bgTextFieldPassword.strokeWidth = 2
 	loginScreen:insert(bgTextFieldPassword)
 	
-	txtSignPassword = native.newTextField( intW/2 + 170, lastY, 300, 60 )
+	txtSignPassword = native.newTextField( intW/1.25, lastY, 250, 60 )
     txtSignPassword.inputType = "password"
     txtSignPassword.hasBackground = false
+	txtSignPassword.placeholder = "CONTRASEÑA"
+	txtSignPassword:setTextColor( 64/255, 90/255, 139/255 )
    -- txtSignPassword:addEventListener( "userInput", onTxtFocus )
 	--txtSignPassword:setReturnKey(  "go"  )
 	txtSignPassword.isSecure = true
@@ -297,32 +305,32 @@ function scene:create( event )
 	
 	-----botones---
 	
-	lastY = intH/1.15
+	lastY = 600 + h
 	
-	local btnCancelLogin = display.newRect( intW/2 - 120, lastY, 200, 65 )
-	btnCancelLogin:setFillColor( 1, 0, 0 )
+	local btnCancelLogin = display.newRoundedRect( intW/2 - 150, lastY, 200, 70, 10 )
+	btnCancelLogin:setFillColor( 205/255, 69/255, 69/255 )
 	loginScreen:insert(btnCancelLogin)
 	
 	local labelCancelLogin = display.newText( {   
-        x = intW/2 - 120, y = lastY,
-        text = "Cancelar",  font = fontDefault, fontSize = 28
+        x = intW/2 - 150, y = lastY,
+        text = "CANCELAR",  font = fontDefault, fontSize = 28
 	})
 	labelCancelLogin:setFillColor( 1 )
 	loginScreen:insert(labelCancelLogin)
 	
-	local btnSignLogin = display.newRect( intW/2 + 120, lastY, 200, 65 )
-	btnSignLogin:setFillColor( 0, 0, 1 )
+	local btnSignLogin = display.newRoundedRect( intW/2 + 150, lastY, 200, 70, 10 )
+	btnSignLogin:setFillColor( 64/255, 90/255, 139/255 )
 	loginScreen:insert(btnSignLogin)
 	btnSignLogin:addEventListener( 'tap', doSignIn)
 	
 	local labelSignLogin = display.newText( {   
-        x = intW/2 + 120, y = lastY,
-        text = "Aceptar",  font = fontDefault, fontSize = 28
+        x = intW/2 + 150, y = lastY,
+        text = "ACEPTAR",  font = fontDefault, fontSize = 28
 	})
 	labelSignLogin:setFillColor( 1 )
 	loginScreen:insert(labelSignLogin)
 	
-	RestManager.getCity()
+	--RestManager.getCity()
 
 end
 

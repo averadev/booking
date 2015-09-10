@@ -140,12 +140,16 @@ function buildItemsGuard()
 end
 
 function doSignInGuard( event )
-	if txtSignPasswordGuard.text ~= '' and currentGuard ~= nil then
+	--[[if txtSignPasswordGuard.text ~= '' and currentGuard ~= nil then
 		--RestManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		RestManager.validateGuard('123',GuardCondo[currentGuard].id)
 	else
 		native.showAlert( "Booking", "Campos vacios", { "OK"})
-	end
+	end]]
+	
+	composer.removeScene("src.Home")
+	composer.gotoScene("src.Home")
+	
 end
 
 
@@ -188,65 +192,62 @@ function showChangeCondo( event )
 	bgChangeCombo:addEventListener( 'tap', hideChangeCombo )
 	
 	local bodyChangeCombo = display.newRect( intW/2, intH/2, intW/1.2, intH/1.4 + h )
-	bodyChangeCombo:setFillColor( 1 )
+	bodyChangeCombo:setFillColor( 54/255, 80/255, 131/255 )
 	groupChangeCondo:insert(bodyChangeCombo)
 	bodyChangeCombo:addEventListener( 'tap', noAction )
 	
-	local labelLegend = "Para cambiar el condominio asignado es necesario introducir la contraseña del administrador"
+	local labelLegend = "PARA CAMBIAR EL CONDOMINIO ASIGNADO ES NECESARIO INTRODUCIR LA CONTRASEÑA DEL ADMINISTRADOR"
 	
 	local labellegendChangeCondo = display.newText( {   
         x = intW/2, y = intH/4 + h,
 		width = bodyChangeCombo.contentWidth - 100,
         text = labelLegend,  font = fontDefault, fontSize = 36, align = "center"
 	})
-	labellegendChangeCondo:setFillColor( 0 )
+	labellegendChangeCondo:setFillColor( 1 )
 	groupChangeCondo:insert(labellegendChangeCondo)
 	
 	lastY = intH/1.8
 	
-	local labelPasswordGuard = display.newText( {   
-        x = intW/2 - 150, y = lastY,
-		width = 200,
-        text = "Contraseña: ",  font = fontDefault, fontSize = 32
-	})
-	labelPasswordGuard:setFillColor( 0 )
-	groupChangeCondo:insert(labelPasswordGuard)
-	
-	local bgTextPasswordChangeCondo = display.newRect( intW/2 + 150, lastY, 300, 60 )
-	bgTextPasswordChangeCondo:setFillColor( .8 )
+	local bgTextPasswordChangeCondo = display.newRoundedRect( intW/2, lastY, 300, 60, 10 )
+	bgTextPasswordChangeCondo:setFillColor( 1 )
 	groupChangeCondo:insert(bgTextPasswordChangeCondo)
 	
-	txtSignPasswordChangeCondo = native.newTextField( intW/2 + 150, lastY, 300, 60 )
+	txtSignPasswordChangeCondo = native.newTextField( intW/2, lastY, 300, 60 )
     txtSignPasswordChangeCondo.inputType = "password"
     txtSignPasswordChangeCondo.hasBackground = false
 	txtSignPasswordChangeCondo.isSecure = true
+	txtSignPasswordChangeCondo.placeholder = "CONTRASEÑA"
+	txtSignPasswordChangeCondo:setTextColor( 64/255, 90/255, 139/255 )
  -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtSignPasswordChangeCondo.size = 20
 	groupChangeCondo:insert(txtSignPasswordChangeCondo)
 	
-	lastY = intH/1.4
+	lastY = intH/1.3
 	
-	local btnCancelChangeCondo = display.newRect( intW/2 - 120, lastY, 200, 65 )
-	btnCancelChangeCondo:setFillColor( 1, 0, 0 )
+	local btnCancelChangeCondo = display.newRoundedRect( intW/2 - 180, lastY, 200, 70, 10 )
+	btnCancelChangeCondo:setFillColor( 205/255, 69/255, 69/255 )
 	groupChangeCondo:insert(btnCancelChangeCondo)
 	btnCancelChangeCondo:addEventListener( 'tap', hideChangeCombo)
 	
 	local labelCancelChangeCondo = display.newText( {   
-        x = intW/2 - 120, y = lastY,
-        text = "Cancelar",  font = fontDefault, fontSize = 28
+        x = intW/2 - 180, y = lastY,
+        text = "CANCELAR",  font = fontDefault, fontSize = 28
 	})
 	labelCancelChangeCondo:setFillColor( 1 )
 	groupChangeCondo:insert(labelCancelChangeCondo)
 	
-	local btnAceptChangeCondo = display.newRect( intW/2 + 120, lastY, 200, 65 )
-	btnAceptChangeCondo:setFillColor( 0, 0, 1 )
+	local btnAceptChangeCondo = display.newRoundedRect( intW/2 + 180, lastY, 200, 70, 10 )
+	btnAceptChangeCondo:setFillColor( 54/255, 80/255, 131/255 )
 	groupChangeCondo:insert(btnAceptChangeCondo)
-	btnAceptChangeCondo:addEventListener( 'tap', changeCondo)
+	btnAceptChangeCondo:setStrokeColor( 1 )
+	btnAceptChangeCondo.strokeWidth = 2
+	--btnAceptChangeCondo:addEventListener( 'tap', changeCondo)
+	btnAceptChangeCondo:addEventListener( 'tap', signOut)
 	
 	local labelAceptChangeCondo = display.newText( {   
-        x = intW/2 + 120, y = lastY,
-        text = "Aceptar",  font = fontDefault, fontSize = 28
+        x = intW/2 + 180, y = lastY,
+        text = "ACEPTAR",  font = fontDefault, fontSize = 28
 	})
 	labelAceptChangeCondo:setFillColor( 1 )
 	groupChangeCondo:insert(labelAceptChangeCondo)
@@ -336,26 +337,26 @@ function scene:create( event )
 	
 	--local groupGuardList = display.newGroup()
 	
-	--[[for i = 1, 4, 1 do
+	for i = 1, 4, 1 do
 	
-		GuardCondo[i] = display.newImage( "img/btn/avatarUser.png" )
+		GuardCondo[i] = display.newContainer( 135, 135 )
 		GuardCondo[i].x = intW/5.7 * i - 50
 		GuardCondo[i].y = lastY
-		GuardCondo[i].height = 120
-		GuardCondo[i].width = 120
 		GuardCondo[i].id = i
 		GuardCondo[i].num = i
 		loginGuardScreen:insert(GuardCondo[i])
 		GuardCondo[i]:addEventListener( 'tap', SelecGuard )
 		
-		local labelNameGuard = display.newText( {   
-			x = intW/5.7 * i - 45, y = lastY + 85,
-			text = "Guardia" .. i ,  font = fontDefault, fontSize = 24
-		})
-		labelNameGuard:setFillColor( 0 )
-		loginGuardScreen:insert(labelNameGuard)
+		bgImgGuard = display.newRoundedRect( 0, 0, 135, 135, 10 )
+		bgImgGuard:setFillColor( 1 )
+		GuardCondo[i]:insert(bgImgGuard)
+		
+		local imgGuard = display.newImage( "img/btn/GUARDIA.png" )
+		imgGuard.x = 0
+		imgGuard.y = 0
+		GuardCondo[i]:insert(imgGuard)
 	
-	end]]
+	end
 	
 	--btn view more
 	
@@ -390,6 +391,7 @@ function scene:create( event )
     txtSignPasswordGuard.hasBackground = false
 	txtSignPasswordGuard.placeholder = "Contraseña"
 	txtSignPasswordGuard.isSecure = true
+	txtSignPasswordGuard:setTextColor( 64/255, 90/255, 139/255 )
  -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtSignPasswordGuard.size = 20
@@ -404,17 +406,17 @@ function scene:create( event )
 	
 	-----botones---
 	
-	lastY = intH/1.25
+	lastY = 600 + h
 	
-	btnSignLoginGuard = display.newRoundedRect( intW/2, lastY + 50, 200, 70, 10 )
+	btnSignLoginGuard = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
 	btnSignLoginGuard:setFillColor( 205/255, 69/255, 69/255 )
 	loginGuardScreen:insert(btnSignLoginGuard)
 	--btnSignLoginGuard.alpha = .3
 	btnSignLoginGuard:addEventListener( 'tap', doSignInGuard)
 	
 	local labelSignLoginGuard = display.newText( {   
-        x = intW/2, y = lastY + 50,
-        text = "ACEPTAR",  font = fontDefault, fontSize = 34
+        x = intW/2, y = lastY,
+        text = "ACEPTAR",  font = fontDefault, fontSize = 28
 	})
 	labelSignLoginGuard:setFillColor( 1 )
 	loginGuardScreen:insert(labelSignLoginGuard)
@@ -425,7 +427,7 @@ function scene:create( event )
 	loginGuardScreen:insert(imgSignOut)
 	imgSignOut:addEventListener( 'tap', showChangeCondo)
 	
-	RestManager.getInfoGuard()
+	--RestManager.getInfoGuard()
 
 end
 

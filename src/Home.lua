@@ -18,7 +18,7 @@ local intW = display.contentWidth
 local intH = display.contentHeight
 local h = display.topStatusBarContentHeight
 
-fontDefault = "native.systemFont"
+fontDefault = native.systemFont
 
 ----elementos
 local btnAceptOptionn
@@ -86,67 +86,91 @@ function scene:create( event )
 	local bgLogin = display.newRect( 0, h, intW, intH )
 	bgLogin.anchorX = 0
 	bgLogin.anchorY = 0
-	bgLogin:setFillColor( 214/255, 226/255, 225/255 )
+	bgLogin:setFillColor( 222/255, 222/255, 222/255 )
 	homeScreen:insert(bgLogin)
 	
-	local imgLogo = display.newRect( intW/2, h + 100, 150, 150 )
-	imgLogo:setFillColor( 0 )
+	local imgLogo = display.newCircle( intW/2, h + 110, 90 )
+	imgLogo:setFillColor( 1 )
 	homeScreen:insert(imgLogo)
 	
-	btnMessageAdmi = display.newRect( intW/3.5, h + intH/2, intH/3, intH/3 )
+	local bgfringeDown = display.newRect( 0, intH - 20, intW, 20 )
+	bgfringeDown.anchorX = 0
+	bgfringeDown.anchorY = 0
+	bgfringeDown:setFillColor( 96/255, 96/255, 96/255 )
+	homeScreen:insert(bgfringeDown)
+	
+	local bgfringeField = display.newRect( 0, h + 240, intW, 300 )
+	bgfringeField.anchorX = 0
+	bgfringeField.anchorY = 0
+	bgfringeField:setFillColor( 54/255, 80/255, 131/255 )
+	homeScreen:insert(bgfringeField)
+	
+	btnMessageAdmi = display.newRoundedRect( intW/3.5, h + intH/2 + 5, 200, 200, 12 )
 	btnMessageAdmi.option = 1
 	btnMessageAdmi:setFillColor( 1 )
 	homeScreen:insert(btnMessageAdmi)
 	btnMessageAdmi:addEventListener( 'tap', selectOptionHome )
 	
+	local imgMessageAdmi = display.newImage( "img/btn/VERSION2MENSAJE.png" )
+	imgMessageAdmi.x =	intW/3.5
+	imgMessageAdmi.y = h + intH/2 - 25
+	homeScreen:insert(imgMessageAdmi)
+	
 	local labelMessageAdmi = display.newText( {   
         --x = intW/3, y = lastY,
-		x = intW/3.5, y = h + intH/2, width = intH/3,
-        text = "Mensaje a administracion",  font = fontDefault, fontSize = 32, align = "center",
+		x = intW/3.5, y = h + intH/2 + 70, width = 200,
+        text = "MENSAJE DE ADMINISTRACION",  font = fontDefault, fontSize = 19, align = "center",
 	})
-	labelMessageAdmi:setFillColor( 0 )
+	labelMessageAdmi:setFillColor( 64/255, 90/255, 139/255 )
 	homeScreen:insert(labelMessageAdmi)
 	
-	btnRecordVisits = display.newRect( intW/1.4, h + intH/2, intH/3, intH/3 )
+	btnRecordVisits = display.newRoundedRect( intW/1.4, h + intH/2 + 5, 200, 200, 12 )
 	btnRecordVisits.option = 2
 	btnRecordVisits:setFillColor( 1 )
 	homeScreen:insert(btnRecordVisits)
 	btnRecordVisits:addEventListener( 'tap', selectOptionHome )
 	
+	local imgMessageAdmi = display.newImage( "img/btn/VERSION2REGISTRO.png" )
+	imgMessageAdmi.x =	intW/1.4
+	imgMessageAdmi.y = h + intH/2 - 25
+	homeScreen:insert(imgMessageAdmi)
+	
 	local labelRecordVisits = display.newText( {   
         --x = intW/3, y = lastY,
-		x = intW/1.4, y = h + intH/2, width = intH/3,
-        text = "Registro de visitas",  font = fontDefault, fontSize = 32, align = "center",
+		x = intW/1.4, y = h + intH/2 + 70, width = 200,
+        text = "REGISTRO DE VISITAS",  font = fontDefault, fontSize = 19, align = "center",
 	})
-	labelRecordVisits:setFillColor( 0 )
+	labelRecordVisits:setFillColor( 64/255, 90/255, 139/255 )
 	homeScreen:insert(labelRecordVisits)
 	
 	--botones
 	
-	lastY = intH/1.2
+	lastY = 600 + h
 	
-	local btnCancelHome = display.newRect( intW/2 - 120, lastY, 200, 65 )
-	btnCancelHome:setFillColor( 1, 0, 0 )
+	
+	
+	local btnCancelHome = display.newRoundedRect( intW/2 - 150, lastY, 200, 70, 10 )
+	btnCancelHome:setFillColor( 205/255, 69/255, 69/255 )
 	homeScreen:insert(btnCancelHome)
 	btnCancelHome:addEventListener( 'tap', returnLoginGuard)
 	
 	local labelCancelHome = display.newText( {   
-        x = intW/2 - 120, y = lastY,
-        text = "Cancelar",  font = fontDefault, fontSize = 28
+        x = intW/2 - 150, y = lastY,
+        text = "CANCELAR",  font = fontDefault, fontSize = 28
 	})
 	labelCancelHome:setFillColor( 1 )
 	homeScreen:insert(labelCancelHome)
 	
-	btnAceptOptionn = display.newRect( intW/2 + 120, lastY, 200, 65 )
-	btnAceptOptionn:setFillColor( 0, 0, 1 )
+	btnAceptOptionn = display.newRoundedRect( intW/2 + 150, lastY, 200, 70, 10 )
+	btnAceptOptionn:setFillColor( 64/255, 90/255, 139/255 )
 	btnAceptOptionn.option = 0
 	btnAceptOptionn.alpha = .3
 	homeScreen:insert(btnAceptOptionn)
 	--btnSignLogin:addEventListener( 'tap', doSignIn)
 	
 	local labelAceptOption = display.newText( {   
-        x = intW/2 + 120, y = lastY,
-        text = "Aceptar",  font = fontDefault, fontSize = 28
+        x = intW/2 + 150, y = lastY,
+        text = "ACEPTAR",  font = fontDefault, fontSize = 28
 	})
 	labelAceptOption:setFillColor( 1 )
 	homeScreen:insert(labelAceptOption)

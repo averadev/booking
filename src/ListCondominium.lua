@@ -71,21 +71,29 @@ function getNumCondo()
 		containerListCondo[i] = display.newContainer( 130, 130 )
         containerListCondo[i].x = (contX * 170) - 40
         containerListCondo[i].y = contY
-		containerListCondo[i].num = "00" .. i
+		containerListCondo[i].num = "0" .. i
 		containerListCondo[i].posc = i
         svListCondo:insert( containerListCondo[i] )
 		containerListCondo[i]:addEventListener( 'tap', selectCondo )
 		
-		local btnNumCondo = display.newRect( 0, 0, 130, 130 )
+		local btnNumCondo = display.newRoundedRect( 0, 0, 130, 130, 10 )
 		btnNumCondo:setFillColor( 1 )
 		containerListCondo[i]:insert(btnNumCondo)
 		
+		local imgNumCondo = display.newImage( "img/btn/CONDOMINIO.png" )
+		imgNumCondo.x =	0
+		imgNumCondo.y = 0
+		imgNumCondo.width = 80
+		imgNumCondo.height = 80
+		imgNumCondo.alpha = .5
+		containerListCondo[i]:insert(imgNumCondo)
+		
 		local labelNumCondo = display.newText( {
-            text = "00" .. i,     
+            text = "0" .. i,     
             x = 0, y = 0,
-            font = fontDefault, fontSize = 24, align = "center"
+            font = fontDefault, fontSize = 60, align = "center"
 		})
-		labelNumCondo:setFillColor( 0 )
+		labelNumCondo:setFillColor( 205/255, 69/255, 69/255 )
 		containerListCondo[i]:insert(labelNumCondo)
 	
 		if i%numMax == 0 then
@@ -124,36 +132,43 @@ function scene:create( event )
 	local bgLogin = display.newRect( 0, h, intW, intH )
 	bgLogin.anchorX = 0
 	bgLogin.anchorY = 0
-	bgLogin:setFillColor( 214/255, 226/255, 225/255 )
+	bgLogin:setFillColor( 54/255, 80/255, 131/255 )
 	listCondominiumScreen:insert(bgLogin)
 	
-	--[[local imgLogo = display.newRect( intW/2, h + 100, 150, 150 )
-	imgLogo:setFillColor( 0 )
-	listCondominiumScreen:insert(imgLogo)]]
+	local bgfringeUp = display.newRect( 0, h, intW, 80 )
+	bgfringeUp.anchorX = 0
+	bgfringeUp.anchorY = 0
+	bgfringeUp:setFillColor( 222/255, 222/255, 222/255 )
+	listCondominiumScreen:insert(bgfringeUp)
 	
 	local imgArrowBack = display.newImage( "img/btn/REGRESAR.png" )
-	imgArrowBack.x = 50
-	imgArrowBack.height = 60
-	imgArrowBack.width = 90
-	imgArrowBack.y = h + imgArrowBack.contentHeight/2
+	imgArrowBack.x = intW - 185
+	imgArrowBack.y = h + 40
 	listCondominiumScreen:insert(imgArrowBack)
 	imgArrowBack:addEventListener( 'tap', returnRecordVisit )
 	
+	local labelArrowBack = display.newText( {   
+        x = intW - 100, y = h + 40,
+        text = "REGRESAR",  font = fontDefault, fontSize = 18
+	})
+	labelArrowBack:setFillColor( 64/255, 90/255, 139/255 )
+	listCondominiumScreen:insert(labelArrowBack)
+	
 	local labelSelectCondo= display.newText( {   
-        x = intW/2 - 200, y = h + 100,
-        text = "Selecciona el condominio:",  font = fontDefault, fontSize = 28
+        x = intW/2, y = h + 40,
+        text = "SELECCIONA EL CONDOMINIO",  font = fontDefault, fontSize = 28
 	})
 	labelSelectCondo:setFillColor( 0 )
 	listCondominiumScreen:insert(labelSelectCondo)
 	
-	local btnContinue = display.newRect( intW/2 + 200, h + 100, 300, 65 )
-	btnContinue:setFillColor( .2 )
+	local btnContinue = display.newRoundedRect( intW/2, intH - 70, 200, 70, 10 )
+	btnContinue:setFillColor( 205/255, 69/255, 69/255 )
 	listCondominiumScreen:insert(btnContinue)
 	btnContinue:addEventListener( 'tap', getNumCondominium )
 	
 	local labelChangeCodo = display.newText( {   
-        x = intW/2 + 200, y = h + 100,
-        text = "Continuar",  font = fontDefault, fontSize = 28
+        x = intW/2, y = intH - 70,
+        text = "CONTINUAR",  font = fontDefault, fontSize = 28
 	})
 	labelChangeCodo:setFillColor( 1 )
 	listCondominiumScreen:insert(labelChangeCodo)
@@ -162,13 +177,13 @@ function scene:create( event )
 	svListCondo = widget.newScrollView
 	{
 		x = intW/2,
-		y = h + intH/2 + 50,
+		y = h + intH/2 - 40,
 		width = intW - intW/4,
-		height = intH - 300 + h,
+		height = 480,
 		horizontalScrollDisabled = true,
         verticalScrollDisabled = false,
-		isBounceEnabled = true,
-		backgroundColor = { .85 }
+		isBounceEnabled = false,
+		backgroundColor = { 54/255, 80/255, 131/255 }
 	}
 	listCondominiumScreen:insert(svListCondo)
 	--svListCondo:addEventListener( 'tap', noAction)

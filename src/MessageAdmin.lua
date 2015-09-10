@@ -36,14 +36,15 @@ function sendMessageToadmin( event )
 
 	--print( os.date( "%c" ) )
 	
-	--native.showAlert( "Booking", "Mensaje enviado", { "OK"})
-	--composer.gotoScene("src.Home")
-	if txtMsgMessage.text ~= '' and txtMsgSubject.text ~= '' then
+	native.showAlert( "Booking", "Mensaje enviado", { "OK"})
+	composer.removeScene("src.LoginGuard")
+	composer.gotoScene("src.LoginGuard")
+	--[[if txtMsgMessage.text ~= '' and txtMsgSubject.text ~= '' then
 		--RestManager.SendMessageGuard(txtMsgMessage.text, txtMsgSubject.text, os.date( "%c" ))
 		RestManager.SendMessageGuard("Mensaje", "Mensaje de aviso", os.date( "%c" ))
 	else
 		native.showAlert( "Booking", "Campos vacios", { "OK"})
-	end
+	end]]
 end
 
 --regresa al pantalla de home
@@ -118,10 +119,10 @@ function scene:create( event )
 	
 	-----botones---
 	
-	lastY = intH/1.2
+	lastY = 600 + h
 	
 	local btnCancelSendMessage = display.newRoundedRect( intW/2 - 150, lastY, 200, 70, 10 )
-	btnCancelSendMessage:setFillColor( 1, 0, 0 )
+	btnCancelSendMessage:setFillColor( 205/255, 69/255, 69/255 )
 	messageAdminScreen:insert(btnCancelSendMessage)
 	btnCancelSendMessage:addEventListener( 'tap', returnHomeMSGAdmin )
 	

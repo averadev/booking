@@ -20,7 +20,7 @@ local intW = display.contentWidth
 local intH = display.contentHeight
 local h = display.topStatusBarContentHeight
 
-fontDefault = "native.systemFont"
+fontDefault = native.systemFont
 
 ----elementos
 local txtRecordVisitName
@@ -67,17 +67,16 @@ function takePhotography( event )
 		photo.width = 200
 		photo.x = 100
 		photo.y = intH/2.04]]
-		
 		if typePhoto == 1 then
 			if photoFrontal then
 				photoFrontal:removeSelf()
 				photoFrontal = nil
 			end
 			photoFrontal = event.target
-			photoFrontal.height = 150
-			photoFrontal.width = 200
-			photoFrontal.x = intW/1.65
-			photoFrontal.y = intH/2.04
+			photoFrontal.height = 190
+			photoFrontal.width = 190
+			photoFrontal.x = intW/1.55
+			photoFrontal.y = intH/1.8
 			recordVisitScreen:insert(photoFrontal)
 			
 		else
@@ -87,10 +86,10 @@ function takePhotography( event )
 				photoBack = nil
 			end
 			photoBack =  event.target
-			photoBack.height = 150
-			photoBack.width = 200
-			photoBack.x = intW/1.18
-			photoBack.y = intH/2.04
+			photoBack.height = 190
+			photoBack.width = 190
+			photoBack.x = intW/1.15
+			photoBack.y = intH/1.8
 			recordVisitScreen:insert(photoBack)
 		
 		end
@@ -159,7 +158,8 @@ function scene:create( event )
 	imgGuardTurn:setFillColor( 1 )
 	recordVisitScreen:insert(imgGuardTurn)
 	
-	local imgGuardTurn = display.newImage( Globals.photoGuard, system.TemporaryDirectory )
+	--local imgGuardTurn = display.newImage( Globals.photoGuard, system.TemporaryDirectory )
+	local imgGuardTurn = display.newImage( "img/btn/GUARDIA.png" )
 	imgGuardTurn.x = intW/1.3
 	imgGuardTurn.height = 100
 	imgGuardTurn.width = 100
@@ -313,14 +313,14 @@ function scene:create( event )
 	
 	lastY = intH/1.2
 	
-	local btnRegisterVisit = display.newRoundedRect( intW/2, intH - 70, 280, 70, 10 )
+	local btnRegisterVisit = display.newRoundedRect( intW/2, intH - 70, 300, 70, 10 )
 	btnRegisterVisit:setFillColor( 205/255, 69/255, 69/255 )
 	recordVisitScreen:insert(btnRegisterVisit)
 	btnRegisterVisit:addEventListener( 'tap', sendRecordVisit )
 	
 	local labelRegisterVisit = display.newText( {   
         x = intW/2, y = intH - 70,
-        text = "REGISTRAR VISITA",  font = fontDefault, fontSize = 24
+        text = "REGISTRAR VISITA",  font = fontDefault, fontSize = 28
 	})
 	labelRegisterVisit:setFillColor( 1 )
 	recordVisitScreen:insert(labelRegisterVisit)

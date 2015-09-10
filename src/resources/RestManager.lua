@@ -21,6 +21,8 @@ local RestManager = {}
 	
 	RestManager.validateAdmin = function(email, password, city)
 	
+		gotoLoginGuard()
+	
         local settings = DBManager.getSettings()
         -- Set url
         password = crypto.digest(crypto.md5, password)
@@ -45,7 +47,7 @@ local RestManager = {}
             return true
         end
         -- Do request
-        network.request( url, "GET", callback ) 
+        --network.request( url, "GET", callback ) 
     end
 	
 	RestManager.validateGuard = function(password, idGuard)

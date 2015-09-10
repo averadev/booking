@@ -18,7 +18,7 @@ local intW = display.contentWidth
 local intH = display.contentHeight
 local h = display.topStatusBarContentHeight
 
-fontDefault = "native.systemFont"
+fontDefault = native.systemFont
 
 ----elementos
 
@@ -35,7 +35,8 @@ local btnMsgContinue
 	
 --regresa al menu de home
 function returnHomeMsg( event )
-	composer.gotoScene("src.Home")
+	composer.removeScene("src.LoginGuard")
+	composer.gotoScene("src.LoginGuard")
 end
 
 ---------------------------------------------------
