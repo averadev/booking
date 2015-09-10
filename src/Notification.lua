@@ -128,7 +128,7 @@ function scene:create( event )
 	notificationScreen:insert(labelMsgMessageVisit)
 	
 	btnMsgContinue = display.newRoundedRect( intW/2, intH - 65, 200, 65, 10 )
-	btnMsgContinue:setFillColor( 64/255, 90/255, 139/255 )
+	btnMsgContinue:setFillColor( 205/255, 69/255, 69/255 )
 	notificationScreen:insert(btnMsgContinue)
 	btnMsgContinue:addEventListener( 'tap', returnHomeMsg )
 	

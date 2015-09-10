@@ -307,24 +307,13 @@ function scene:create( event )
 	
 	lastY = 600 + h
 	
-	local btnCancelLogin = display.newRoundedRect( intW/2 - 150, lastY, 200, 70, 10 )
-	btnCancelLogin:setFillColor( 205/255, 69/255, 69/255 )
-	loginScreen:insert(btnCancelLogin)
-	
-	local labelCancelLogin = display.newText( {   
-        x = intW/2 - 150, y = lastY,
-        text = "CANCELAR",  font = fontDefault, fontSize = 28
-	})
-	labelCancelLogin:setFillColor( 1 )
-	loginScreen:insert(labelCancelLogin)
-	
-	local btnSignLogin = display.newRoundedRect( intW/2 + 150, lastY, 200, 70, 10 )
-	btnSignLogin:setFillColor( 64/255, 90/255, 139/255 )
+	local btnSignLogin = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
+	btnSignLogin:setFillColor( 205/255, 69/255, 69/255 )
 	loginScreen:insert(btnSignLogin)
 	btnSignLogin:addEventListener( 'tap', doSignIn)
 	
 	local labelSignLogin = display.newText( {   
-        x = intW/2 + 150, y = lastY,
+        x = intW/2, y = lastY,
         text = "ACEPTAR",  font = fontDefault, fontSize = 28
 	})
 	labelSignLogin:setFillColor( 1 )

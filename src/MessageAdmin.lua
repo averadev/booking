@@ -34,11 +34,38 @@ local txtMsgSubject
 --envia el mensaje al administrador
 function sendMessageToadmin( event )
 
+	local midW = display.contentWidth / 2
+	local midH = display.contentHeight / 2
+	messageConfirmAdmin = display.newGroup()
+        
+	local bgShade = display.newRect( midW, midH, display.contentWidth, display.contentHeight )
+	bgShade:setFillColor( 0, 0, 0, .3 )
+	messageConfirmAdmin:insert(bgShade)
+        
+	local bg = display.newRoundedRect( midW, midH, 280, 300, 10 )
+	bg:setFillColor( .3, .3, .3 )
+	messageConfirmAdmin:insert(bg)
+	
+	local labelConfirmAdmin= display.newText( {   
+        x = midW, y = midH, width = 280,
+        text = "Mensaje enviado",  font = fontDefault, fontSize = 40, align = "center",
+	})
+	labelConfirmAdmin:setFillColor( 1 )
+	messageConfirmAdmin:insert(labelConfirmAdmin)
+	
+	timeMarker = timer.performWithDelay( 3000, function()
+		messageConfirmAdmin:removeSelf()
+		messageConfirmAdmin = nil
+		composer.removeScene("src.LoginGuard")
+		composer.gotoScene("src.LoginGuard")
+	end, 1 )
+
+
 	--print( os.date( "%c" ) )
 	
-	native.showAlert( "Booking", "Mensaje enviado", { "OK"})
-	composer.removeScene("src.LoginGuard")
-	composer.gotoScene("src.LoginGuard")
+	--native.showAlert( "Booking", "Mensaje enviado", { "OK"})
+	--composer.removeScene("src.LoginGuard")
+	--composer.gotoScene("src.LoginGuard")
 	--[[if txtMsgMessage.text ~= '' and txtMsgSubject.text ~= '' then
 		--RestManager.SendMessageGuard(txtMsgMessage.text, txtMsgSubject.text, os.date( "%c" ))
 		RestManager.SendMessageGuard("Mensaje", "Mensaje de aviso", os.date( "%c" ))
@@ -121,25 +148,28 @@ function scene:create( event )
 	
 	lastY = 600 + h
 	
-	local btnCancelSendMessage = display.newRoundedRect( intW/2 - 150, lastY, 200, 70, 10 )
-	btnCancelSendMessage:setFillColor( 205/255, 69/255, 69/255 )
-	messageAdminScreen:insert(btnCancelSendMessage)
-	btnCancelSendMessage:addEventListener( 'tap', returnHomeMSGAdmin )
+	local imgArrowBack = display.newImage( "img/btn/REGRESAR.png" )
+	imgArrowBack.x = 50
+	imgArrowBack.height = 50
+	imgArrowBack.width = 50
+	imgArrowBack.y = h + 40
+	messageAdminScreen:insert(imgArrowBack)
+	imgArrowBack:addEventListener( 'tap', returnHomeMSGAdmin)
 	
-	local labelCancelSendMessage = display.newText( {   
-        x = intW/2 - 150, y = lastY,
-        text = "CANCELAR",  font = fontDefault, fontSize = 28
+	local labelArrowBack = display.newText( {   
+        x = 140, y = h + 40,
+        text = "REGRESAR",  font = fontDefault, fontSize = 18
 	})
-	labelCancelSendMessage:setFillColor( 1 )
-	messageAdminScreen:insert(labelCancelSendMessage)
+	labelArrowBack:setFillColor( 64/255, 90/255, 139/255 )
+	messageAdminScreen:insert(labelArrowBack)
 	
-	local btnSendMessage = display.newRoundedRect( intW/2 + 150, lastY, 200, 70, 10 )
-	btnSendMessage:setFillColor( 54/255, 80/255, 131/255 )
+	local btnSendMessage = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
+	btnSendMessage:setFillColor( 205/255, 69/255, 69/255 )
 	messageAdminScreen:insert(btnSendMessage)
 	btnSendMessage:addEventListener( 'tap', sendMessageToadmin)
 	
 	local labelSendMessage = display.newText( {   
-        x = intW/2 + 150, y = lastY,
+        x = intW/2, y = lastY,
         text = "ACEPTAR",  font = fontDefault, fontSize = 28
 	})
 	labelSendMessage:setFillColor( 1 )

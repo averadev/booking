@@ -225,7 +225,7 @@ function showChangeCondo( event )
 	
 	lastY = intH/1.3
 	
-	local btnCancelChangeCondo = display.newRoundedRect( intW/2 - 180, lastY, 200, 70, 10 )
+	--[[local btnCancelChangeCondo = display.newRoundedRect( intW/2 - 180, lastY, 200, 70, 10 )
 	btnCancelChangeCondo:setFillColor( 205/255, 69/255, 69/255 )
 	groupChangeCondo:insert(btnCancelChangeCondo)
 	btnCancelChangeCondo:addEventListener( 'tap', hideChangeCombo)
@@ -235,18 +235,22 @@ function showChangeCondo( event )
         text = "CANCELAR",  font = fontDefault, fontSize = 28
 	})
 	labelCancelChangeCondo:setFillColor( 1 )
-	groupChangeCondo:insert(labelCancelChangeCondo)
+	groupChangeCondo:insert(labelCancelChangeCondo)]]
 	
-	local btnAceptChangeCondo = display.newRoundedRect( intW/2 + 180, lastY, 200, 70, 10 )
-	btnAceptChangeCondo:setFillColor( 54/255, 80/255, 131/255 )
+	local imgArrowBackReturn = display.newImage( "img/btn/CANCELAR.png" )
+	imgArrowBackReturn.x = intH/2 + 535
+	imgArrowBackReturn.y = h + 70
+	groupChangeCondo:insert(imgArrowBackReturn)
+	imgArrowBackReturn:addEventListener( 'tap', hideChangeCombo)
+	
+	local btnAceptChangeCondo = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
+	btnAceptChangeCondo:setFillColor( 205/255, 69/255, 69/255 )
 	groupChangeCondo:insert(btnAceptChangeCondo)
-	btnAceptChangeCondo:setStrokeColor( 1 )
-	btnAceptChangeCondo.strokeWidth = 2
 	--btnAceptChangeCondo:addEventListener( 'tap', changeCondo)
 	btnAceptChangeCondo:addEventListener( 'tap', signOut)
 	
 	local labelAceptChangeCondo = display.newText( {   
-        x = intW/2 + 180, y = lastY,
+        x = intW/2, y = lastY,
         text = "ACEPTAR",  font = fontDefault, fontSize = 28
 	})
 	labelAceptChangeCondo:setFillColor( 1 )

@@ -147,29 +147,30 @@ function scene:create( event )
 	
 	lastY = 600 + h
 	
+	local imgArrowBack = display.newImage( "img/btn/REGRESAR.png" )
+	imgArrowBack.x = 50
+	imgArrowBack.height = 50
+	imgArrowBack.width = 50
+	imgArrowBack.y = h + 40
+	homeScreen:insert(imgArrowBack)
+	imgArrowBack:addEventListener( 'tap', returnLoginGuard)
 	
-	
-	local btnCancelHome = display.newRoundedRect( intW/2 - 150, lastY, 200, 70, 10 )
-	btnCancelHome:setFillColor( 205/255, 69/255, 69/255 )
-	homeScreen:insert(btnCancelHome)
-	btnCancelHome:addEventListener( 'tap', returnLoginGuard)
-	
-	local labelCancelHome = display.newText( {   
-        x = intW/2 - 150, y = lastY,
-        text = "CANCELAR",  font = fontDefault, fontSize = 28
+	local labelArrowBack = display.newText( {   
+        x = 140, y = h + 40,
+        text = "REGRESAR",  font = fontDefault, fontSize = 18
 	})
-	labelCancelHome:setFillColor( 1 )
-	homeScreen:insert(labelCancelHome)
+	labelArrowBack:setFillColor( 64/255, 90/255, 139/255 )
+	homeScreen:insert(labelArrowBack)
 	
-	btnAceptOptionn = display.newRoundedRect( intW/2 + 150, lastY, 200, 70, 10 )
-	btnAceptOptionn:setFillColor( 64/255, 90/255, 139/255 )
+	btnAceptOptionn = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
+	btnAceptOptionn:setFillColor( 205/255, 69/255, 69/255 )
 	btnAceptOptionn.option = 0
 	btnAceptOptionn.alpha = .3
 	homeScreen:insert(btnAceptOptionn)
 	--btnSignLogin:addEventListener( 'tap', doSignIn)
 	
 	local labelAceptOption = display.newText( {   
-        x = intW/2 + 150, y = lastY,
+        x = intW/2, y = lastY,
         text = "ACEPTAR",  font = fontDefault, fontSize = 28
 	})
 	labelAceptOption:setFillColor( 1 )
