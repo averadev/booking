@@ -6,8 +6,11 @@
 -----------------------------------------------------------------------------------------
 
 --componentes 
-local composer = require( "composer" )
 local widget = require( "widget" )
+local composer = require( "composer" )
+local Globals = require('src.resources.Globals')
+local DBManager = require('src.resources.DBManager')
+local RestManager = require('src.resources.RestManager')
 local scene = composer.newScene()
 
 --variables
@@ -29,6 +32,8 @@ local labelMsgDateVisit
 	
 local btnMsgContinue
 
+local lastId
+
 ---------------------------------------------------
 ------------------ Funciones ----------------------
 ---------------------------------------------------
@@ -39,12 +44,32 @@ function returnHomeMsg( event )
 	composer.gotoScene("src.LoginGuard")
 end
 
+-- Genera la fecha en formato
+function getDateNoti(strDate)
+    local fecha
+    for k, v, u, m, s  in string.gmatch(strDate, "(%w+)-(%w+)-(%w+) (%w+):(%w+)") do
+		local timeSystem
+		if tonumber(m) < 13 then
+			timeSystem = ' A.M'
+		else
+			timeSystem = ' P:M'
+		end
+        fecha = u .. " de "..Globals.Months[tonumber(v)].." de " .. k .. " " .. m ..":" .. s .. timeSystem
+		
+    end
+    return fecha
+end
+
 ---------------------------------------------------
 --------------Funciones defaults-------------------
 ---------------------------------------------------
 
 -- "scene:create()"
 function scene:create( event )
+
+	lastId = event.params.lastId
+	
+	local infoRecordVisit = DBManager.getRecordVisitById(lastId)
 
 	local screen = self.view
 	
@@ -106,7 +131,7 @@ function scene:create( event )
 	labelMsgNameVisit = display.newText( {   
         x = intW/2, y = lastY + 100,
 		width = 560,
-        text = "VISITANTE: ",  font = fontDefault, fontSize = 24
+        text = "VISITANTE: " .. infoRecordVisit.nombreVisitante,  font = fontDefault, fontSize = 24
 	})
 	labelMsgNameVisit:setFillColor( 64/255, 90/255, 139/255 )
 	notificationScreen:insert(labelMsgNameVisit)
@@ -114,18 +139,10 @@ function scene:create( event )
 	labelMsgReasonVisit = display.newText( {   
         x = intW/2, y = lastY + 150,
 		width = 560,
-        text = "MOTIVO DE VISITA: ",  font = fontDefault, fontSize = 24
+        text = "MOTIVO DE VISITA: " .. infoRecordVisit.motivo,  font = fontDefault, fontSize = 24
 	})
 	labelMsgReasonVisit:setFillColor( 64/255, 90/255, 139/255 )
 	notificationScreen:insert(labelMsgReasonVisit)
-	
-	labelMsgMessageVisit = display.newText( {   
-        x = intW/2, y = lastY + 205,
-		width = 560,
-        text = "MENSAJE: ",  font = fontDefault, fontSize = 24
-	})
-	labelMsgMessageVisit:setFillColor( 64/255, 90/255, 139/255 )
-	notificationScreen:insert(labelMsgMessageVisit)
 	
 	btnMsgContinue = display.newRoundedRect( intW/2, intH - 65, 200, 65, 10 )
 	btnMsgContinue:setFillColor( 205/255, 69/255, 69/255 )
@@ -138,6 +155,9 @@ function scene:create( event )
 	})
 	labelMsgContinue:setFillColor( 1 )
 	notificationScreen:insert(labelMsgContinue)
+	
+	local dateNoti = getDateNoti(infoRecordVisit.fechaHora)
+	labelMsgDate.text = dateNoti
    
 end
 

@@ -6,11 +6,14 @@
 -----------------------------------------------------------------------------------------
 
 --componentes 
-local DBManager = require('src.resources.DBManager')
-local RestManager = require('src.resources.RestManager')
+require('src.BuildItem')
 local widget = require( "widget" )
 local composer = require( "composer" )
+local DBManager = require('src.resources.DBManager')
+local RestManager = require('src.resources.RestManager')
 local scene = composer.newScene()
+
+local settings = DBManager.getSettings()
 
 --variables
 local loginScreen = display.newGroup()
@@ -30,7 +33,9 @@ local labelComboOpcionCity
 local txtSignEmail, txtSignPassword
 --scroll
 local svOptionCombo
-local itemsCity = {'Cancun', 'Merida', 'Chetumal', 'Villahermosa', 'tuxtla', 'Narnia'}
+--local itemsCity = {'Cancun', 'Merida', 'Chetumal', 'Villahermosa', 'tuxtla', 'Narnia'}
+local itemsCity
+local itemsGuard
 
 ---------------------------------------------------
 ------------------ Funciones ----------------------
@@ -40,8 +45,16 @@ function setItemsCity(items)
 	itemsCity = items
 end
 
+function setItemsGuard(items)
+	itemsGuard = items
+	if #itemsGuard > 0 then
+		LoadImageGuard(1)
+	end
+end
+
 function gotoLoginGuard()
 
+	deleteNewAlert()
 	composer.removeScene( "src.LoginGuard" )
 	composer.gotoScene( "src.LoginGuard" )
 	
@@ -49,18 +62,66 @@ end
 
 --funcion de logeo
 function doSignIn( event )
+
+	NewAlert("Comprobando usuario", 600, 200)
 	
 	--RestManager.validateAdmin('','123','alfredo',1)
-	--[[if txtSignEmail.text == "" or txtSignPassword.text == "" or labelComboOpcionCity.id == 0 then
-		native.showAlert( "Booking", "Los campos son requeridos.", { "OK"})
+	if txtSignEmail.text == "" or txtSignPassword.text == "" or labelComboOpcionCity.id == 0 then
+		--native.showAlert( "Booking", "Los campos son requeridos.", { "OK"})
+		NewAlert("Los campos son requeridos.", 600, 200)
+		timeMarker = timer.performWithDelay( 2000, function()
+			deleteNewAlert()
+		end, 1 )
 	else
-		--RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text, labelComboOpcionCity.id)
-		RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
-	end]]
+		RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text, labelComboOpcionCity.id)
+		--RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
+	end
 	
-	RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
+	--RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
 	
 	return true
+end
+
+--carga las imagenes de los guardias
+function LoadImageGuard(posc)
+	-- Determinamos si la imagen existe
+	local path = system.pathForFile( itemsGuard[posc].foto, system.TemporaryDirectory )
+	local fhd = io.open( path )
+	if fhd then
+		fhd:close()
+		--if itemsGuard[posc].callback == Globals.noCallbackGlobal then
+			--imageLogos[posc] = display.newImage( itemsGuard[posc].partnerImage, system.TemporaryDirectory )
+			--imageLogos[posc].alpha = 0
+			if posc < #itemsGuard then
+				posc = posc + 1
+				LoadImageGuard(posc)
+			else
+				gotoLoginGuard()
+				--loadImage({posc = 1, screen = 'MainScreen'})
+			end
+		--end
+	else
+		-- Listener de la carga de la imagen del servidor
+		local function loadImageListener( event )
+			if ( event.isError ) then
+				native.showAlert( "Go Deals", "Network error :(", { "OK"})
+			else
+				event.target.alpha = 0
+				--if itemsGuard[posc].callback == Globals.noCallbackGlobal then
+					--imageLogos[posc] = event.target
+					if posc < #itemsGuard then
+						posc = posc + 1
+						LoadImageGuard(posc)
+					else
+						gotoLoginGuard()
+					end
+				--end
+			end
+		end
+		-- Descargamos de la nube
+		display.loadRemoteImage( settings.url..itemsGuard[posc].path..itemsGuard[posc].foto, 
+		"GET", loadImageListener, itemsGuard[posc].foto, system.TemporaryDirectory )
+	end
 end
 
 --obtiene el valor del combobox
@@ -87,16 +148,13 @@ function setOptionComboCity()
 		
 		optionCity[i] = display.newRect( svOptionCombo.contentWidth/2, lastY, intW/2, 80 )
 		optionCity[i]:setFillColor( 1 )
-		--optionCity[i].name = itemsCity[i].nombre
-		--optionCity[i].id = itemsCity[i].id
-		optionCity[i].name = itemsCity[i]
-		optionCity[i].id = i
+		optionCity[i].name = itemsCity[i].nombre
+		optionCity[i].id = itemsCity[i].id
 		svOptionCombo:insert(optionCity[i])
 		optionCity[i]:addEventListener( 'tap', getOptionComboCity )
 		
 		local labelOpcion = display.newText( {
-       -- text = itemsCity[i].nombre, 
-		text = itemsCity[i], 
+        text = itemsCity[i].nombre,
         x = svOptionCombo.contentWidth/2, y = lastY + 10, width = svOptionCombo.contentWidth - 40,
         font = fontDefault, fontSize = 28, align = "left"
 		})
@@ -319,7 +377,7 @@ function scene:create( event )
 	labelSignLogin:setFillColor( 1 )
 	loginScreen:insert(labelSignLogin)
 	
-	--RestManager.getCity()
+	RestManager.getCity()
 
 end
 

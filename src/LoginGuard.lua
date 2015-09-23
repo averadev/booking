@@ -6,14 +6,16 @@
 -----------------------------------------------------------------------------------------
 
 --componentes
+require('src.BuildItem')
+local widget = require( "widget" )
+local composer = require( "composer" )
+local Globals = require('src.resources.Globals')
 local DBManager = require('src.resources.DBManager')
 local RestManager = require('src.resources.RestManager')
-local Globals = require('src.resources.Globals')
-local composer = require( "composer" )
-local widget = require( "widget" )
 local scene = composer.newScene()
 
 local settings = DBManager.getSettings()
+local settingsGuard = DBManager.getGuards()
 
 -------variables
 --grupos
@@ -37,65 +39,16 @@ local currentGuard = nil
 
 local GuardCondo = {}
 
-local itemsGuard
-
 ---------------------------------------------------
 ------------------ Funciones ----------------------
 ---------------------------------------------------
 
-function gotoHome(idGuard)
-	Globals.idGuard = idGuard
+function gotoHome(idGuard, name, photo)
+	--[[Globals.idGuard = idGuard
+	Globals.nameGuard = name
+	Globals.photoGuard = photo]]
 	composer.removeScene("src.Home")
 	composer.gotoScene("src.Home")
-end
-
-function setItemsGuard(items)
-	itemsGuard = items
-	if #itemsGuard > 0 then
-		LoadImageGuard(1)
-	end
-end
-
---carga las imagenes de los guardias
-function LoadImageGuard(posc)
-	-- Determinamos si la imagen existe
-	local path = system.pathForFile( itemsGuard[posc].foto, system.TemporaryDirectory )
-	local fhd = io.open( path )
-	if fhd then
-		fhd:close()
-		--if itemsGuard[posc].callback == Globals.noCallbackGlobal then
-			--imageLogos[posc] = display.newImage( itemsGuard[posc].partnerImage, system.TemporaryDirectory )
-			--imageLogos[posc].alpha = 0
-			if posc < #itemsGuard then
-				posc = posc + 1
-				LoadImageGuard(posc)
-			else
-				buildItemsGuard()
-				--loadImage({posc = 1, screen = 'MainScreen'})
-			end
-		--end
-	else
-		-- Listener de la carga de la imagen del servidor
-		local function loadImageListener( event )
-			if ( event.isError ) then
-				native.showAlert( "Go Deals", "Network error :(", { "OK"})
-			else
-				event.target.alpha = 0
-				--if itemsGuard[posc].callback == Globals.noCallbackGlobal then
-					--imageLogos[posc] = event.target
-					if posc < #itemsGuard then
-						posc = posc + 1
-						LoadImageGuard(posc)
-					else
-						buildItemsGuard()
-					end
-				--end
-			end
-		end
-		-- Descargamos de la nube
-		display.loadRemoteImage( settings.url..itemsGuard[posc].path..itemsGuard[posc].foto, 
-		"GET", loadImageListener, itemsGuard[posc].foto, system.TemporaryDirectory )
-	end
 end
 
 --crea los guardias
@@ -107,12 +60,12 @@ function buildItemsGuard()
 	
 	--local groupGuardList = display.newGroup()
 	
-	for i = 1, #itemsGuard, 1 do
+	for i = 1, #settingsGuard, 1 do
 	
 		GuardCondo[i] = display.newContainer( 135, 135 )
 		GuardCondo[i].x = intW/5.7 * i - 50
 		GuardCondo[i].y = lastY
-		GuardCondo[i].id = itemsGuard[i].id
+		GuardCondo[i].id = settingsGuard[i].id
 		GuardCondo[i].num = i
 		loginGuardScreen:insert(GuardCondo[i])
 		GuardCondo[i]:addEventListener( 'tap', SelecGuard )
@@ -121,7 +74,7 @@ function buildItemsGuard()
 		bgImgGuard:setFillColor( 1 )
 		GuardCondo[i]:insert(bgImgGuard)
 		
-		local imgGuard = display.newImage( itemsGuard[i].foto, system.TemporaryDirectory )
+		local imgGuard = display.newImage( settingsGuard[i].foto, system.TemporaryDirectory )
 		imgGuard.x = 0
 		imgGuard.y = 0
 		imgGuard.height = 120
@@ -140,15 +93,30 @@ function buildItemsGuard()
 end
 
 function doSignInGuard( event )
-	--[[if txtSignPasswordGuard.text ~= '' and currentGuard ~= nil then
+	if txtSignPasswordGuard.text ~= '' and currentGuard ~= nil then
 		--RestManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
-		RestManager.validateGuard('123',GuardCondo[currentGuard].id)
+		--RestManager.validateGuard('123',GuardCondo[currentGuard].id)
+		--local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
+		local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
+		if result == 1 then
+			NewAlert("Contraseña incorrecta.", 600, 200)
+			timeMarker = timer.performWithDelay( 2000, function()
+				deleteNewAlert()
+			end, 1 )
+		else
+			composer.removeScene("src.Home")
+			composer.gotoScene("src.Home")
+		end
 	else
-		native.showAlert( "Booking", "Campos vacios", { "OK"})
-	end]]
+		--native.showAlert( "Booking", "Campos vacios", { "OK"})
+		NewAlert("Campos Vacios.", 600, 200)
+		timeMarker = timer.performWithDelay( 2000, function()
+			deleteNewAlert()
+		end, 1 )
+	end
 	
-	composer.removeScene("src.Home")
-	composer.gotoScene("src.Home")
+	--composer.removeScene("src.Home")
+	--composer.gotoScene("src.Home")
 	
 end
 
@@ -169,8 +137,10 @@ function changeCondo( event )
 	
 	if txtSignPasswordChangeCondo.text ~= "" then
 		RestManager.signOut(txtSignPasswordChangeCondo.text)
+		--RestManager.signOut("123")
 	else
-		native.showAlert( "Booking", "Campos vacios", { "OK"})
+		--native.showAlert( "Booking", "Campos vacios", { "OK"})
+		NewAlert("Campo Vacio.", 600, 200, 2000)
 	end
 	
 end
@@ -191,7 +161,7 @@ function showChangeCondo( event )
 	groupChangeCondo:insert(bgChangeCombo)
 	bgChangeCombo:addEventListener( 'tap', hideChangeCombo )
 	
-	local bodyChangeCombo = display.newRect( intW/2, intH/2, intW/1.2, intH/1.4 + h )
+	local bodyChangeCombo = display.newRect( intW/2, intH/2, intW/1.2, intH/1.4 )
 	bodyChangeCombo:setFillColor( 54/255, 80/255, 131/255 )
 	groupChangeCondo:insert(bodyChangeCombo)
 	bodyChangeCombo:addEventListener( 'tap', noAction )
@@ -225,29 +195,24 @@ function showChangeCondo( event )
 	
 	lastY = intH/1.3
 	
-	--[[local btnCancelChangeCondo = display.newRoundedRect( intW/2 - 180, lastY, 200, 70, 10 )
-	btnCancelChangeCondo:setFillColor( 205/255, 69/255, 69/255 )
+	local poscC = bodyChangeCombo.contentWidth + (intW - intW/1.2) / 2 - 30
+	local poscC2 = (intH - intH/1.4) / 2 + 30
+	
+	local btnCancelChangeCondo = display.newRect( poscC, poscC2, 60, 60 )
+	btnCancelChangeCondo:setFillColor( 43/255, 66/255, 116/255 )
 	groupChangeCondo:insert(btnCancelChangeCondo)
 	btnCancelChangeCondo:addEventListener( 'tap', hideChangeCombo)
 	
-	local labelCancelChangeCondo = display.newText( {   
-        x = intW/2 - 180, y = lastY,
-        text = "CANCELAR",  font = fontDefault, fontSize = 28
-	})
-	labelCancelChangeCondo:setFillColor( 1 )
-	groupChangeCondo:insert(labelCancelChangeCondo)]]
-	
 	local imgArrowBackReturn = display.newImage( "img/btn/CANCELAR.png" )
-	imgArrowBackReturn.x = intH/2 + 535
-	imgArrowBackReturn.y = h + 70
+	imgArrowBackReturn.x = poscC
+	imgArrowBackReturn.y = poscC2
 	groupChangeCondo:insert(imgArrowBackReturn)
-	imgArrowBackReturn:addEventListener( 'tap', hideChangeCombo)
 	
 	local btnAceptChangeCondo = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
 	btnAceptChangeCondo:setFillColor( 205/255, 69/255, 69/255 )
 	groupChangeCondo:insert(btnAceptChangeCondo)
-	--btnAceptChangeCondo:addEventListener( 'tap', changeCondo)
-	btnAceptChangeCondo:addEventListener( 'tap', signOut)
+	btnAceptChangeCondo:addEventListener( 'tap', changeCondo)
+	--btnAceptChangeCondo:addEventListener( 'tap', signOut)
 	
 	local labelAceptChangeCondo = display.newText( {   
         x = intW/2, y = lastY,
@@ -341,7 +306,7 @@ function scene:create( event )
 	
 	--local groupGuardList = display.newGroup()
 	
-	for i = 1, 4, 1 do
+	--[[for i = 1, 4, 1 do
 	
 		GuardCondo[i] = display.newContainer( 135, 135 )
 		GuardCondo[i].x = intW/5.7 * i - 50
@@ -360,7 +325,7 @@ function scene:create( event )
 		imgGuard.y = 0
 		GuardCondo[i]:insert(imgGuard)
 	
-	end
+	end]]
 	
 	--btn view more
 	
@@ -431,7 +396,9 @@ function scene:create( event )
 	loginGuardScreen:insert(imgSignOut)
 	imgSignOut:addEventListener( 'tap', showChangeCondo)
 	
-	--RestManager.getInfoGuard()
+	DBManager.updateGuardActive()
+	
+	buildItemsGuard()
 
 end
 

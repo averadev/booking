@@ -6,9 +6,11 @@
 -----------------------------------------------------------------------------------------
 
 --componentes 
-local composer = require( "composer" )
 local widget = require( "widget" )
+local composer = require( "composer" )
 local Globals = require('src.resources.Globals')
+local DBManager = require('src.resources.DBManager')
+local RestManager = require('src.resources.RestManager')
 local scene = composer.newScene()
 
 --variables
@@ -30,6 +32,7 @@ local containerListCondo = {}
 local lasPoscCondo = 1
 
 local NumCondo = 0
+local idCondo = 0
 
 ---------------------------------------------------
 ------------------ Funciones ----------------------
@@ -39,6 +42,7 @@ local NumCondo = 0
 function getNumCondominium( event )
 	
 	Globals.numCondominium = NumCondo
+	Globals.idCondominium = idCondo
 	
 	composer.gotoScene("src.RecordVisit")
 
@@ -53,11 +57,14 @@ function selectCondo( event )
 	lasPoscCondo = event.target.posc
 	event.target.alpha = .7
 	NumCondo = event.target.num
+	idCondo = event.target.id
 
 end
 
 --pinta los condominios
 function getNumCondo()
+
+	local listCondo = DBManager.getCondominiums()
 
 	local contX = 1
 	local contY = 100
@@ -66,12 +73,13 @@ function getNumCondo()
 	numMax = math.round(numMax * mult + 0.5)
 	numMax = numMax - 2
 	
-	for i = 1, 15, 1 do
+	for i = 1, #listCondo, 1 do
 		
 		containerListCondo[i] = display.newContainer( 130, 130 )
         containerListCondo[i].x = (contX * 170) - 40
         containerListCondo[i].y = contY
-		containerListCondo[i].num = "0" .. i
+		containerListCondo[i].num = listCondo[i].nombre
+		containerListCondo[i].id = listCondo[i].id
 		containerListCondo[i].posc = i
         svListCondo:insert( containerListCondo[i] )
 		containerListCondo[i]:addEventListener( 'tap', selectCondo )
@@ -89,7 +97,7 @@ function getNumCondo()
 		containerListCondo[i]:insert(imgNumCondo)
 		
 		local labelNumCondo = display.newText( {
-            text = "0" .. i,     
+            text = listCondo[i].nombre,   
             x = 0, y = 0,
             font = fontDefault, fontSize = 60, align = "center"
 		})

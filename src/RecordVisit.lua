@@ -6,10 +6,15 @@
 -----------------------------------------------------------------------------------------
 
 --componentes 
-local composer = require( "composer" )
 local widget = require( "widget" )
+local composer = require( "composer" )
 local Globals = require('src.resources.Globals')
+local DBManager = require('src.resources.DBManager')
+local RestManager = require('src.resources.RestManager')
+
 local scene = composer.newScene()
+
+local settingsGuard = DBManager.getGuardActive()
 
 --variables
 local recordVisitScreen = display.newGroup()
@@ -26,10 +31,14 @@ fontDefault = native.systemFont
 local txtRecordVisitName
 local txtRecordVisitReason
 local txtRecordNumCondo
+local labelNumCondominius
 
 local photoFrontal = nil
 local photoBack = nil
 local typePhoto = 0
+
+local timeStampPhoto
+local idLastMSG
 
 ---------------------------------------------------
 ------------------ Funciones ----------------------
@@ -39,6 +48,16 @@ local typePhoto = 0
 function sendMessageToadmin( event )
 	native.showAlert( "Booking", "Mensaje enviado", { "OK"})
 	composer.gotoScene("src.Home")
+end
+
+--llama a la scena de notificaciones
+function goToNotificationMSG()
+	composer.removeScene("src.Notification")
+	composer.gotoScene("src.Notification", {
+		time = 400,
+		effect = "crossFade",
+		params = { lastId = idLastMSG }
+	})
 end
 
 --muestra la pantalla de condominio
@@ -53,7 +72,41 @@ end
 
 --envia el mensaje
 function sendRecordVisit( event )
-	composer.gotoScene("src.Notification")
+	
+	--print(RestManager.getDateCompound())
+
+	--print(os.date( "%x" ) )
+	--local TimeStamp = RestManager.getTimeStamp('2015-09-21T17:50:36.03-0400')
+	--print(TimeStamp)
+	--print(os.time())
+
+	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
+	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
+		
+		--[[NewAlert("Visitante registrado.", 600, 200)
+		timeMarker = timer.performWithDelay( 2000, function()
+			deleteNewAlert()
+		end, 1 )]]
+		NewAlert("Enviando mensaje", 600, 200)
+		
+		local dateS2 = RestManager.getDate()
+		
+		idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto)
+		--idLastMSG = DBManager.saveRecordVisit("arturo jimenez", "visita a la empresa geek", labelNumCondominius.id, dateS2, "1111")
+		
+		RestManager.sendMSGRecordVisit()
+		--RestManager.uploadImage()
+		
+		
+		
+	else
+		--native.showAlert( "Booking", "Campos vacios", { "OK"})
+		NewAlert("Campos vacios.", 600, 200)
+		timeMarker = timer.performWithDelay( 2000, function()
+			deleteNewAlert()
+		end, 1 )
+	end
+	--composer.gotoScene("src.Notification")
 end
 
 --camara
@@ -61,43 +114,59 @@ function takePhotography( event )
 
 	typePhoto = event.target.type
 	
+	local namePhoto = timeStampPhoto .. typePhoto .. settingsGuard.id .. ".jpg"
+	print ('nameFoto ' .. namePhoto)
+	
+	local group = display.newGroup()
+	
 	local function onComplete( event )
+		print('adsadad')
 		--local photo = event.target
 		--[[photo.height = 150
 		photo.width = 200
 		photo.x = 100
 		photo.y = intH/2.04]]
+		
+		--media.save( namePhoto, namePhoto, system.TemporaryDirectory )
+		
 		if typePhoto == 1 then
+			
 			if photoFrontal then
 				photoFrontal:removeSelf()
 				photoFrontal = nil
 			end
-			photoFrontal = event.target
+			
+			photoFrontal = display.newImage( "tempFotos/" .. namePhoto, system.TemporaryDirectory ) 
 			photoFrontal.height = 190
 			photoFrontal.width = 190
 			photoFrontal.x = intW/1.55
 			photoFrontal.y = intH/1.8
 			recordVisitScreen:insert(photoFrontal)
-			
 		else
-		
+			
 			if photoBack then
 				photoBack:removeSelf()
 				photoBack = nil
 			end
-			photoBack =  event.target
+			photoBack = display.newImage( "tempFotos/" .. namePhoto, system.TemporaryDirectory )
 			photoBack.height = 190
 			photoBack.width = 190
 			photoBack.x = intW/1.15
 			photoBack.y = intH/1.8
 			recordVisitScreen:insert(photoBack)
-		
 		end
 		
 	end
 
 	if media.hasSource( media.Camera ) then
-		media.capturePhoto( { listener=onComplete } )
+		media.capturePhoto( { 
+			listener=onComplete,
+			destination = {
+				baseDir = system.TemporaryDirectory,
+				filename = "tempFotos/" .. namePhoto,
+				type = "image"
+			}
+		} )
 	else
 		native.showAlert( "Corona", "This device does not have a camera.", { "OK" } )
 	end
@@ -116,6 +185,7 @@ function scene:create( event )
 	screen:insert(recordVisitScreen)
 	--screen:insert(grpTextFieldRV)
 	
+	local settingsGuard = DBManager.getGuardActive()
 	
 	local bgRecordVisit = display.newRect( 0, h, intW, intH )
 	bgRecordVisit.anchorX = 0
@@ -158,8 +228,8 @@ function scene:create( event )
 	imgGuardTurn:setFillColor( 1 )
 	recordVisitScreen:insert(imgGuardTurn)
 	
-	--local imgGuardTurn = display.newImage( Globals.photoGuard, system.TemporaryDirectory )
-	local imgGuardTurn = display.newImage( "img/btn/GUARDIA.png" )
+	local imgGuardTurn = display.newImage( settingsGuard.foto, system.TemporaryDirectory )
+	--local imgGuardTurn = display.newImage( "img/btn/GUARDIA.png" )
 	imgGuardTurn.x = intW/1.3
 	imgGuardTurn.height = 100
 	imgGuardTurn.width = 100
@@ -168,7 +238,7 @@ function scene:create( event )
 	
 	local labelGuardTurn = display.newText( {   
         x = intW/1.3, y = h + 155,
-        text = Globals.nameGuard,  font = fontDefault, fontSize = 20
+        text = settingsGuard.nombre,  font = fontDefault, fontSize = 20
 	})
 	labelGuardTurn:setFillColor( 64/255, 90/255, 139/255 )
 	recordVisitScreen:insert(labelGuardTurn)
@@ -228,14 +298,21 @@ function scene:create( event )
 	recordVisitScreen:insert(imgNumCondo)
 	imgNumCondo:addEventListener( 'tap', showListCondominium)
 	
-	txtRecordNumCondo = native.newTextField( intW/4 - 30, lastY, 340, 60 )
+	labelNumCondominius = display.newText( {
+		x = intW/5, y = lastY,
+		width = 200,
+        text = "Num. Condominio",  font = fontDefault, fontSize = 20, align = "left"
+	})
+	labelNumCondominius:setFillColor( 64/255, 90/255, 139/255 )
+	labelNumCondominius.id = 0
+	recordVisitScreen:insert(labelNumCondominius)
+	
+	--[[txtRecordNumCondo = native.newTextField( intW/4 - 30, lastY, 340, 60 )
     txtRecordNumCondo.inputType = "number"
     txtRecordNumCondo.hasBackground = false
 	txtRecordNumCondo.placeholder = "SELECCIONAR CONDOMINIO"
- -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
-	--txtSignEmail:setReturnKey(  "next"  )
 	txtRecordNumCondo.size = 20
-	grpTextFieldRV:insert(txtRecordNumCondo)
+	grpTextFieldRV:insert(txtRecordNumCondo)]]
 	
 	----- fotos -----
 	
@@ -248,6 +325,8 @@ function scene:create( event )
 	btnRecordCamaraFrontal:addEventListener( 'tap', takePhotography )
 	
 	local imgRecordCamaraFrontal = display.newImage( "img/btn/CAMARA.png" )
+	--local imgRecordCamaraFrontal = display.newImage( "/storage/emulated/0/Pictures/Picture19.jpg" )
+	--local imgRecordCamaraFrontal = display.newImage( "/sdcard/Pictures/Picture19.jpg" )
 	imgRecordCamaraFrontal.x = intW/1.55
 	imgRecordCamaraFrontal.y = lastY
 	recordVisitScreen:insert(imgRecordCamaraFrontal)
@@ -287,30 +366,6 @@ function scene:create( event )
 	labelRecordCamaraFrontal:setFillColor( 64/255, 90/255, 139/255 )
 	recordVisitScreen:insert(labelRecordCamaraFrontal)
 	
-	lastY = intH/1.28
-	
-	--[[local imgArrowLeftCondo = display.newImage( "img/btn/btnBackward.png" )
-	imgArrowLeftCondo.x = intW/1.9
-	--imgArrowBack.height = 40
-	--imgArrowBack.width = 40
-	imgArrowLeftCondo.y = lastY
-	recordVisitScreen:insert(imgArrowLeftCondo)
-	
-	local imgNumCondo= display.newImage( "img/btn/btnFilter.png" )
-	imgNumCondo.x = intW/1.9 + 55
-	--imgNumCondo.height = 40
-	--imgNumCondo.width = 40
-	imgNumCondo.y = lastY
-	recordVisitScreen:insert(imgNumCondo)
-	imgNumCondo:addEventListener( 'tap', showListCondominium )
-	
-	local labelRecordCamaraFrontal= display.newText( {   
-        x = intW/1.9 + 245, y = lastY,
-        text = "Selecionar condominio",  font = fontDefault, fontSize = 28, align = "center",
-	})
-	labelRecordCamaraFrontal:setFillColor( 0 )
-	recordVisitScreen:insert(labelRecordCamaraFrontal)]]
-	
 	lastY = intH/1.2
 	
 	local btnRegisterVisit = display.newRoundedRect( intW/2, intH - 70, 300, 70, 10 )
@@ -324,8 +379,6 @@ function scene:create( event )
 	})
 	labelRegisterVisit:setFillColor( 1 )
 	recordVisitScreen:insert(labelRegisterVisit)
-	
-	
    
 end
 
@@ -336,10 +389,13 @@ function scene:show( event )
 	if txtRecordVisitReason then txtRecordVisitReason.x = intW/4 end
 	if txtRecordNumCondo then txtRecordNumCondo.x = intW/4 end]]
 	
+	timeStampPhoto = os.time()
+	
 	grpTextFieldRV.x = 0
 
-	if txtRecordNumCondo then
-		txtRecordNumCondo.text = Globals.numCondominium
+	if labelNumCondominius then
+		labelNumCondominius.text = Globals.numCondominium
+		labelNumCondominius.id = Globals.idCondominium
 	end
 	
 end

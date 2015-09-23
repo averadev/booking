@@ -30,48 +30,30 @@ local txtMsgSubject
 ---------------------------------------------------
 ------------------ Funciones ----------------------
 ---------------------------------------------------
+
+function goToLoginGuardMSGAdmin()
+
+		composer.removeScene("src.LoginGuard")
+		composer.gotoScene("src.LoginGuard")
+
+end
 	
 --envia el mensaje al administrador
 function sendMessageToadmin( event )
-
-	local midW = display.contentWidth / 2
-	local midH = display.contentHeight / 2
-	messageConfirmAdmin = display.newGroup()
-        
-	local bgShade = display.newRect( midW, midH, display.contentWidth, display.contentHeight )
-	bgShade:setFillColor( 0, 0, 0, .3 )
-	messageConfirmAdmin:insert(bgShade)
-        
-	local bg = display.newRoundedRect( midW, midH, 280, 300, 10 )
-	bg:setFillColor( .3, .3, .3 )
-	messageConfirmAdmin:insert(bg)
 	
-	local labelConfirmAdmin= display.newText( {   
-        x = midW, y = midH, width = 280,
-        text = "Mensaje enviado",  font = fontDefault, fontSize = 40, align = "center",
-	})
-	labelConfirmAdmin:setFillColor( 1 )
-	messageConfirmAdmin:insert(labelConfirmAdmin)
-	
-	timeMarker = timer.performWithDelay( 3000, function()
-		messageConfirmAdmin:removeSelf()
-		messageConfirmAdmin = nil
-		composer.removeScene("src.LoginGuard")
-		composer.gotoScene("src.LoginGuard")
-	end, 1 )
-
-
-	--print( os.date( "%c" ) )
-	
-	--native.showAlert( "Booking", "Mensaje enviado", { "OK"})
-	--composer.removeScene("src.LoginGuard")
-	--composer.gotoScene("src.LoginGuard")
-	--[[if txtMsgMessage.text ~= '' and txtMsgSubject.text ~= '' then
-		--RestManager.SendMessageGuard(txtMsgMessage.text, txtMsgSubject.text, os.date( "%c" ))
-		RestManager.SendMessageGuard("Mensaje", "Mensaje de aviso", os.date( "%c" ))
+	if txtMsgMessage.text ~= '' and txtMsgSubject.text ~= '' then
+		NewAlert("Enviando mensaje", 600, 200)
+		local dateS2 = RestManager.getDate()
+		
+		DBManager.saveMessageGuard(txtMsgMessage.text, txtMsgSubject.text, dateS2)
+		--DBManager.saveMessageGuard("Bienvenida", "Mensaje de bienbenida", dateS2)
+		RestManager.sendMessagesGuard()
 	else
-		native.showAlert( "Booking", "Campos vacios", { "OK"})
-	end]]
+		NewAlert("Campos vacios.", 600, 200)
+		timeMarker = timer.performWithDelay( 2000, function()
+			deleteNewAlert()
+		end, 1 )
+	end
 end
 
 --regresa al pantalla de home
