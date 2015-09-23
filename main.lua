@@ -9,12 +9,13 @@
 local composer = require( "composer" )
 local Globals = require('src.resources.Globals')
 local DBManager = require('src.resources.DBManager')
-local RestManager = require('src.resources.RestManager')
+--
 
 display.setStatusBar( display.DarkStatusBar )
 
 local isUser = DBManager.setupSquema()
 
+local RestManager = require('src.resources.RestManager')
 
 function createFolderPhoto(name)
 	
@@ -51,6 +52,6 @@ end
 
 timeMarker = timer.performWithDelay( 30000, function()
 	if Globals.ItIsUploading == 0 then
-		RestManager.checkUnsentMessage(1)
+		--RestManager.checkUnsentMessage(1)
 	end
 end, -1 )
