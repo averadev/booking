@@ -154,8 +154,9 @@ local dbManager = {}
     dbManager.updateRecordVisit = function(items)
 		openConnection( )
         local query = "UPDATE registro_visitas SET idRV = "..items.idMSGNew..", enviado = '1' where id = '" .. items.idMSG .. "' ;"
-        db:exec( query )
+        local result = db:exec( query )
 		closeConnection( )
+		return result
 	end
 	
 	--inserta los guardias de la residencial
@@ -283,7 +284,7 @@ local dbManager = {}
 		
         -- Populate config
 		query = "INSERT INTO config VALUES (1, 0, '', '', '', '', '', 'http://geekbucket.com.mx/booking/');"
-		--query = "INSERT INTO config VALUES (1, 0, '', '', '', '', '', 'http://192.168.1.73/booking/');"
+		--query = "INSERT INTO config VALUES (1, 0, '', '', '', '', '', 'http://localhost:8080/booking/');"
 		
 		db:exec( query )
     

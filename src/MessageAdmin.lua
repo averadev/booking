@@ -45,8 +45,8 @@ function sendMessageToadmin( event )
 		NewAlert("Enviando mensaje", 600, 200)
 		local dateS2 = RestManager.getDate()
 		
-		DBManager.saveMessageGuard(txtMsgMessage.text, txtMsgSubject.text, dateS2)
-		--DBManager.saveMessageGuard("Bienvenida", "Mensaje de bienbenida", dateS2)
+		--DBManager.saveMessageGuard(txtMsgMessage.text, txtMsgSubject.text, dateS2)
+		DBManager.saveMessageGuard("Bienvenida", "Mensaje de bienbenida", dateS2)
 		RestManager.sendMessagesGuard()
 	else
 		NewAlert("Campos vacios.", 600, 200)

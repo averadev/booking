@@ -70,6 +70,14 @@ function returnHomeRecordVisit( event )
 	composer.gotoScene("src.Home")
 end
 
+--elimina las imagenes una vez subidas
+function deleteImageRecordVisit(frente, vuelta)
+	
+	os.remove( system.pathForFile( "tempFotos/" .. frente, system.TemporaryDirectory  ) )
+	os.remove( system.pathForFile( "tempFotos/" .. vuelta, system.TemporaryDirectory  ) )
+	
+end
+
 --envia el mensaje
 function sendRecordVisit( event )
 	
@@ -80,8 +88,8 @@ function sendRecordVisit( event )
 	--print(TimeStamp)
 	--print(os.time())
 
-	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
-	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
+	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
+	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
 		
 		--[[NewAlert("Visitante registrado.", 600, 200)
 		timeMarker = timer.performWithDelay( 2000, function()
@@ -91,8 +99,8 @@ function sendRecordVisit( event )
 		
 		local dateS2 = RestManager.getDate()
 		
-		idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto)
-		--idLastMSG = DBManager.saveRecordVisit("arturo jimenez", "visita a la empresa geek", labelNumCondominius.id, dateS2, "1111")
+		--idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto)
+		idLastMSG = DBManager.saveRecordVisit("arturo jimenez", "visita a la empresa geek", labelNumCondominius.id, dateS2, "1111")
 		
 		RestManager.sendMSGRecordVisit()
 		--RestManager.uploadImage()

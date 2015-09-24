@@ -52,6 +52,6 @@ end
 
 timeMarker = timer.performWithDelay( 30000, function()
 	if Globals.ItIsUploading == 0 then
-		--RestManager.checkUnsentMessage(1)
+		RestManager.checkUnsentMessage(1)
 	end
 end, -1 )
