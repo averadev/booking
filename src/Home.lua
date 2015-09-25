@@ -6,12 +6,15 @@
 -----------------------------------------------------------------------------------------
 
 --componentes 
-local composer = require( "composer" )
 local widget = require( "widget" )
+local composer = require( "composer" )
+local DBManager = require('src.resources.DBManager')
 local scene = composer.newScene()
 
 --variables
 local homeScreen = display.newGroup()
+
+local settingsGuard = DBManager.getGuardActive()
 
 --variables para el tamaño del entorno
 local intW = display.contentWidth
@@ -24,6 +27,18 @@ fontDefault = native.systemFont
 local btnAceptOptionn
 local btnMessageAdmi
 local btnRecordVisits
+
+local fontLatoBold, fontLatoLight, fontLatoRegular
+local environment = system.getInfo( "environment" )
+if environment == "simulator" then
+	fontLatoBold = native.systemFontBold
+	fontLatoLight = native.systemFont
+	fontLatoRegular = native.systemFont
+else
+	fontLatoBold = "Lato-Bold"
+	fontLatoLight = "Lato-Light"
+	fontLatoRegular = "Lato-Regular"
+end
 
 ---------------------------------------------------
 ------------------ Funciones ----------------------
@@ -83,98 +98,101 @@ function scene:create( event )
 	
 	screen:insert(homeScreen)
 	
-	local bgLogin = display.newRect( 0, h, intW, intH )
-	bgLogin.anchorX = 0
-	bgLogin.anchorY = 0
-	bgLogin:setFillColor( 222/255, 222/255, 222/255 )
-	homeScreen:insert(bgLogin)
+	local bgHome = display.newImage( "img/btn/fondo.png" )
+	bgHome.anchorX = 0
+	bgHome.anchorY = 0
+	bgHome.width = intW
+	bgHome.height = intH - h
+	bgHome.y = h
+	homeScreen:insert(bgHome)
 	
-	local imgLogo = display.newCircle( intW/2, h + 110, 90 )
-	imgLogo:setFillColor( 1 )
-	homeScreen:insert(imgLogo)
-	
-	local bgfringeDown = display.newRect( 0, intH - 20, intW, 20 )
-	bgfringeDown.anchorX = 0
-	bgfringeDown.anchorY = 0
-	bgfringeDown:setFillColor( 96/255, 96/255, 96/255 )
-	homeScreen:insert(bgfringeDown)
-	
-	local bgfringeField = display.newRect( 0, h + 240, intW, 300 )
-	bgfringeField.anchorX = 0
-	bgfringeField.anchorY = 0
-	bgfringeField:setFillColor( 54/255, 80/255, 131/255 )
-	homeScreen:insert(bgfringeField)
-	
-	btnMessageAdmi = display.newRoundedRect( intW/3.5, h + intH/2 + 5, 200, 200, 12 )
-	btnMessageAdmi.option = 1
-	btnMessageAdmi:setFillColor( 1 )
-	homeScreen:insert(btnMessageAdmi)
-	btnMessageAdmi:addEventListener( 'tap', selectOptionHome )
-	
-	local imgMessageAdmi = display.newImage( "img/btn/VERSION2MENSAJE.png" )
-	imgMessageAdmi.x =	intW/3.5
-	imgMessageAdmi.y = h + intH/2 - 25
-	homeScreen:insert(imgMessageAdmi)
-	
-	local labelMessageAdmi = display.newText( {   
-        --x = intW/3, y = lastY,
-		x = intW/3.5, y = h + intH/2 + 70, width = 200,
-        text = "MENSAJE DE ADMINISTRACION",  font = fontDefault, fontSize = 19, align = "center",
-	})
-	labelMessageAdmi:setFillColor( 64/255, 90/255, 139/255 )
-	homeScreen:insert(labelMessageAdmi)
-	
-	btnRecordVisits = display.newRoundedRect( intW/1.4, h + intH/2 + 5, 200, 200, 12 )
-	btnRecordVisits.option = 2
-	btnRecordVisits:setFillColor( 1 )
-	homeScreen:insert(btnRecordVisits)
-	btnRecordVisits:addEventListener( 'tap', selectOptionHome )
-	
-	local imgMessageAdmi = display.newImage( "img/btn/VERSION2REGISTRO.png" )
-	imgMessageAdmi.x =	intW/1.4
-	imgMessageAdmi.y = h + intH/2 - 25
-	homeScreen:insert(imgMessageAdmi)
-	
-	local labelRecordVisits = display.newText( {   
-        --x = intW/3, y = lastY,
-		x = intW/1.4, y = h + intH/2 + 70, width = 200,
-        text = "REGISTRO DE VISITAS",  font = fontDefault, fontSize = 19, align = "center",
-	})
-	labelRecordVisits:setFillColor( 64/255, 90/255, 139/255 )
-	homeScreen:insert(labelRecordVisits)
-	
-	--botones
-	
-	lastY = 600 + h
-	
-	local imgArrowBack = display.newImage( "img/btn/REGRESAR.png" )
-	imgArrowBack.x = 50
-	imgArrowBack.height = 50
-	imgArrowBack.width = 50
+	local imgArrowBack = display.newImage( "img/btn/seleccionOpcion-regresarSuperior.png" )
+	imgArrowBack.x = 30
 	imgArrowBack.y = h + 40
 	homeScreen:insert(imgArrowBack)
 	imgArrowBack:addEventListener( 'tap', returnLoginGuard)
 	
 	local labelArrowBack = display.newText( {   
-        x = 140, y = h + 40,
-        text = "REGRESAR",  font = fontDefault, fontSize = 18
+        x = 125, y = h + 40,
+        text = "REGRESAR",  font = fontLatoBold, fontSize = 26
 	})
-	labelArrowBack:setFillColor( 64/255, 90/255, 139/255 )
+	labelArrowBack:setFillColor( 1 )
 	homeScreen:insert(labelArrowBack)
 	
-	btnAceptOptionn = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
-	btnAceptOptionn:setFillColor( 205/255, 69/255, 69/255 )
-	btnAceptOptionn.option = 0
-	btnAceptOptionn.alpha = .3
-	homeScreen:insert(btnAceptOptionn)
-	--btnSignLogin:addEventListener( 'tap', doSignIn)
-	
-	local labelAceptOption = display.newText( {   
-        x = intW/2, y = lastY,
-        text = "ACEPTAR",  font = fontDefault, fontSize = 28
+	local labelWeolcomeGuard= display.newText( {   
+        x = intW/2, y = h + 40,
+        text = "Bienvenido " .. settingsGuard.nombre,  font = fontLatoBold, fontSize = 40
 	})
-	labelAceptOption:setFillColor( 1 )
-	homeScreen:insert(labelAceptOption)
+	labelWeolcomeGuard:setFillColor( 1 )
+	homeScreen:insert(labelWeolcomeGuard)
+	
+	lastY = h + 150
+	
+	local msgInfoHome = "Seleciona lo que deaseas registrar. \nPuedes regresarte a la pantalla anterior seleccionando el icono      en la esquina superior derecha."
+	
+	local labelInfoHome = display.newText( {   
+        x = intW/2, y = lastY, width = intW - 100,
+        text = msgInfoHome,  font = fontLatoRegular, fontSize = 26
+	})
+	labelInfoHome:setFillColor( 1 )
+	homeScreen:insert(labelInfoHome)
+	labelInfoHome.y = labelInfoHome.y + labelInfoHome.contentHeight/2
+	
+	local imgArrowInfoHome = display.newImage( "img/btn/seleccionOpcion-regresarTexto.png" )
+	imgArrowInfoHome.x = 99 * 8.05
+	imgArrowInfoHome.y =  h + 195
+	homeScreen:insert(imgArrowInfoHome)
+	
+	local bgOpcionMsg = display.newRoundedRect( intW/2, h + 300, 800, 300, 10 )
+	bgOpcionMsg.anchorY = 0
+	bgOpcionMsg:setFillColor( 1, 1, 1, 0 )
+	bgOpcionMsg.strokeWidth = 5
+	bgOpcionMsg:setStrokeColor( 15/255, 68/255, 108/255 )
+	homeScreen:insert(bgOpcionMsg)
+	
+	btnMessageAdmi = display.newRoundedRect( intW/2 - 150, h + 450, 200, 200, 12 )
+	btnMessageAdmi.option = 1
+	btnMessageAdmi:setFillColor( 15/255, 68/255, 108/255 )
+	btnMessageAdmi.strokeWidth = 4
+	btnMessageAdmi:setStrokeColor( 54/255, 80/255, 131/255 )
+	homeScreen:insert(btnMessageAdmi)
+	--btnMessageAdmi:addEventListener( 'tap', selectOptionHome )
+	btnMessageAdmi:addEventListener( 'tap', aceptOptionHome)
+	
+	local imgMessageAdmi = display.newImage( "img/btn/seleccionOpcion-Mensaje.png" )
+	imgMessageAdmi.x =	intW/2 - 150
+	imgMessageAdmi.y =  h + 420
+	homeScreen:insert(imgMessageAdmi)
+	
+	local labelMessageAdmi = display.newText( {   
+        --x = intW/3, y = lastY,
+		x = intW/2 - 150, y = h + 510, width = 200,
+        text = "Mensaje a Administración",  font = fontLatoRegular, fontSize = 22, align = "center",
+	})
+	labelMessageAdmi:setFillColor( 1 )
+	homeScreen:insert(labelMessageAdmi)
+	
+	btnRecordVisits = display.newRoundedRect( intW/2 + 150, h + 450, 200, 200, 12 )
+	btnRecordVisits.option = 2
+	btnRecordVisits:setFillColor( 15/255, 68/255, 108/255 )
+	btnRecordVisits.strokeWidth = 4
+	btnRecordVisits:setStrokeColor( 54/255, 80/255, 131/255 )
+	homeScreen:insert(btnRecordVisits)
+	--btnRecordVisits:addEventListener( 'tap', selectOptionHome )
+	btnRecordVisits:addEventListener( 'tap', aceptOptionHome)
+	
+	local imgMessageAdmi = display.newImage( "img/btn/seleccionOpcion-registro.png" )
+	imgMessageAdmi.x =	intW/2 + 150
+	imgMessageAdmi.y =  h + 420
+	homeScreen:insert(imgMessageAdmi)
+	
+	local labelRecordVisits = display.newText( {   
+        --x = intW/3, y = lastY,
+		x = intW/2 + 150, y = h + 510, width = 200,
+        text = "REGISTRO DE VISITAS",  font = fontLatoRegular, fontSize = 22, align = "center",
+	})
+	labelRecordVisits:setFillColor( 1 )
+	homeScreen:insert(labelRecordVisits)
    
 end
 
