@@ -34,6 +34,19 @@ local lasPoscCondo = 1
 local NumCondo = 0
 local idCondo = 0
 
+fontDefault = native.systemFont
+local fontLatoBold, fontLatoLight, fontLatoRegular
+local environment = system.getInfo( "environment" )
+if environment == "simulator" then
+	fontLatoBold = native.systemFontBold
+	fontLatoLight = native.systemFont
+	fontLatoRegular = native.systemFont
+else
+	fontLatoBold = "Lato-Bold"
+	fontLatoLight = "Lato-Light"
+	fontLatoRegular = "Lato-Regular"
+end
+
 ---------------------------------------------------
 ------------------ Funciones ----------------------
 ---------------------------------------------------
@@ -137,66 +150,74 @@ function scene:create( event )
 	
 	screen:insert(listCondominiumScreen)
 	
-	local bgLogin = display.newRect( 0, h, intW, intH )
+	local bgLogin = display.newImage( "img/btn/fondo.png" )
 	bgLogin.anchorX = 0
 	bgLogin.anchorY = 0
-	bgLogin:setFillColor( 54/255, 80/255, 131/255 )
+	bgLogin.width = intW
+	bgLogin.height = intH - h
+	bgLogin.y = h
 	listCondominiumScreen:insert(bgLogin)
 	
-	local bgfringeUp = display.newRect( 0, h, intW, 80 )
-	bgfringeUp.anchorX = 0
-	bgfringeUp.anchorY = 0
-	bgfringeUp:setFillColor( 222/255, 222/255, 222/255 )
-	listCondominiumScreen:insert(bgfringeUp)
-	
-	local imgArrowBack = display.newImage( "img/btn/REGRESAR.png" )
-	imgArrowBack.x = intW - 185
+	local imgArrowBack = display.newImage( "img/btn/seleccionOpcion-regresarSuperior.png" )
+	imgArrowBack.x = 30
 	imgArrowBack.y = h + 40
 	listCondominiumScreen:insert(imgArrowBack)
-	imgArrowBack:addEventListener( 'tap', returnRecordVisit )
+	imgArrowBack:addEventListener( 'tap', returnRecordVisit)
 	
 	local labelArrowBack = display.newText( {   
-        x = intW - 100, y = h + 40,
-        text = "REGRESAR",  font = fontDefault, fontSize = 18
+        x = 125, y = h + 40,
+        text = "REGRESAR",  font = fontLatoBold, fontSize = 26
 	})
-	labelArrowBack:setFillColor( 64/255, 90/255, 139/255 )
+	labelArrowBack:setFillColor( 1 )
 	listCondominiumScreen:insert(labelArrowBack)
 	
-	local labelSelectCondo= display.newText( {   
-        x = intW/2, y = h + 40,
-        text = "SELECCIONA EL CONDOMINIO",  font = fontDefault, fontSize = 28
+	local labelWelcomeListCondo = display.newText( {   
+        x = intW/2, y = h + 100, 
+        text = "Selecciona el condominio",  font = fontLatoRegular, fontSize = 36
 	})
-	labelSelectCondo:setFillColor( 0 )
-	listCondominiumScreen:insert(labelSelectCondo)
+	labelWelcomeListCondo:setFillColor( 150/255, 254/255, 255/255 )
+	listCondominiumScreen:insert(labelWelcomeListCondo)
 	
-	local btnContinue = display.newRoundedRect( intW/2, intH - 70, 200, 70, 10 )
-	btnContinue:setFillColor( 205/255, 69/255, 69/255 )
-	listCondominiumScreen:insert(btnContinue)
-	btnContinue:addEventListener( 'tap', getNumCondominium )
-	
-	local labelChangeCodo = display.newText( {   
-        x = intW/2, y = intH - 70,
-        text = "CONTINUAR",  font = fontDefault, fontSize = 28
-	})
-	labelChangeCodo:setFillColor( 1 )
-	listCondominiumScreen:insert(labelChangeCodo)
+	local bgSvListCondo = display.newRect( intW/2, h + intH/2 + 40, intW - 96, 586 )
+	bgSvListCondo:setFillColor( 54/255, 80/255, 131/255 )
+	listCondominiumScreen:insert(bgSvListCondo)
 	
 	--scroll
 	svListCondo = widget.newScrollView
 	{
 		x = intW/2,
-		y = h + intH/2 - 40,
-		width = intW - intW/4,
-		height = 480,
+		y = h + intH/2 + 40,
+		width = intW - 100,
+		height = 580,
 		horizontalScrollDisabled = true,
         verticalScrollDisabled = false,
 		isBounceEnabled = false,
-		backgroundColor = { 54/255, 80/255, 131/255 }
+		backgroundColor = { 6/255, 58/255, 98/255 }
 	}
 	listCondominiumScreen:insert(svListCondo)
 	--svListCondo:addEventListener( 'tap', noAction)
 	
 	getNumCondo()
+	
+	local paint = {
+		type = "gradient",
+		color1 = { 49/255, 187/255, 40/255 },
+		color2 = { 45/255, 161/255, 45/255, 0.9 },
+		direction = "down"
+	}
+	
+	local btnContinue = display.newRoundedRect( intW/2, intH - 70, 200, 70, 10 )
+	btnContinue:setFillColor( 51/255, 176/255, 46/255 )
+	btnContinue.fill = paint
+	listCondominiumScreen:insert(btnContinue)
+	btnContinue:addEventListener( 'tap', getNumCondominium )
+	
+	local labelChangeCodo = display.newText( {   
+        x = intW/2, y = intH - 70,
+        text = "CONTINUAR",  font = fontLatoRegular, fontSize = 28
+	})
+	labelChangeCodo:setFillColor( 1 )
+	listCondominiumScreen:insert(labelChangeCodo)
    
 end
 

@@ -185,14 +185,14 @@ local RestManager = {}
 				sendMessageGuard(1,messagesSend,1)
 			else
 				Globals.ItIsUploading = 0
-				NewAlert("Booking","Mensaje enviado.", 600, 200)
+				NewAlert("Booking","Mensaje enviado.", 0)
 				timeMarker = timer.performWithDelay( 2000, function()
 					deleteNewAlert()
 					goToLoginGuardMSGAdmin()
 				end, 1 )
 			end
 		else
-			NewAlert("Booking","Mensaje enviado.", 600, 200)
+			NewAlert("Booking","Mensaje enviado.", 0)
 			timeMarker = timer.performWithDelay( 2000, function()
 				deleteNewAlert()
 				goToLoginGuardMSGAdmin()
@@ -219,7 +219,7 @@ local RestManager = {}
         local function callback(event)
             if ( event.isError ) then
 				if typeM == 1 then
-					NewAlert("Booking","Mensaje enviado.", 600, 200)
+					NewAlert("Booking","Mensaje enviado.", 0)
 					timeMarker = timer.performWithDelay( 2000, function()
 						Globals.ItIsUploading = 0
 						deleteNewAlert()
@@ -237,7 +237,7 @@ local RestManager = {}
 						DBManager.updateMessageGuard(data.items)
 						if posc == #items then
 							if typeM == 1 then
-								NewAlert("Booking","Mensaje enviado.", 600, 200)
+								NewAlert("Booking","Mensaje enviado.", 0)
 								timeMarker = timer.performWithDelay( 2000, function()
 									Globals.ItIsUploading = 0
 									deleteNewAlert()
@@ -254,7 +254,7 @@ local RestManager = {}
 					else
 						--native.showAlert( "Booking", data.message, { "OK"})
 						if typeM == 1 then
-							NewAlert("Booking","Mensaje enviado.", 600, 200)
+							NewAlert("Booking","Mensaje enviado.", 0)
 							timeMarker = timer.performWithDelay( 2000, function()
 								Globals.ItIsUploading = 0
 								deleteNewAlert()
@@ -266,7 +266,7 @@ local RestManager = {}
 					end
 				else
 					if typeM == 1 then
-						NewAlert("Mensaje enviado.", 600, 200)
+						NewAlert("Mensaje enviado.", 0)
 						timeMarker = timer.performWithDelay( 2000, function()
 							Globals.ItIsUploading = 0
 							deleteNewAlert()

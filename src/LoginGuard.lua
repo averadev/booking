@@ -109,8 +109,8 @@ function doSignInGuard( event )
 	if txtSignPasswordGuard.text ~= '' and currentGuard ~= nil then
 		--RestManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		--RestManager.validateGuard('123',GuardCondo[currentGuard].id)
-		local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
-		--local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
+		--local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
+		local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		if result == 1 then
 			NewAlert("Booking","Contraseña incorrecta.", 1)
 		else
