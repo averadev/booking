@@ -252,8 +252,8 @@ end
 
 --esconde el combobox de ciudad
 function hideComboBoxCity( event )
-	txtSignEmail.x = intW/2
-	txtSignPassword.x = intW/1.25
+	txtSignEmail.x = intW/5 + 30
+	txtSignPassword.x = intW/2 + 30
 	groupOptionCombo:removeSelf()
 	groupOptionCombo = nil
 	groupOptionCombo = display.newGroup()

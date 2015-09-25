@@ -39,6 +39,18 @@ local currentGuard = nil
 
 local GuardCondo = {}
 
+local fontLatoBold, fontLatoLight, fontLatoRegular
+local environment = system.getInfo( "environment" )
+if environment == "simulator" then
+	fontLatoBold = native.systemFontBold
+	fontLatoLight = native.systemFont
+	fontLatoRegular = native.systemFont
+else
+	fontLatoBold = "Lato-Bold"
+	fontLatoLight = "Lato-Light"
+	fontLatoRegular = "Lato-Regular"
+end
+
 ---------------------------------------------------
 ------------------ Funciones ----------------------
 ---------------------------------------------------
@@ -54,31 +66,32 @@ end
 --crea los guardias
 function buildItemsGuard()
 	
-	local lastY = intH/2.3
+	local lastY = h + 150
 	
 	--local nameGuarda = {'Guardia'}
 	
 	--local groupGuardList = display.newGroup()
 	
+	local lastX = 150
+	
 	for i = 1, #settingsGuard, 1 do
 	
-		GuardCondo[i] = display.newContainer( 135, 135 )
-		GuardCondo[i].x = intW/5.7 * i - 50
+		GuardCondo[i] = display.newContainer( 120, 120 )
+		--GuardCondo[i].x = intW/5.7 * i - 50
+		GuardCondo[i].x = lastX * i
 		GuardCondo[i].y = lastY
 		GuardCondo[i].id = settingsGuard[i].id
 		GuardCondo[i].num = i
 		loginGuardScreen:insert(GuardCondo[i])
 		GuardCondo[i]:addEventListener( 'tap', SelecGuard )
 		
-		bgImgGuard = display.newRoundedRect( 0, 0, 135, 135, 10 )
+		bgImgGuard = display.newRoundedRect( 0, 0, 120, 120, 10 )
 		bgImgGuard:setFillColor( 1 )
 		GuardCondo[i]:insert(bgImgGuard)
 		
 		local imgGuard = display.newImage( settingsGuard[i].foto, system.TemporaryDirectory )
 		imgGuard.x = 0
 		imgGuard.y = 0
-		imgGuard.height = 120
-		imgGuard.width = 120
 		GuardCondo[i]:insert(imgGuard)
 		
 		--[[local labelNameGuard = display.newText( {   
@@ -96,10 +109,10 @@ function doSignInGuard( event )
 	if txtSignPasswordGuard.text ~= '' and currentGuard ~= nil then
 		--RestManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		--RestManager.validateGuard('123',GuardCondo[currentGuard].id)
-		--local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
-		local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
+		local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
+		--local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		if result == 1 then
-			NewAlert("Contraseña incorrecta.", 600, 200)
+			NewAlert("Booking","Contraseña incorrecta.", 600, 200)
 			timeMarker = timer.performWithDelay( 2000, function()
 				deleteNewAlert()
 			end, 1 )
@@ -109,7 +122,7 @@ function doSignInGuard( event )
 		end
 	else
 		--native.showAlert( "Booking", "Campos vacios", { "OK"})
-		NewAlert("Campos Vacios.", 600, 200)
+		NewAlert("Booking","Campos Vacios.", 600, 200)
 		timeMarker = timer.performWithDelay( 2000, function()
 			deleteNewAlert()
 		end, 1 )
@@ -136,11 +149,11 @@ end
 function changeCondo( event )
 	
 	if txtSignPasswordChangeCondo.text ~= "" then
-		RestManager.signOut(txtSignPasswordChangeCondo.text)
-		--RestManager.signOut("123")
+		--RestManager.signOut(txtSignPasswordChangeCondo.text)
+		RestManager.signOut("123")
 	else
 		--native.showAlert( "Booking", "Campos vacios", { "OK"})
-		NewAlert("Campo Vacio.", 600, 200, 2000)
+		NewAlert("Booking","Campo Vacio.", 600, 200, 2000)
 	end
 	
 end
@@ -162,7 +175,9 @@ function showChangeCondo( event )
 	bgChangeCombo:addEventListener( 'tap', hideChangeCombo )
 	
 	local bodyChangeCombo = display.newRect( intW/2, intH/2, intW/1.2, intH/1.4 )
-	bodyChangeCombo:setFillColor( 54/255, 80/255, 131/255 )
+	bodyChangeCombo:setFillColor( 6/255, 58/255, 98/255 )
+	bodyChangeCombo.strokeWidth = 4
+	bodyChangeCombo:setStrokeColor( 54/255, 80/255, 131/255 )
 	groupChangeCondo:insert(bodyChangeCombo)
 	bodyChangeCombo:addEventListener( 'tap', noAction )
 	
@@ -208,9 +223,17 @@ function showChangeCondo( event )
 	imgArrowBackReturn.y = poscC2
 	groupChangeCondo:insert(imgArrowBackReturn)
 	
+	local paint = {
+		type = "gradient",
+		color1 = { 49/255, 187/255, 40/255 },
+		color2 = { 45/255, 161/255, 45/255, 0.9 },
+		direction = "down"
+	}
+	
 	local btnAceptChangeCondo = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
-	btnAceptChangeCondo:setFillColor( 205/255, 69/255, 69/255 )
+	btnAceptChangeCondo:setFillColor( 51/255, 176/255, 46/255 )
 	groupChangeCondo:insert(btnAceptChangeCondo)
+	btnAceptChangeCondo.fill = paint
 	btnAceptChangeCondo:addEventListener( 'tap', changeCondo)
 	--btnAceptChangeCondo:addEventListener( 'tap', signOut)
 	
@@ -231,7 +254,7 @@ function hideChangeCombo( event )
 		txtSignPasswordChangeCondo:removeSelf()
 		txtSignPasswordChangeCondo = nil
 	end
-	txtSignPasswordGuard.x = intW/2
+	txtSignPasswordGuard.x = 335
 	groupChangeCondo:removeSelf()
 	groupChangeCondo = nil
 	groupChangeCondo = display.newGroup()
@@ -270,41 +293,35 @@ function scene:create( event )
 	
 	screen:insert(loginGuardScreen)
 	
-	local bgLogin = display.newRect( 0, h, intW, intH )
+	local bgLogin = display.newImage( "img/btn/fondo.png" )
 	bgLogin.anchorX = 0
 	bgLogin.anchorY = 0
-	bgLogin:setFillColor( 222/255, 222/255, 222/255 )
+	bgLogin.width = intW
+	bgLogin.height = intH - h
+	bgLogin.y = h
 	loginGuardScreen:insert(bgLogin)
 	
-	local imgLogo = display.newCircle( intW/2, h + 110, 90 )
-	imgLogo:setFillColor( 1 )
-	loginGuardScreen:insert(imgLogo)
+	local bgImgGuard = display.newRoundedRect( intW/2, h + 30, intW - 50, 200, 5 )
+	bgImgGuard.anchorY = 0
+	bgImgGuard:setFillColor( 6/255, 58/255, 98/255 )
+	bgImgGuard.strokeWidth = 4
+	bgImgGuard:setStrokeColor( 54/255, 80/255, 131/255 )
+	loginGuardScreen:insert(bgImgGuard)
 	
-	local bgfringeDown = display.newRect( 0, intH - 20, intW, 20 )
-	bgfringeDown.anchorX = 0
-	bgfringeDown.anchorY = 0
-	bgfringeDown:setFillColor( 96/255, 96/255, 96/255 )
-	loginGuardScreen:insert(bgfringeDown)
-	
-	local bgfringeBtn = display.newRect( 0, intH - 210, intW, 190 )
-	bgfringeBtn.anchorX = 0
-	bgfringeBtn.anchorY = 0
-	bgfringeBtn:setFillColor( 54/255, 80/255, 131/255 )
-	loginGuardScreen:insert(bgfringeBtn)
-	
-	local bgfringePass = display.newRect( 0, intH - 330, intW, 120 )
-	bgfringePass.anchorX = 0
-	bgfringePass.anchorY = 0
-	bgfringePass:setFillColor( 1 )
-	loginGuardScreen:insert(bgfringePass)
+	local bgFieldPassword = display.newRoundedRect( intW/2, h + 250, intW - 50, 200, 5 )
+	bgFieldPassword.anchorY = 0
+	bgFieldPassword:setFillColor( 6/255, 58/255, 98/255 )
+	bgFieldPassword.strokeWidth = 4
+	bgFieldPassword:setStrokeColor( 54/255, 80/255, 131/255 )
+	loginGuardScreen:insert(bgFieldPassword)
 	
 	--lista de guardias
 	
-	local lastY = intH/2.3
+	local lastY = h + 65
 	
 	--local nameGuarda = {'Guardia'}
 	
-	--local groupGuardList = display.newGroup()
+	--local groupGuardList = display.newGroup()]]
 	
 	--[[for i = 1, 4, 1 do
 	
@@ -327,9 +344,17 @@ function scene:create( event )
 	
 	end]]
 	
+	labelTextPasswordGuard = display.newText( {   
+        --x = intW/3, y = lastY,
+		x = intW/2, y = lastY, width = intW - 100,
+        text = "1. Selecciona tu usuario para iniciar:",  font = fontLatoBold, fontSize = 32, align = "left"
+	})
+	labelTextPasswordGuard:setFillColor( 1 )
+	loginGuardScreen:insert(labelTextPasswordGuard)
+	
 	--btn view more
 	
-	local btnViewMore = display.newRoundedRect( intW/1.14, lastY, 135, 135, 10 )
+	--[[local btnViewMore = display.newRoundedRect( intW/1.14, lastY, 135, 135, 10 )
 	btnViewMore:setFillColor( 1 )
 	loginGuardScreen:insert(btnViewMore)
 	
@@ -343,19 +368,32 @@ function scene:create( event )
 	local imgViewMore = display.newImage( "img/btn/BUSCAR.png" )
 	imgViewMore.x = intW/1.14
 	imgViewMore.y = lastY - 20
-	loginGuardScreen:insert(imgViewMore)
+	loginGuardScreen:insert(imgViewMore)]]
 	
 	--compo contraseña guardia
 	
-	lastY = intH/1.54
+	lastY = h + 285
 	
-	local bgTextPasswordGuard = display.newRoundedRect( intW/2, lastY, 300, 60, 10 )
+	labelTextPasswordGuard = display.newText( {   
+        --x = intW/3, y = lastY,
+		x = intW/2, y = lastY, width = intW - 100,
+        text = "2. Introduce tu contraseña asignada",  font = fontLatoBold, fontSize = 32, align = "left"
+	})
+	labelTextPasswordGuard:setFillColor( 1 )
+	loginGuardScreen:insert(labelTextPasswordGuard)
+	
+	local bgTextPasswordGuard = display.newRoundedRect( 300, lastY + 85, 350, 60, 10 )
 	bgTextPasswordGuard:setFillColor( 1 )
 	bgTextPasswordGuard.strokeWidth = 2
 	bgTextPasswordGuard:setStrokeColor( 54/255, 80/255, 131/255 )
 	loginGuardScreen:insert(bgTextPasswordGuard)
 	
-	txtSignPasswordGuard = native.newTextField( intW/2, lastY, 300, 60 )
+	local imgTextFieldPassword = display.newImage( "img/btn/icono-password.png" )
+	imgTextFieldPassword.y = lastY + 85
+	imgTextFieldPassword.x =  160
+	loginGuardScreen:insert(imgTextFieldPassword)
+	
+	txtSignPasswordGuard = native.newTextField( 335, lastY + 85, 280, 60 )
     txtSignPasswordGuard.inputType = "password"
     txtSignPasswordGuard.hasBackground = false
 	txtSignPasswordGuard.placeholder = "Contraseña"
@@ -366,35 +404,59 @@ function scene:create( event )
 	txtSignPasswordGuard.size = 20
 	loginGuardScreen:insert(txtSignPasswordGuard)
 	
-	local imgCleanPassword = display.newImage( "img/btn/CANCELAR.png" )
-	imgCleanPassword.x = intW/2 + 200
-	imgCleanPassword.y = lastY
-	imgCleanPassword.height = 60
-	imgCleanPassword.width = 60
-	loginGuardScreen:insert(imgCleanPassword)
 	
 	-----botones---
 	
-	lastY = 600 + h
+	lastY = lastY + 85
 	
-	btnSignLoginGuard = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
-	btnSignLoginGuard:setFillColor( 205/255, 69/255, 69/255 )
+	local paint = {
+		type = "gradient",
+		color1 = { 49/255, 187/255, 40/255 },
+		color2 = { 45/255, 161/255, 45/255, 0.9 },
+		direction = "down"
+	}
+	
+	btnSignLoginGuard = display.newRoundedRect( 600, lastY + 1, 200, 70, 10 )
+	btnSignLoginGuard:setFillColor( 51/255, 176/255, 46/255 )
 	loginGuardScreen:insert(btnSignLoginGuard)
+	btnSignLoginGuard.fill = paint
 	--btnSignLoginGuard.alpha = .3
 	btnSignLoginGuard:addEventListener( 'tap', doSignInGuard)
 	
+	
 	local labelSignLoginGuard = display.newText( {   
-        x = intW/2, y = lastY,
-        text = "ACEPTAR",  font = fontDefault, fontSize = 28
+        x = 585, y = lastY,
+        text = "ENTRAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelSignLoginGuard:setFillColor( 1 )
 	loginGuardScreen:insert(labelSignLoginGuard)
 	
-	local imgSignOut = display.newImage( "img/btn/SALIR.png" )
-	imgSignOut.x = 100
-	imgSignOut.y = 60 + h
+	local imgSignLogin = display.newImage( "img/btn/loginGuardias-iconoEntrar.png" )
+	imgSignLogin.y = lastY
+	imgSignLogin.x =  680
+	loginGuardScreen:insert(imgSignLogin)
+	
+	lastY = 515
+	
+	local labelNoPasswordLoginG = display.newText( {   
+        x = intW/2, y = lastY, width = intW - 100,
+        text = "En caso de no contar con esos datos, favor de comunicarse a administración",  font = fontLatoLight, fontSize = 22
+	})
+	labelNoPasswordLoginG:setFillColor( 1 )
+	loginGuardScreen:insert(labelNoPasswordLoginG)
+	
+	local imgSignOut = display.newImage( "img/btn/loginGuardias-iconoSalir.png" )
+	imgSignOut.x = 50
+	imgSignOut.y = intH - 60
 	loginGuardScreen:insert(imgSignOut)
 	imgSignOut:addEventListener( 'tap', showChangeCondo)
+	
+	local labelSignOut = display.newText( {   
+        x = 140, y = intH - 60,
+        text = "SALIR",  font = fontLatoBold, fontSize = 30
+	})
+	labelSignOut:setFillColor( 5/255, 44/255, 77/255 )
+	loginGuardScreen:insert(labelSignOut)
 	
 	DBManager.updateGuardActive()
 	
