@@ -77,23 +77,23 @@ function doSignIn( event )
 	NewAlert("Booking","Comprobando usuario", 0)
 	
 	--RestManager.validateAdmin('','123','alfredo',1)
-	if txtSignEmail.text == "" or txtSignPassword.text == "" or labelComboOpcionCity.id == 0 then
+	if txtSignEmail.text == "" or txtSignPassword.text == "" then
 		--native.showAlert( "Booking", "Los campos son requeridos.", { "OK"})
-		local msgError = "Por favor Introduce los siguientes datos faltantes "
+		local msgError = "Por favor Introduce los siguientes datos faltantes: "
 		if txtSignEmail.text == "" then
 			msgError = msgError .. "\nCorreo del administrador "
 		end
 		if txtSignPassword.text == "" then
 			msgError = msgError .. "\n*Contraseña del administrador "
 		end
-		if labelComboOpcionCity.id == 0 then
+		--[[if labelComboOpcionCity.id == 0 then
 			msgError = msgError .. " \n*Ciudad del condominio"
-		end
+		end]]
 		
 		NewAlert("Datos Faltantes", msgError, 1)
 	else
 		--RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text, labelComboOpcionCity.id)
-		RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
+		RestManager.validateAdmin('alfredo.conomia@gmail.com','123')
 	end
 	
 	--RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
@@ -359,7 +359,7 @@ function scene:create( event )
 	
 	--combobox ciudad
 	
-	local bgComboCity = display.newRoundedRect( intW/1.25, lastY, 270, 60, 10 )
+	--[[local bgComboCity = display.newRoundedRect( intW/1.25, lastY, 270, 60, 10 )
 	bgComboCity:setFillColor( 1 )
 	loginScreen:insert(bgComboCity)
 	bgComboCity:setStrokeColor( 54/255, 80/255, 131/255 )
@@ -386,7 +386,7 @@ function scene:create( event )
 	})
 	labelComboOpcionCity:setFillColor( 204/255, 204/255, 204/255 )
 	labelComboOpcionCity.id = 0
-	loginScreen:insert(labelComboOpcionCity)
+	loginScreen:insert(labelComboOpcionCity)]]
 	
 	-----botones---
 	

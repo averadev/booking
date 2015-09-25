@@ -112,20 +112,21 @@ function doSignInGuard( event )
 		local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
 		--local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		if result == 1 then
-			NewAlert("Booking","Contraseña incorrecta.", 600, 200)
-			timeMarker = timer.performWithDelay( 2000, function()
-				deleteNewAlert()
-			end, 1 )
+			NewAlert("Booking","Contraseña incorrecta.", 1)
 		else
 			composer.removeScene("src.Home")
 			composer.gotoScene("src.Home")
 		end
 	else
 		--native.showAlert( "Booking", "Campos vacios", { "OK"})
-		NewAlert("Booking","Campos Vacios.", 600, 200)
-		timeMarker = timer.performWithDelay( 2000, function()
-			deleteNewAlert()
-		end, 1 )
+		local msgError = "Por favor Introduce los siguientes datos faltantes: "
+		if currentGuard == nil then
+			msgError = msgError .. "\nSelecionar un guardia "
+		end
+		if txtSignPasswordGuard.text == "" then
+			msgError = msgError .. "\nContrasela del guardia "
+		end
+		NewAlert("Datos Faltantes", msgError, 1)
 	end
 	
 	--composer.removeScene("src.Home")
@@ -153,7 +154,7 @@ function changeCondo( event )
 		RestManager.signOut("123")
 	else
 		--native.showAlert( "Booking", "Campos vacios", { "OK"})
-		NewAlert("Booking","Campo Vacio.", 600, 200, 2000)
+		NewAlert("Booking","Campo Vacio.", 1)
 	end
 	
 end

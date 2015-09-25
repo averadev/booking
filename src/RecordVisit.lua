@@ -88,8 +88,8 @@ function sendRecordVisit( event )
 	--print(TimeStamp)
 	--print(os.time())
 
-	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
-	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
+	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
+	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
 		
 		--[[NewAlert("Visitante registrado.", 600, 200)
 		timeMarker = timer.performWithDelay( 2000, function()
@@ -99,8 +99,8 @@ function sendRecordVisit( event )
 		
 		local dateS2 = RestManager.getDate()
 		
-		--idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto)
-		idLastMSG = DBManager.saveRecordVisit("arturo jimenez", "visita a la empresa geek", labelNumCondominius.id, dateS2, "1111")
+		idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto)
+		--idLastMSG = DBManager.saveRecordVisit("arturo jimenez", "visita a la empresa geek", labelNumCondominius.id, dateS2, "1111")
 		
 		RestManager.sendMSGRecordVisit()
 		--RestManager.uploadImage()
@@ -267,7 +267,7 @@ function scene:create( event )
 	txtRecordVisitName = native.newTextField( intW/4, lastY, 400, 60 )
     txtRecordVisitName.inputType = "email"
     txtRecordVisitName.hasBackground = false
-	txtRecordVisitName.placeholder = "ASUNTO"
+	txtRecordVisitName.placeholder = "VISITANTE"  
  -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtRecordVisitName.size = 20
@@ -284,7 +284,7 @@ function scene:create( event )
 	txtRecordVisitReason = native.newTextBox( intW/4, lastY, 400, 120 )
     txtRecordVisitReason.hasBackground = false
 	txtRecordVisitReason.isEditable = true
-	txtRecordVisitReason.placeholder = "Nombre del visitante"
+	txtRecordVisitReason.placeholder = "ASUNTO"
  -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtRecordVisitReason.size = 24
@@ -309,7 +309,7 @@ function scene:create( event )
 	labelNumCondominius = display.newText( {
 		x = intW/5, y = lastY,
 		width = 200,
-        text = "Num. Condominio",  font = fontDefault, fontSize = 20, align = "left"
+        text = "SELECCIONAR CONDOMINIO",  font = fontDefault, fontSize = 20, align = "left"
 	})
 	labelNumCondominius:setFillColor( 64/255, 90/255, 139/255 )
 	labelNumCondominius.id = 0
@@ -402,8 +402,13 @@ function scene:show( event )
 	grpTextFieldRV.x = 0
 
 	if labelNumCondominius then
-		labelNumCondominius.text = Globals.numCondominium
-		labelNumCondominius.id = Globals.idCondominium
+		if Globals.numCondominium == 0 then
+			labelNumCondominius.text = "SELECCIONAR CONDOMINIO"
+			labelNumCondominius.id = Globals.idCondominium
+		else
+			labelNumCondominius.text = Globals.numCondominium
+			labelNumCondominius.id = Globals.idCondominium
+		end
 	end
 	
 end

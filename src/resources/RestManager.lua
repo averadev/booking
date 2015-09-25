@@ -30,7 +30,6 @@ local RestManager = {}
         url = url.."/idApp/"..settings.idApp
         url = url.."/email/"..urlencode(email)
         url = url.."/password/"..password
-		url = url.."/city/"..city
 	
         local function callback(event)
             if ( event.isError ) then
