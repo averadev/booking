@@ -34,6 +34,19 @@ local btnMsgContinue
 
 local lastId
 
+fontDefault = native.systemFont
+local fontLatoBold, fontLatoLight, fontLatoRegular
+local environment = system.getInfo( "environment" )
+if environment == "simulator" then
+	fontLatoBold = native.systemFontBold
+	fontLatoLight = native.systemFont
+	fontLatoRegular = native.systemFont
+else
+	fontLatoBold = "Lato-Bold"
+	fontLatoLight = "Lato-Light"
+	fontLatoRegular = "Lato-Regular"
+end
+
 ---------------------------------------------------
 ------------------ Funciones ----------------------
 ---------------------------------------------------
@@ -75,83 +88,110 @@ function scene:create( event )
 	
 	screen:insert(notificationScreen)
 	
-	local bgNotification = display.newRect( 0, h, intW, intH )
+	local bgNotification = display.newImage( "img/btn/fondo.png" )
 	bgNotification.anchorX = 0
 	bgNotification.anchorY = 0
-	bgNotification:setFillColor( 222/255, 222/255, 222/255 )
+	bgNotification.width = intW
+	bgNotification.height = intH - h
+	bgNotification.y = h
 	notificationScreen:insert(bgNotification)
 	
-	local imgLogo = display.newCircle( intW/2, h + 110, 90 )
-	imgLogo:setFillColor( 1 )
-	notificationScreen:insert(imgLogo)
-	
-	local bgfringeDown = display.newRect( 0, intH - 20, intW, 20 )
-	bgfringeDown.anchorX = 0
-	bgfringeDown.anchorY = 0
-	bgfringeDown:setFillColor( 96/255, 96/255, 96/255 )
-	notificationScreen:insert(bgfringeDown)
-	
-	local bgfringeField = display.newRect( 0, h + 220, intW, 400 )
-	bgfringeField.anchorX = 0
-	bgfringeField.anchorY = 0
-	bgfringeField:setFillColor( 54/255, 80/255, 131/255 )
-	notificationScreen:insert(bgfringeField)
-	
-	local lastY = intH/2 - 85
+	local lastY = 100 + h
 	
 	labelMsgConfirmation = display.newText( {   
         x = intW/2, y = lastY,
-        text = "LA VISITA HA SIDO REGISTRADA",  font = fontDefault, fontSize = 44
+        text = "La visita ha sido registrada",  font = fontLatoRegular, fontSize = 38
 	})
 	labelMsgConfirmation:setFillColor( 1 )
 	notificationScreen:insert(labelMsgConfirmation)
 	
-	lastY = intH/2 - 40
+	lastY = lastY + 60
 	
 	local labelMsgNotiConfirm = display.newText( {   
         x = intW/2, y = lastY,
-        text = "SE HA NOTIFICADO AL CONDOMINIO MEDIANTE MENSAJE A SU APLICACION",  font = fontDefault, fontSize = 22
+        text = "Se ha notificado al condóminio mediante mensaje a su aplicación",  font = fontLatoLight, fontSize = 30
 	})
 	labelMsgNotiConfirm:setFillColor( 1 )
 	notificationScreen:insert(labelMsgNotiConfirm)
 	
-	local bgNotiMSG = display.newRoundedRect( intW/2, lastY + 30, 600, 270, 10 )
+	lastY = lastY + 40
+	
+	local bgNotiMSG = display.newRoundedRect( intW/2, lastY, 800, 430, 10 )
 	bgNotiMSG.anchorY = 0
-	bgNotiMSG:setFillColor( 1 )
+	bgNotiMSG:setFillColor( 6/255, 58/255, 98/255 )
+	bgNotiMSG.strokeWidth = 4
+	bgNotiMSG:setStrokeColor( 54/255, 80/255, 131/255 )
 	notificationScreen:insert(bgNotiMSG)
+
+	lastY = lastY + 30
+	
+	local bgInfoNotiMSG = display.newRoundedRect( intW/2, lastY, 740, 300, 10 )
+	bgInfoNotiMSG.anchorY = 0
+	bgInfoNotiMSG:setFillColor( 1 )
+	notificationScreen:insert(bgInfoNotiMSG)
+	
 	
 	labelMsgDate = display.newText( {   
-        x = intW/2, y = lastY + 50,
-		width = 560,
-        text = "09 de septiembre del 2015 05:57 pm",  font = fontDefault, fontSize = 22, align = "right",
+        x = intW/2, y = lastY + 30,
+		width = 690,
+        text = "09 de septiembre del 2015 05:57 pm",  font = fontLatoRegular, fontSize = 22, align = "right",
 	})
-	labelMsgDate:setFillColor( 64/255, 90/255, 139/255 )
+	labelMsgDate:setFillColor( 78/255, 78/255, 78/255 )
 	notificationScreen:insert(labelMsgDate)
 	
-	labelMsgNameVisit = display.newText( {   
-        x = intW/2, y = lastY + 100,
-		width = 560,
-        text = "VISITANTE: " .. infoRecordVisit.nombreVisitante,  font = fontDefault, fontSize = 24
+	labelTiTleNameVisit = display.newText( {   
+        x = intW/2, y = lastY + 75,
+		width = 700,
+        text = "VISITANTE: ",  font = fontLatoBold, fontSize = 24
 	})
-	labelMsgNameVisit:setFillColor( 64/255, 90/255, 139/255 )
+	labelTiTleNameVisit:setFillColor( 78/255, 78/255, 78/255 )
+	notificationScreen:insert(labelTiTleNameVisit)
+	
+	labelMsgNameVisit = display.newText( {   
+        x = intW/2 + 75, y = lastY + 73,
+		width = 550,
+        text = infoRecordVisit.nombreVisitante,  font = fontLatoRegular, fontSize = 26
+	})
+	labelMsgNameVisit:setFillColor( 78/255, 78/255, 78/255 )
 	notificationScreen:insert(labelMsgNameVisit)
+	labelMsgNameVisit.y = labelMsgNameVisit.y + labelMsgNameVisit.contentHeight/2 - 13
+	
+	labelTitleReasonVisit = display.newText( {   
+        x = intW/2, y = lastY + 125,
+		width = 700,
+        text = "MOTIVO : ",  font = fontLatoBold, fontSize = 24
+	})
+	labelTitleReasonVisit:setFillColor( 78/255, 78/255, 78/255 )
+	notificationScreen:insert(labelTitleReasonVisit)
 	
 	labelMsgReasonVisit = display.newText( {   
-        x = intW/2, y = lastY + 150,
-		width = 560,
-        text = "MOTIVO DE VISITA: " .. infoRecordVisit.motivo,  font = fontDefault, fontSize = 24
+        x = intW/2 + 75, y = lastY + 123,
+		width = 550,
+        text = infoRecordVisit.motivo,  font = fontLatoRegular, fontSize = 24
 	})
-	labelMsgReasonVisit:setFillColor( 64/255, 90/255, 139/255 )
+	labelMsgReasonVisit:setFillColor( 78/255, 78/255, 78/255 )
 	notificationScreen:insert(labelMsgReasonVisit)
 	
-	btnMsgContinue = display.newRoundedRect( intW/2, intH - 65, 200, 65, 10 )
+	labelMsgReasonVisit.y = labelMsgReasonVisit.y + labelMsgReasonVisit.contentHeight/2 - 13
+	
+	lastY = lastY + 348
+	
+	local paint = {
+		type = "gradient",
+		color1 = { 49/255, 187/255, 40/255 },
+		color2 = { 45/255, 161/255, 45/255, 0.9 },
+		direction = "down"
+	}
+	
+	btnMsgContinue = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
 	btnMsgContinue:setFillColor( 205/255, 69/255, 69/255 )
 	notificationScreen:insert(btnMsgContinue)
+	btnMsgContinue.fill = paint
 	btnMsgContinue:addEventListener( 'tap', returnHomeMsg )
 	
 	local labelMsgContinue = display.newText( {   
-        x = intW/2, y = intH - 65,
-        text = "ACEPTAR",  font = fontDefault, fontSize = 28
+        x = intW/2, y = lastY,
+        text = "ACEPTAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelMsgContinue:setFillColor( 1 )
 	notificationScreen:insert(labelMsgContinue)

@@ -110,6 +110,27 @@ function sendRecordVisit( event )
 		end, 1 )]]
 		NewAlert("Booking","Enviando mensaje.", 0)
 		
+		for i = 1, 2, 1 do
+			
+			local namePhoto = "tempFotos/" .. timeStampPhoto .. i .. settingsGuard.id .. ".jpg"
+		
+			local grupoA =  display.newGroup()
+			local photo1 = display.newImage( namePhoto, system.TemporaryDirectory )
+			photo1.height = photo1.contentHeight/2
+			photo1.width = photo1.contentWidth/2
+			photo1.x = intW/2
+			photo1.y = intH/2
+			grupoA:insert(photo1)
+		
+			display.save( grupoA, { filename=namePhoto, baseDir=system.TemporaryDirectory, isFullResolution=false, backgroundColor={0, 0, 0, 0} } )
+		
+			grupoA:removeSelf()
+			grupoA = nil
+		
+		end
+		
+		
+		
 		local dateS2 = RestManager.getDate()
 		
 		idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto)
@@ -143,7 +164,20 @@ end
 --camara
 function takePhotography( event )
 
+	--[[local grupoA =  display.newGroup()
+		photoFrontal = display.newImage( "playa.jpg", system.TemporaryDirectory )
+		photoFrontal.height = 330
+		photoFrontal.width = 466
+		photoFrontal.x = intW/1.61
+		photoFrontal.y = 385
+		grupoA:insert(photoFrontal)
+		
+	--local baseDir = system.DocumentsDirectory
+	display.save( grupoA, { filename="hola.jpg", baseDir=system.TemporaryDirectory, isFullResolution=false, backgroundColor={0, 0, 0, 0} } )]]
+
 	typePhoto = event.target.type
+	
+	
 	
 	local namePhoto = timeStampPhoto .. typePhoto .. settingsGuard.id .. ".jpg"
 	print ('nameFoto ' .. namePhoto)
@@ -151,7 +185,6 @@ function takePhotography( event )
 	local group = display.newGroup()
 	
 	local function onComplete( event )
-		print('adsadad')
 		--local photo = event.target
 		--[[photo.height = 150
 		photo.width = 200
@@ -170,9 +203,10 @@ function takePhotography( event )
 			photoFrontal = display.newImage( "tempFotos/" .. namePhoto, system.TemporaryDirectory ) 
 			photoFrontal.height = 190
 			photoFrontal.width = 190
-			photoFrontal.x = intW/1.55
-			photoFrontal.y = intH/1.8
+			photoFrontal.x = intW/1.61
+			photoFrontal.y = 385
 			recordVisitScreen:insert(photoFrontal)
+			
 		else
 			
 			if photoBack then
@@ -182,8 +216,8 @@ function takePhotography( event )
 			photoBack = display.newImage( "tempFotos/" .. namePhoto, system.TemporaryDirectory )
 			photoBack.height = 190
 			photoBack.width = 190
-			photoBack.x = intW/1.15
-			photoBack.y = intH/1.8
+			photoBack.x = intW/1.21
+			photoBack.y = 385
 			recordVisitScreen:insert(photoBack)
 		end
 		
@@ -336,6 +370,7 @@ function scene:create( event )
 	local bgTextRecordNumCondo = display.newRoundedRect( intW/4 + 35, lastY, 400, 60, 10 )
 	bgTextRecordNumCondo:setFillColor( 1 )
 	recordVisitScreen:insert(bgTextRecordNumCondo)
+	bgTextRecordNumCondo:addEventListener( 'tap', showListCondominium)
 	
 	local imgComboNumCondo = display.newImage( "img/btn/registro-seleccionarCondo.png" )
 	imgComboNumCondo.y = lastY
@@ -348,7 +383,6 @@ function scene:create( event )
 	imgNumCondo.height = 35
 	imgNumCondo.width = 40
 	recordVisitScreen:insert(imgNumCondo)
-	imgNumCondo:addEventListener( 'tap', showListCondominium)
 	
 	labelNumCondominius = display.newText( {
 		x = intW/4, y = lastY,
@@ -383,7 +417,7 @@ function scene:create( event )
 	
 	local labelRecordCamaraFrontal= display.newText( {   
         x = intW/1.61, y = lastY + 140, width = 120,
-        text = "Frente",  font = fontDefault, fontSize = 20, align = "center",
+        text = "Frente",  font = fontLatoRegular, fontSize = 20, align = "center",
 	})
 	labelRecordCamaraFrontal:setFillColor( 0 )
 	recordVisitScreen:insert(labelRecordCamaraFrontal)
@@ -404,12 +438,12 @@ function scene:create( event )
 	bgRecordCamaraBack.type = 1
 	recordVisitScreen:insert(bgRecordCamaraBack)
 	
-	local labelRecordCamaraFrontal= display.newText( {   
+	local labelRecordCamaraVuelta= display.newText( {   
         x =  intW/1.21, y = lastY + 140, width = 120,
-        text = "Vuelta",  font = fontDefault, fontSize = 20, align = "center",
+        text = "Vuelta",  font = fontLatoRegular, fontSize = 20, align = "center",
 	})
-	labelRecordCamaraFrontal:setFillColor( 0 )
-	recordVisitScreen:insert(labelRecordCamaraFrontal)
+	labelRecordCamaraVuelta:setFillColor( 0 )
+	recordVisitScreen:insert(labelRecordCamaraVuelta)
 	
 	lastY = lastY + 250
 	
@@ -428,7 +462,7 @@ function scene:create( event )
 	
 	local labelRegisterVisit = display.newText( {   
         x = intW/2, y = lastY,
-        text = "ENVIAR",  font = fontDefault, fontSize = 28
+        text = "ENVIAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelRegisterVisit:setFillColor( 1 )
 	recordVisitScreen:insert(labelRegisterVisit)

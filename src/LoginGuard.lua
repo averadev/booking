@@ -109,8 +109,8 @@ function doSignInGuard( event )
 	if txtSignPasswordGuard.text ~= '' and currentGuard ~= nil then
 		--RestManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		--RestManager.validateGuard('123',GuardCondo[currentGuard].id)
-		--local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
-		local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
+		local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
+		--local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		if result == 1 then
 			NewAlert("Booking","Contraseña incorrecta.", 1)
 		else
@@ -150,8 +150,8 @@ end
 function changeCondo( event )
 	
 	if txtSignPasswordChangeCondo.text ~= "" then
-		--RestManager.signOut(txtSignPasswordChangeCondo.text)
-		RestManager.signOut("123")
+		RestManager.signOut(txtSignPasswordChangeCondo.text)
+		--RestManager.signOut("123")
 	else
 		--native.showAlert( "Booking", "Campos vacios", { "OK"})
 		NewAlert("Booking","Campo Vacio.", 1)
@@ -458,6 +458,7 @@ function scene:create( event )
 	})
 	labelSignOut:setFillColor( 5/255, 44/255, 77/255 )
 	loginGuardScreen:insert(labelSignOut)
+	labelSignOut:addEventListener( 'tap', showChangeCondo)
 	
 	DBManager.updateGuardActive()
 	

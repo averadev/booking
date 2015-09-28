@@ -173,7 +173,7 @@ function scene:create( event )
 	
 	local labelSendMessage = display.newText( {   
         x = intW/2, y = lastY,
-        text = "ENVIAR",  font = fontDefault, fontSize = 28
+        text = "ENVIAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelSendMessage:setFillColor( 1 )
 	messageAdminScreen:insert(labelSendMessage)
