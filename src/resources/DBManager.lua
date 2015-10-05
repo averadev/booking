@@ -24,6 +24,8 @@ local dbManager = {}
             db = sqlite3.open( system.pathForFile("booking.db", system.DocumentsDirectory) )
         end
 	end
+	
+	
 
 	local function closeConnection( )
 		if db and db:isopen() then
@@ -235,6 +237,34 @@ local dbManager = {}
 		else
 			return 1
 		end
+	end
+	
+	--elimina imagenes basura
+	dbManager.getGarbageImage = function()
+		
+		local lfs = require "lfs"
+		local doc_path = system.pathForFile( "tempFotos/",  system.TemporaryDirectory )
+		local destDir =  system.TemporaryDirectory  -- where the file is stored
+
+		for file in lfs.dir(doc_path) do
+			local result = getImageBD(file)
+			if result == 0 then
+				os.remove( system.pathForFile( "tempFotos/" .. file, destDir  ) )
+			end
+		end
+		
+	end
+	
+	--busca si hay imagenes basura
+	function getImageBD(image)
+		openConnection( )
+		for row in db:nrows("SELECT * FROM registro_visitas where idFrente = '" .. image .."' or idVuelta = '" .. image .."';") do
+			closeConnection( )
+			return  1
+		end
+		closeConnection( )
+		return 0
+		
 	end
 	
 	

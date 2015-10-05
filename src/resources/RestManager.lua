@@ -43,7 +43,7 @@ local RestManager = {}
 					setItemsGuard(data.items2)
                 else
                     --native.showAlert( "Booking", data.message, { "OK"})
-					NewAlert(data.message, 600, 200)
+					NewAlert("Booking","Usuario Incorrecto", 0)
 					timeMarker = timer.performWithDelay( 2000, function()
 						deleteNewAlert()
 					end, 1 )
@@ -109,7 +109,7 @@ local RestManager = {}
 					signOut()
                 else
                     --native.showAlert( "Booking", data.message, { "OK"})
-					NewAlert("Booking",data.message, 600, 200, 2000)
+					NewAlert("Booking",data.message, 0)
 					timeMarker = timer.performWithDelay( 2000, function()
 						deleteNewAlert()
 					end, 1 )

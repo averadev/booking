@@ -21,6 +21,8 @@ local settingsGuard = DBManager.getGuards()
 --grupos
 local loginGuardScreen = display.newGroup()
 local groupChangeCondo = display.newGroup()
+local groupInfoGuard = display.newGroup()
+local groupPassScreen = display.newGroup()
 
 --variables para el tamaño del entorno
 local intW = display.contentWidth
@@ -82,7 +84,7 @@ function buildItemsGuard()
 		GuardCondo[i].y = lastY
 		GuardCondo[i].id = settingsGuard[i].id
 		GuardCondo[i].num = i
-		loginGuardScreen:insert(GuardCondo[i])
+		groupInfoGuard:insert(GuardCondo[i])
 		GuardCondo[i]:addEventListener( 'tap', SelecGuard )
 		
 		bgImgGuard = display.newRoundedRect( 0, 0, 120, 120, 10 )
@@ -245,6 +247,9 @@ function showChangeCondo( event )
 	labelAceptChangeCondo:setFillColor( 1 )
 	groupChangeCondo:insert(labelAceptChangeCondo)
 	
+	loginGuardScreen:toFront()
+	groupChangeCondo:toFront();
+	
 	return true
 
 end
@@ -255,6 +260,7 @@ function hideChangeCombo( event )
 		txtSignPasswordChangeCondo:removeSelf()
 		txtSignPasswordChangeCondo = nil
 	end
+	loginGuardScreen:toBack()
 	txtSignPasswordGuard.x = 335
 	groupChangeCondo:removeSelf()
 	groupChangeCondo = nil
@@ -284,6 +290,28 @@ function SelecGuard( event )
 	return true
 end
 
+--funciones del teclado
+function onTxtFocusLoginGuard(  event )
+	
+	if ( event.phase == "began" ) then
+		groupInfoGuard.y = -20
+		groupPassScreen.y = - 35
+
+    elseif ( event.phase == "ended" ) then
+		native.setKeyboardFocus( nil )
+		groupInfoGuard.y = 0
+		groupPassScreen.y = 0
+    elseif ( event.phase == "submitted" ) then
+		native.setKeyboardFocus( nil )
+		groupInfoGuard.y = 0
+		groupPassScreen.y = 0
+
+    elseif event.phase == "editing" then
+		
+    end
+	
+end
+
 ---------------------------------------------------
 --------------Funciones defaults-------------------
 ---------------------------------------------------
@@ -293,6 +321,8 @@ function scene:create( event )
 	screen = self.view
 	
 	screen:insert(loginGuardScreen)
+	screen:insert(groupInfoGuard)
+	screen:insert(groupPassScreen)
 	
 	local bgLogin = display.newImage( "img/btn/fondo.png" )
 	bgLogin.anchorX = 0
@@ -307,14 +337,14 @@ function scene:create( event )
 	bgImgGuard:setFillColor( 6/255, 58/255, 98/255 )
 	bgImgGuard.strokeWidth = 4
 	bgImgGuard:setStrokeColor( 54/255, 80/255, 131/255 )
-	loginGuardScreen:insert(bgImgGuard)
+	groupInfoGuard:insert(bgImgGuard)
 	
 	local bgFieldPassword = display.newRoundedRect( intW/2, h + 250, intW - 50, 200, 5 )
 	bgFieldPassword.anchorY = 0
 	bgFieldPassword:setFillColor( 6/255, 58/255, 98/255 )
 	bgFieldPassword.strokeWidth = 4
 	bgFieldPassword:setStrokeColor( 54/255, 80/255, 131/255 )
-	loginGuardScreen:insert(bgFieldPassword)
+	groupPassScreen:insert(bgFieldPassword)
 	
 	--lista de guardias
 	
@@ -351,7 +381,7 @@ function scene:create( event )
         text = "1. Selecciona tu usuario para iniciar:",  font = fontLatoBold, fontSize = 32, align = "left"
 	})
 	labelTextPasswordGuard:setFillColor( 1 )
-	loginGuardScreen:insert(labelTextPasswordGuard)
+	groupInfoGuard:insert(labelTextPasswordGuard)
 	
 	--btn view more
 	
@@ -381,18 +411,18 @@ function scene:create( event )
         text = "2. Introduce tu contraseña asignada",  font = fontLatoBold, fontSize = 32, align = "left"
 	})
 	labelTextPasswordGuard:setFillColor( 1 )
-	loginGuardScreen:insert(labelTextPasswordGuard)
+	groupPassScreen:insert(labelTextPasswordGuard)
 	
 	local bgTextPasswordGuard = display.newRoundedRect( 300, lastY + 85, 350, 60, 10 )
 	bgTextPasswordGuard:setFillColor( 1 )
 	bgTextPasswordGuard.strokeWidth = 2
 	bgTextPasswordGuard:setStrokeColor( 54/255, 80/255, 131/255 )
-	loginGuardScreen:insert(bgTextPasswordGuard)
+	groupPassScreen:insert(bgTextPasswordGuard)
 	
 	local imgTextFieldPassword = display.newImage( "img/btn/icono-password.png" )
 	imgTextFieldPassword.y = lastY + 85
 	imgTextFieldPassword.x =  160
-	loginGuardScreen:insert(imgTextFieldPassword)
+	groupPassScreen:insert(imgTextFieldPassword)
 	
 	txtSignPasswordGuard = native.newTextField( 335, lastY + 85, 280, 60 )
     txtSignPasswordGuard.inputType = "password"
@@ -400,11 +430,10 @@ function scene:create( event )
 	txtSignPasswordGuard.placeholder = "Contraseña"
 	txtSignPasswordGuard.isSecure = true
 	txtSignPasswordGuard:setTextColor( 64/255, 90/255, 139/255 )
- -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
+	txtSignPasswordGuard:addEventListener( "userInput", onTxtFocusLoginGuard )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtSignPasswordGuard.size = 20
-	loginGuardScreen:insert(txtSignPasswordGuard)
-	
+	groupPassScreen:insert(txtSignPasswordGuard)
 	
 	-----botones---
 	
@@ -419,7 +448,7 @@ function scene:create( event )
 	
 	btnSignLoginGuard = display.newRoundedRect( 600, lastY + 1, 200, 70, 10 )
 	btnSignLoginGuard:setFillColor( 51/255, 176/255, 46/255 )
-	loginGuardScreen:insert(btnSignLoginGuard)
+	groupPassScreen:insert(btnSignLoginGuard)
 	btnSignLoginGuard.fill = paint
 	--btnSignLoginGuard.alpha = .3
 	btnSignLoginGuard:addEventListener( 'tap', doSignInGuard)
@@ -430,12 +459,14 @@ function scene:create( event )
         text = "ENTRAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelSignLoginGuard:setFillColor( 1 )
-	loginGuardScreen:insert(labelSignLoginGuard)
+	groupPassScreen:insert(labelSignLoginGuard)
 	
 	local imgSignLogin = display.newImage( "img/btn/loginGuardias-iconoEntrar.png" )
 	imgSignLogin.y = lastY
 	imgSignLogin.x =  680
-	loginGuardScreen:insert(imgSignLogin)
+	groupPassScreen:insert(imgSignLogin)
+	
+	
 	
 	lastY = 515
 	
@@ -485,6 +516,7 @@ function scene:hide( event )
 	local phase = event.phase
 
 	if ( phase == "will" ) then
+		native.setKeyboardFocus( nil )
 		if txtSignPasswordGuard then txtSignPasswordGuard:removeSelf() txtSignPasswordGuard = nil end
 		if txtSignPasswordChangeCondo then txtSignPasswordChangeCondo:removeSelf() txtSignPasswordChangeCondo = nil end
 	end

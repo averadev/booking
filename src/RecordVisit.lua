@@ -19,6 +19,7 @@ local settingsGuard = DBManager.getGuardActive()
 --variables
 local recordVisitScreen = display.newGroup()
 local grpTextFieldRV = display.newGroup()
+local recordVisitField = display.newGroup()
 
 --variables para el tamaño del entorno
 local intW = display.contentWidth
@@ -32,6 +33,8 @@ local txtRecordVisitName
 local txtRecordVisitReason
 local txtRecordNumCondo
 local labelNumCondominius
+
+local labelWelcomeRecordVisit
 
 local photoFrontal = nil
 local photoBack = nil
@@ -129,8 +132,6 @@ function sendRecordVisit( event )
 		
 		end
 		
-		
-		
 		local dateS2 = RestManager.getDate()
 		
 		idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto)
@@ -138,8 +139,6 @@ function sendRecordVisit( event )
 		
 		RestManager.sendMSGRecordVisit()
 		--RestManager.uploadImage()
-		
-		
 		
 	else
 		--native.showAlert( "Booking", "Campos vacios", { "OK"})
@@ -205,7 +204,7 @@ function takePhotography( event )
 			photoFrontal.width = 190
 			photoFrontal.x = intW/1.61
 			photoFrontal.y = 385
-			recordVisitScreen:insert(photoFrontal)
+			recordVisitField:insert(photoFrontal)
 			
 		else
 			
@@ -218,7 +217,7 @@ function takePhotography( event )
 			photoBack.width = 190
 			photoBack.x = intW/1.21
 			photoBack.y = 385
-			recordVisitScreen:insert(photoBack)
+			recordVisitField:insert(photoBack)
 		end
 		
 	end
@@ -238,6 +237,28 @@ function takePhotography( event )
 	
 end
 
+function onTxtFocusRecord( event )
+	
+	if ( event.phase == "began" ) then
+		labelWelcomeRecordVisit. y = h + 40
+		recordVisitField.y = - 100
+		grpTextFieldRV.y = - 100
+    elseif ( event.phase == "ended" ) then
+		native.setKeyboardFocus( nil )
+		labelWelcomeRecordVisit. y = h + 120
+		recordVisitField.y = 0
+		grpTextFieldRV.y = 0
+    elseif ( event.phase == "submitted" ) then
+		native.setKeyboardFocus( nil )
+		labelWelcomeRecordVisit. y = h + 120
+		recordVisitField.y = 0
+		grpTextFieldRV.y = 0
+    elseif event.phase == "editing" then
+		
+    end
+
+end
+
 ---------------------------------------------------
 --------------Funciones defaults-------------------
 ---------------------------------------------------
@@ -248,7 +269,7 @@ function scene:create( event )
 	local screen = self.view
 	
 	screen:insert(recordVisitScreen)
-	--screen:insert(grpTextFieldRV)
+	screen:insert(recordVisitField)
 	
 	local settingsGuard = DBManager.getGuardActive()
 	
@@ -273,7 +294,7 @@ function scene:create( event )
 	labelArrowBack:setFillColor( 1 )
 	recordVisitScreen:insert(labelArrowBack)
 	
-	local labelWelcomeRecordVisit = display.newText( {   
+	labelWelcomeRecordVisit = display.newText( {   
         x = intW/2, y = h + 120, 
         text = "Registro de visita",  font = fontLatoRegular, fontSize = 36
 	})
@@ -307,17 +328,17 @@ function scene:create( event )
 	labelGuardTurn:setFillColor( 1 )
 	recordVisitScreen:insert(labelGuardTurn)
 	
-	local bgImgGuard = display.newRoundedRect( intW/2, h + 200, intW - 100, 450, 5 )
-	bgImgGuard.anchorY = 0
-	bgImgGuard:setFillColor( 6/255, 58/255, 98/255 )
-	bgImgGuard.strokeWidth = 4
-	bgImgGuard:setStrokeColor( 54/255, 80/255, 131/255 )
-	recordVisitScreen:insert(bgImgGuard)
+	local bgTextField = display.newRoundedRect( intW/2, h + 200, intW - 100, 450, 5 )
+	bgTextField.anchorY = 0
+	bgTextField:setFillColor( 6/255, 58/255, 98/255 )
+	bgTextField.strokeWidth = 4
+	bgTextField:setStrokeColor( 54/255, 80/255, 131/255 )
+	recordVisitField:insert(bgTextField)
 	
 	local lineRecordVisit = display.newLine( intW/2, 280, intW/2, 580 )
 	lineRecordVisit:setStrokeColor( 171/255, 30/255, 46/255 )
 	lineRecordVisit.strokeWidth = 6
-	recordVisitScreen:insert(lineRecordVisit)
+	recordVisitField:insert(lineRecordVisit)
 	
 	---- campo nombre del visitante
 	
@@ -325,18 +346,18 @@ function scene:create( event )
 	
 	local bgTextRecordVisitName = display.newRoundedRect( intW/4 + 35, lastY, 400, 60, 10 )
 	bgTextRecordVisitName:setFillColor( 1 )
-	recordVisitScreen:insert(bgTextRecordVisitName)
+	recordVisitField:insert(bgTextRecordVisitName)
 	
 	local imgTextFieldName = display.newImage( "img/btn/icono-user.png" )
 	imgTextFieldName.y = lastY
 	imgTextFieldName.x =  intW/4 - 135
-	recordVisitScreen:insert(imgTextFieldName)
+	recordVisitField:insert(imgTextFieldName)
 	
 	txtRecordVisitName = native.newTextField( intW/4 + 65, lastY, 340, 60 )
     txtRecordVisitName.inputType = "email"
     txtRecordVisitName.hasBackground = false
 	txtRecordVisitName.placeholder = "VISITANTE"  
- -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
+	txtRecordVisitName:addEventListener( "userInput", onTxtFocusRecord )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtRecordVisitName.size = 20
 	grpTextFieldRV:insert(txtRecordVisitName)
@@ -347,18 +368,18 @@ function scene:create( event )
 	
 	local bgTextRecordVisitReason = display.newRoundedRect( intW/4 + 35, lastY, 400, 120, 10 )
 	bgTextRecordVisitReason:setFillColor( 1 )
-	recordVisitScreen:insert(bgTextRecordVisitReason)
+	recordVisitField:insert(bgTextRecordVisitReason)
 	
 	local imgTextFieldReason = display.newImage( "img/btn/registro-asunto.png" )
 	imgTextFieldReason.y = lastY
 	imgTextFieldReason.x =  intW/4 - 135
-	recordVisitScreen:insert(imgTextFieldReason)
+	recordVisitField:insert(imgTextFieldReason)
 	
 	txtRecordVisitReason = native.newTextBox( intW/4 + 65, lastY, 340, 120 )
     txtRecordVisitReason.hasBackground = false
 	txtRecordVisitReason.isEditable = true
 	txtRecordVisitReason.placeholder = "ASUNTO"
- -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
+	txtRecordVisitReason:addEventListener( "userInput", onTxtFocusRecord )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtRecordVisitReason.size = 24
 	grpTextFieldRV:insert(txtRecordVisitReason)
@@ -369,20 +390,20 @@ function scene:create( event )
 	
 	local bgTextRecordNumCondo = display.newRoundedRect( intW/4 + 35, lastY, 400, 60, 10 )
 	bgTextRecordNumCondo:setFillColor( 1 )
-	recordVisitScreen:insert(bgTextRecordNumCondo)
+	recordVisitField:insert(bgTextRecordNumCondo)
 	bgTextRecordNumCondo:addEventListener( 'tap', showListCondominium)
 	
 	local imgComboNumCondo = display.newImage( "img/btn/registro-seleccionarCondo.png" )
 	imgComboNumCondo.y = lastY
 	imgComboNumCondo.x =  intW/4 - 135
-	recordVisitScreen:insert(imgComboNumCondo)
+	recordVisitField:insert(imgComboNumCondo)
 	
 	local imgNumCondo = display.newImage( "img/btn/optionCondo.png" )
 	imgNumCondo.x = intW/4 + 190
 	imgNumCondo.y = lastY
 	imgNumCondo.height = 35
 	imgNumCondo.width = 40
-	recordVisitScreen:insert(imgNumCondo)
+	recordVisitField:insert(imgNumCondo)
 	
 	labelNumCondominius = display.newText( {
 		x = intW/4, y = lastY,
@@ -391,7 +412,7 @@ function scene:create( event )
 	})
 	labelNumCondominius:setFillColor( 64/255, 90/255, 139/255 )
 	labelNumCondominius.id = 0
-	recordVisitScreen:insert(labelNumCondominius)
+	recordVisitField:insert(labelNumCondominius)
 	
 	----- fotos -----
 	
@@ -400,7 +421,7 @@ function scene:create( event )
 	local btnRecordCamaraFrontal = display.newRoundedRect( intW/1.61, lastY, 190, 190, 10 )
 	btnRecordCamaraFrontal:setFillColor( 1 )
 	btnRecordCamaraFrontal.type = 1
-	recordVisitScreen:insert(btnRecordCamaraFrontal)
+	recordVisitField:insert(btnRecordCamaraFrontal)
 	btnRecordCamaraFrontal:addEventListener( 'tap', takePhotography )
 	
 	local imgRecordCamaraFrontal = display.newImage( "img/btn/CAMARA.png" )
@@ -408,42 +429,42 @@ function scene:create( event )
 	--local imgRecordCamaraFrontal = display.newImage( "/sdcard/Pictures/Picture19.jpg" )
 	imgRecordCamaraFrontal.x = intW/1.61
 	imgRecordCamaraFrontal.y = lastY
-	recordVisitScreen:insert(imgRecordCamaraFrontal)
+	recordVisitField:insert(imgRecordCamaraFrontal)
 	
 	local bgRecordCamaraFrontal = display.newRect( intW/1.61, lastY + 140, 190, 40 )
 	bgRecordCamaraFrontal:setFillColor( 1 )
 	bgRecordCamaraFrontal.type = 1
-	recordVisitScreen:insert(bgRecordCamaraFrontal)
+	recordVisitField:insert(bgRecordCamaraFrontal)
 	
 	local labelRecordCamaraFrontal= display.newText( {   
         x = intW/1.61, y = lastY + 140, width = 120,
         text = "Frente",  font = fontLatoRegular, fontSize = 20, align = "center",
 	})
 	labelRecordCamaraFrontal:setFillColor( 0 )
-	recordVisitScreen:insert(labelRecordCamaraFrontal)
+	recordVisitField:insert(labelRecordCamaraFrontal)
 	
 	local btnRecordCamaraBack = display.newRoundedRect( intW/1.21, lastY, 190, 190, 10 )
 	btnRecordCamaraBack:setFillColor( 1 )
 	btnRecordCamaraBack.type = 2
-	recordVisitScreen:insert(btnRecordCamaraBack)
+	recordVisitField:insert(btnRecordCamaraBack)
 	btnRecordCamaraBack:addEventListener( 'tap', takePhotography )
 	
 	local imgRecordCamaraBack = display.newImage( "img/btn/CAMARA.png" )
 	imgRecordCamaraBack.x = intW/1.21
 	imgRecordCamaraBack.y = lastY
-	recordVisitScreen:insert(imgRecordCamaraBack)
+	recordVisitField:insert(imgRecordCamaraBack)
 	
 	local bgRecordCamaraBack = display.newRect( intW/1.21, lastY + 140, 190, 40 )
 	bgRecordCamaraBack:setFillColor( 1 )
 	bgRecordCamaraBack.type = 1
-	recordVisitScreen:insert(bgRecordCamaraBack)
+	recordVisitField:insert(bgRecordCamaraBack)
 	
 	local labelRecordCamaraVuelta= display.newText( {   
         x =  intW/1.21, y = lastY + 140, width = 120,
         text = "Vuelta",  font = fontLatoRegular, fontSize = 20, align = "center",
 	})
 	labelRecordCamaraVuelta:setFillColor( 0 )
-	recordVisitScreen:insert(labelRecordCamaraVuelta)
+	recordVisitField:insert(labelRecordCamaraVuelta)
 	
 	lastY = lastY + 250
 	
@@ -457,7 +478,7 @@ function scene:create( event )
 	local btnRegisterVisit = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
 	btnRegisterVisit:setFillColor( 205/255, 69/255, 69/255 )
 	btnRegisterVisit.fill = paint
-	recordVisitScreen:insert(btnRegisterVisit)
+	recordVisitField:insert(btnRegisterVisit)
 	btnRegisterVisit:addEventListener( 'tap', sendRecordVisit )
 	
 	local labelRegisterVisit = display.newText( {   
@@ -465,7 +486,7 @@ function scene:create( event )
         text = "ENVIAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelRegisterVisit:setFillColor( 1 )
-	recordVisitScreen:insert(labelRegisterVisit)
+	recordVisitField:insert(labelRegisterVisit)
    
 end
 
@@ -494,6 +515,9 @@ end
 
 -- "scene:hide()"
 function scene:hide( event )
+
+	native.setKeyboardFocus( nil )
+
 	local phase = event.phase
 	
 	if phase == "will" then

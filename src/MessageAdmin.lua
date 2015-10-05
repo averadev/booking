@@ -15,6 +15,7 @@ local scene = composer.newScene()
 
 --variables
 local messageAdminScreen = display.newGroup()
+local messageAdminField = display.newGroup()
 
 --variables para el tamaño del entorno
 local intW = display.contentWidth
@@ -24,6 +25,8 @@ local h = display.topStatusBarContentHeight
 ----elementos
 local txtMsgMessage
 local txtMsgSubject
+
+local labelWelcomeMsgAdmin
 
 fontDefault = native.systemFont
 local fontLatoBold, fontLatoLight, fontLatoRegular
@@ -76,6 +79,27 @@ function returnHomeMSGAdmin( event )
 	composer.gotoScene("src.Home")
 end
 
+function onTxtFocusMSGAdmin( event )
+	
+	if ( event.phase == "began" ) then
+		labelWelcomeMsgAdmin.y = h + 40
+		messageAdminField.y = - 110
+
+    elseif ( event.phase == "ended" ) then
+		native.setKeyboardFocus( nil )
+		labelWelcomeMsgAdmin.y = h + 100
+		messageAdminField.y = 0
+    elseif ( event.phase == "submitted" ) then
+		native.setKeyboardFocus( nil )
+		labelWelcomeMsgAdmin.y = h + 100
+		messageAdminField.y = 0
+
+    elseif event.phase == "editing" then
+		
+    end
+	
+end
+
 ---------------------------------------------------
 --------------Funciones defaults-------------------
 ---------------------------------------------------
@@ -86,6 +110,7 @@ function scene:create( event )
 	local screen = self.view
 	
 	screen:insert(messageAdminScreen)
+	screen:insert(messageAdminField)
 	
 	local bgSendMessage = display.newImage( "img/btn/fondo.png" )
 	bgSendMessage.anchorX = 0
@@ -108,7 +133,7 @@ function scene:create( event )
 	labelArrowBack:setFillColor( 1 )
 	messageAdminScreen:insert(labelArrowBack)
 	
-	local labelWelcomeMsgAdmin = display.newText( {   
+	labelWelcomeMsgAdmin = display.newText( {   
         x = intW/2, y = h + 100, 
         text = "Envío de mensaje a administración",  font = fontLatoRegular, fontSize = 36
 	})
@@ -120,7 +145,7 @@ function scene:create( event )
 	bgImgGuard:setFillColor( 6/255, 58/255, 98/255 )
 	bgImgGuard.strokeWidth = 4
 	bgImgGuard:setStrokeColor( 54/255, 80/255, 131/255 )
-	messageAdminScreen:insert(bgImgGuard)
+	messageAdminField:insert(bgImgGuard)
 	
 	------campos asunto
 	
@@ -128,16 +153,16 @@ function scene:create( event )
 	
 	local bgTextFieldMsgSubject = display.newRoundedRect( intW/2, lastY, 550, 60, 10 )
 	bgTextFieldMsgSubject:setFillColor( 1 )
-	messageAdminScreen:insert(bgTextFieldMsgSubject)
+	messageAdminField:insert(bgTextFieldMsgSubject)
 	
 	txtMsgSubject = native.newTextField( intW/2, lastY, 550, 60 )
     txtMsgSubject.inputType = "email"
     txtMsgSubject.hasBackground = false
 	txtMsgSubject.placeholder = "ASUNTO"
-	--txtSignEmail:addEventListener( "userInput", onTxtFocus )
+	txtMsgSubject:addEventListener( "userInput", onTxtFocusMSGAdmin )
 	--txtSignEmail:setReturnKey( "next" )
 	txtMsgSubject.size = 20
-	messageAdminScreen:insert(txtMsgSubject)
+	messageAdminField:insert(txtMsgSubject)
 	
 	------campo mensaje
 	
@@ -145,14 +170,15 @@ function scene:create( event )
 	
 	local bgTextBoxdMsgMessage = display.newRoundedRect( intW/2, lastY, 550, 180, 10 )
 	bgTextBoxdMsgMessage:setFillColor( 1 )
-	messageAdminScreen:insert(bgTextBoxdMsgMessage)
+	messageAdminField:insert(bgTextBoxdMsgMessage)
 	
 	txtMsgMessage = native.newTextBox( intW/2, lastY, 550, 180 )
 	txtMsgMessage.isEditable = true
 	txtMsgMessage.hasBackground = false
 	txtMsgMessage.placeholder = "MENSAJE"
+	txtMsgMessage:addEventListener( "userInput", onTxtFocusMSGAdmin )
 	txtMsgMessage.size = 20
-	messageAdminScreen:insert(txtMsgMessage)
+	messageAdminField:insert(txtMsgMessage)
 	
 	-----botones---
 	
@@ -167,7 +193,7 @@ function scene:create( event )
 	
 	local btnSendMessage = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
 	btnSendMessage:setFillColor( 205/255, 69/255, 69/255 )
-	messageAdminScreen:insert(btnSendMessage)
+	messageAdminField:insert(btnSendMessage)
 	btnSendMessage.fill = paint
 	btnSendMessage:addEventListener( 'tap', sendMessageToadmin)
 	
@@ -176,7 +202,7 @@ function scene:create( event )
         text = "ENVIAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelSendMessage:setFillColor( 1 )
-	messageAdminScreen:insert(labelSendMessage)
+	messageAdminField:insert(labelSendMessage)
    
 end
 
@@ -187,7 +213,7 @@ end
 
 -- "scene:hide()"
 function scene:hide( event )
-	
+	native.setKeyboardFocus( nil )
 	if txtMsgMessage then
 		txtMsgMessage:removeSelf()
 		txtMsgMessage = nil
