@@ -104,8 +104,8 @@ function sendRecordVisit( event )
 	--print(TimeStamp)
 	--print(os.time())
 
-	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
-	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
+	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
+	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
 		
 		--[[NewAlert("Visitante registrado.", 600, 200)
 		timeMarker = timer.performWithDelay( 2000, function()
@@ -115,7 +115,11 @@ function sendRecordVisit( event )
 		
 		for i = 1, 2, 1 do
 			
-			local namePhoto = "tempFotos/" .. timeStampPhoto .. i .. settingsGuard.id .. ".jpg"
+			--local namePhoto = "tempFotos/" .. timeStampPhoto .. i .. settingsGuard.id .. ".jpg"
+			
+			local namePhoto =  "tempFotos/1111" .. i .. settingsGuard.id .. ".jpg"
+		
+			print(namePhoto)
 		
 			local grupoA =  display.newGroup()
 			local photo1 = display.newImage( namePhoto, system.TemporaryDirectory )

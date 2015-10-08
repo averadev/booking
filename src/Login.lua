@@ -92,8 +92,8 @@ function doSignIn( event )
 		
 		NewAlert("Datos Faltantes", msgError, 1)
 	else
-		--RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text)
-		RestManager.validateAdmin('alfredo.conomia@gmail.com','123')
+		RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text)
+		--RestManager.validateAdmin('alfredo.conomia@gmail.com','123')
 	end
 	
 	--RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
