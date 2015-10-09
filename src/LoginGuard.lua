@@ -513,10 +513,12 @@ end
 -- "scene:hide()"
 function scene:hide( event )
 
+	native.setKeyboardFocus( nil )
+
 	local phase = event.phase
 
 	if ( phase == "will" ) then
-		native.setKeyboardFocus( nil )
+		
 		if txtSignPasswordGuard then txtSignPasswordGuard:removeSelf() txtSignPasswordGuard = nil end
 		if txtSignPasswordChangeCondo then txtSignPasswordChangeCondo:removeSelf() txtSignPasswordChangeCondo = nil end
 	end

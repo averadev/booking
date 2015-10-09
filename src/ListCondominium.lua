@@ -170,6 +170,7 @@ function scene:create( event )
 	})
 	labelArrowBack:setFillColor( 1 )
 	listCondominiumScreen:insert(labelArrowBack)
+	labelArrowBack:addEventListener( 'tap', returnRecordVisit)
 	
 	local labelWelcomeListCondo = display.newText( {   
         x = intW/2, y = h + 100, 

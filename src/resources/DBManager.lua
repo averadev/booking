@@ -301,6 +301,19 @@ local dbManager = {}
 		local query = "CREATE TABLE IF NOT EXISTS registro_visitas (id INTEGER PRIMARY KEY AUTOINCREMENT, idRV INTEGER, empleadosId INTEGER, nombreVisitante TEXT, motivo TEXT," ..
 		"idFrente TEXT, idVuelta TEXT, condominiosId INTEGER, fechaHora TEXT, enviado INTEGER );"
 		db:exec( query )
+		
+		local oldVersion = true
+		for row in db:nrows("PRAGMA registro_visitas(config);") do
+			if row.name == 'proveedor' then
+				oldVersion = false
+            end
+		end
+		
+		if oldVersion then
+			local query = "ALTER TABLE registro_visitas ADD COLUMN proveedor TEXT;"
+            db:exec( query )
+			oldVersion = false
+		end
 
         -- Return if have connection
 		for row in db:nrows("SELECT idApp FROM config;") do

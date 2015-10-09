@@ -265,6 +265,29 @@ function noAction( event )
 	return true
 end
 
+--evento de los textField
+function onTxtFocusLogin( event )
+	
+	if ( event.phase == "began" ) then
+
+    elseif ( event.phase == "ended" ) then
+		native.setKeyboardFocus( nil )
+
+    elseif ( event.phase == "submitted" ) then
+		native.setKeyboardFocus( nil )
+	
+		--[[if event.target.name == "email" then
+			native.setKeyboardFocus(txtSignPassword)
+		elseif event.target.name == "password" then
+			native.setKeyboardFocus( nil )
+			SignIn()
+		end]]
+
+    elseif event.phase == "editing" then
+
+    end
+end
+
 ---------------------------------------------------
 --------------Funciones defaults-------------------
 ---------------------------------------------------
@@ -288,7 +311,7 @@ function scene:create( event )
 	labelWelcomeLogin = display.newText( {   
         --x = intW/3, y = lastY,
 		x = intW/3.5, y = lastY,
-        text = "!BIENVENIDO¡",  font = fontLatoBold, fontSize = 60, align = "left"
+        text = "¡BIENVENIDO!",  font = fontLatoBold, fontSize = 60, align = "left"
 	})
 	labelWelcomeLogin:setFillColor( 1 )
 	loginScreen:insert(labelWelcomeLogin)
@@ -326,7 +349,7 @@ function scene:create( event )
     txtSignEmail.hasBackground = false
 	txtSignEmail.placeholder = "USUARIO"
 	txtSignEmail:setTextColor( 64/255, 90/255, 139/255 )
- -- txtSignEmail:addEventListener( "userInput", onTxtFocus )
+	txtSignEmail:addEventListener( "userInput", onTxtFocusLogin )
 	--txtSignEmail:setReturnKey(  "next"  )
 	txtSignEmail.size = 24
 	loginScreen:insert(txtSignEmail)
@@ -351,7 +374,7 @@ function scene:create( event )
     txtSignPassword.hasBackground = false
 	txtSignPassword.placeholder = "CONTRASEÑA"
 	txtSignPassword:setTextColor( 64/255, 90/255, 139/255 )
-   -- txtSignPassword:addEventListener( "userInput", onTxtFocus )
+    txtSignPassword:addEventListener( "userInput", onTxtFocusLogin )
 	--txtSignPassword:setReturnKey(  "go"  )
 	txtSignPassword.isSecure = true
 	txtSignPassword.size = 24
@@ -430,9 +453,11 @@ end
 -- "scene:hide()"
 function scene:hide( event )
 
-   local phase = event.phase
+	native.setKeyboardFocus( nil )
 
-   if ( phase == "will" ) then
+	local phase = event.phase
+
+	if ( phase == "will" ) then
 		if txtSignEmail then
 			txtSignEmail:removeSelf()
 			txtSignPassword:removeSelf()

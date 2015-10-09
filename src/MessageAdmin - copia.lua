@@ -17,6 +17,10 @@ local scene = composer.newScene()
 local messageAdminScreen = display.newGroup()
 local messageAdminField = display.newGroup()
 
+local messageMessage = display.newGroup()
+local messageSubject = display.newGroup()
+local messageAdminBtn = display.newGroup()
+
 --variables para el tamaño del entorno
 local intW = display.contentWidth
 local intH = display.contentHeight
@@ -80,19 +84,32 @@ function returnHomeMSGAdmin( event )
 end
 
 function onTxtFocusMSGAdmin( event )
+
+	--[[messageMessage
+	messageSubject
+	messageAdminBtn]]
 	
 	if ( event.phase == "began" ) then
-		labelWelcomeMsgAdmin.y = h + 40
-		messageAdminField.y = - 110
+		labelWelcomeMsgAdmin.y = h + 30
+		messageAdminField.y = -110
+		messageMessage.y = - 150
+		messageSubject.y = - 170
+		messageAdminBtn.y = - 190
 
     elseif ( event.phase == "ended" ) then
 		native.setKeyboardFocus( nil )
 		labelWelcomeMsgAdmin.y = h + 100
 		messageAdminField.y = 0
+		messageMessage.y = 0
+		messageSubject.y = 0
+		messageAdminBtn.y = 0
     elseif ( event.phase == "submitted" ) then
 		native.setKeyboardFocus( nil )
 		labelWelcomeMsgAdmin.y = h + 100
 		messageAdminField.y = 0
+		messageMessage.y = 0
+		messageSubject.y = 0
+		messageAdminBtn.y = 0
 
     elseif event.phase == "editing" then
 		
@@ -111,6 +128,10 @@ function scene:create( event )
 	
 	screen:insert(messageAdminScreen)
 	screen:insert(messageAdminField)
+	
+	screen:insert(messageMessage)
+	screen:insert(messageSubject)
+	screen:insert(messageAdminBtn)
 	
 	local bgSendMessage = display.newImage( "img/btn/fondo.png" )
 	bgSendMessage.anchorX = 0
@@ -141,7 +162,7 @@ function scene:create( event )
 	labelWelcomeMsgAdmin:setFillColor( 1 )
 	messageAdminScreen:insert(labelWelcomeMsgAdmin)
 	
-	local bgImgGuard = display.newRoundedRect( intW/2, h + 180, 650, 400, 5 )
+	local bgImgGuard = display.newRoundedRect( intW/2, h + 180, 650, 450, 5 )
 	bgImgGuard.anchorY = 0
 	bgImgGuard:setFillColor( 6/255, 58/255, 98/255 )
 	bgImgGuard.strokeWidth = 4
@@ -154,7 +175,7 @@ function scene:create( event )
 	
 	local bgTextFieldMsgSubject = display.newRoundedRect( intW/2, lastY, 550, 60, 10 )
 	bgTextFieldMsgSubject:setFillColor( 1 )
-	messageAdminField:insert(bgTextFieldMsgSubject)
+	messageMessage:insert(bgTextFieldMsgSubject)
 	
 	txtMsgSubject = native.newTextField( intW/2, lastY, 550, 60 )
     txtMsgSubject.inputType = "email"
@@ -163,15 +184,15 @@ function scene:create( event )
 	txtMsgSubject:addEventListener( "userInput", onTxtFocusMSGAdmin )
 	--txtSignEmail:setReturnKey( "next" )
 	txtMsgSubject.size = 20
-	messageAdminField:insert(txtMsgSubject)
+	messageMessage:insert(txtMsgSubject)
 	
 	------campo mensaje
 	
-	lastY = lastY + 115
+	lastY = lastY + 150
 	
 	local bgTextBoxdMsgMessage = display.newRoundedRect( intW/2, lastY, 550, 120, 10 )
 	bgTextBoxdMsgMessage:setFillColor( 1 )
-	messageAdminField:insert(bgTextBoxdMsgMessage)
+	messageSubject:insert(bgTextBoxdMsgMessage)
 	
 	txtMsgMessage = native.newTextBox( intW/2, lastY, 550, 120 )
 	txtMsgMessage.isEditable = true
@@ -179,11 +200,11 @@ function scene:create( event )
 	txtMsgMessage.placeholder = "MENSAJE"
 	txtMsgMessage:addEventListener( "userInput", onTxtFocusMSGAdmin )
 	txtMsgMessage.size = 20
-	messageAdminField:insert(txtMsgMessage)
+	messageSubject:insert(txtMsgMessage)
 	
 	-----botones---
 	
-	lastY = lastY + 115
+	lastY = lastY + 155
 	
 	local paint = {
 		type = "gradient",
@@ -192,24 +213,23 @@ function scene:create( event )
 		direction = "down"
 	}
 	
-	local btnSendMessage = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
+	btnSendMessage = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
 	btnSendMessage:setFillColor( 205/255, 69/255, 69/255 )
-	messageAdminField:insert(btnSendMessage)
+	messageAdminBtn:insert(btnSendMessage)
 	btnSendMessage.fill = paint
 	btnSendMessage:addEventListener( 'tap', sendMessageToadmin)
 	
-	local labelSendMessage = display.newText( {   
+	labelSendMessage = display.newText( {   
         x = intW/2, y = lastY,
         text = "ENVIAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelSendMessage:setFillColor( 1 )
-	messageAdminField:insert(labelSendMessage)
+	messageAdminBtn:insert(labelSendMessage)
    
 end
 
 -- "scene:show()"
 function scene:show( event )
-	
 end
 
 -- "scene:hide()"

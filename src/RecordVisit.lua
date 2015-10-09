@@ -115,11 +115,9 @@ function sendRecordVisit( event )
 		
 		for i = 1, 2, 1 do
 			
-			--local namePhoto = "tempFotos/" .. timeStampPhoto .. i .. settingsGuard.id .. ".jpg"
+			local namePhoto = "tempFotos/" .. timeStampPhoto .. i .. settingsGuard.id .. ".jpg"
 			
-			local namePhoto =  "tempFotos/1111" .. i .. settingsGuard.id .. ".jpg"
-		
-			print(namePhoto)
+			--local namePhoto =  "tempFotos/1111" .. i .. settingsGuard.id .. ".jpg"
 		
 			local grupoA =  display.newGroup()
 			local photo1 = display.newImage( namePhoto, system.TemporaryDirectory )
@@ -183,7 +181,6 @@ function takePhotography( event )
 	
 	
 	local namePhoto = timeStampPhoto .. typePhoto .. settingsGuard.id .. ".jpg"
-	print ('nameFoto ' .. namePhoto)
 	
 	local group = display.newGroup()
 	
@@ -242,19 +239,21 @@ function takePhotography( event )
 end
 
 function onTxtFocusRecord( event )
-	
+
 	if ( event.phase == "began" ) then
-		labelWelcomeRecordVisit. y = h + 40
-		recordVisitField.y = - 100
-		grpTextFieldRV.y = - 100
+		bgTextField.y = h + 90
+		recordVisitField.y = - 130
+		grpTextFieldRV.y = - 130
     elseif ( event.phase == "ended" ) then
 		native.setKeyboardFocus( nil )
 		labelWelcomeRecordVisit. y = h + 120
+		bgTextField.y = h + 200
 		recordVisitField.y = 0
 		grpTextFieldRV.y = 0
     elseif ( event.phase == "submitted" ) then
 		native.setKeyboardFocus( nil )
 		labelWelcomeRecordVisit. y = h + 120
+		bgTextField.y = h + 200
 		recordVisitField.y = 0
 		grpTextFieldRV.y = 0
     elseif event.phase == "editing" then
@@ -297,9 +296,10 @@ function scene:create( event )
 	})
 	labelArrowBack:setFillColor( 1 )
 	recordVisitScreen:insert(labelArrowBack)
+	labelArrowBack:addEventListener( 'tap', returnHomeRecordVisit)
 	
 	labelWelcomeRecordVisit = display.newText( {   
-        x = intW/2, y = h + 120, 
+        x = intW/2, y = h + 110,
         text = "Registro de visita",  font = fontLatoRegular, fontSize = 36
 	})
 	labelWelcomeRecordVisit:setFillColor( 150/255, 254/255, 255/255 )
@@ -332,14 +332,14 @@ function scene:create( event )
 	labelGuardTurn:setFillColor( 1 )
 	recordVisitScreen:insert(labelGuardTurn)
 	
-	local bgTextField = display.newRoundedRect( intW/2, h + 200, intW - 100, 450, 5 )
+	bgTextField = display.newRoundedRect( intW/2, h + 150, intW - 100, 450, 5 )
 	bgTextField.anchorY = 0
 	bgTextField:setFillColor( 6/255, 58/255, 98/255 )
 	bgTextField.strokeWidth = 4
 	bgTextField:setStrokeColor( 54/255, 80/255, 131/255 )
-	recordVisitField:insert(bgTextField)
+	recordVisitScreen:insert(bgTextField)
 	
-	local lineRecordVisit = display.newLine( intW/2, 280, intW/2, 580 )
+	local lineRecordVisit = display.newLine( intW/2, 270, intW/2, 530 )
 	lineRecordVisit:setStrokeColor( 171/255, 30/255, 46/255 )
 	lineRecordVisit.strokeWidth = 6
 	recordVisitField:insert(lineRecordVisit)
@@ -368,9 +368,9 @@ function scene:create( event )
 	
 	---- campo motivo del visitante
 	
-	lastY = lastY + 110
+	lastY = lastY + 80
 	
-	local bgTextRecordVisitReason = display.newRoundedRect( intW/4 + 35, lastY, 400, 120, 10 )
+	local bgTextRecordVisitReason = display.newRoundedRect( intW/4 + 35, lastY, 400, 60, 10 )
 	bgTextRecordVisitReason:setFillColor( 1 )
 	recordVisitField:insert(bgTextRecordVisitReason)
 	
@@ -379,7 +379,7 @@ function scene:create( event )
 	imgTextFieldReason.x =  intW/4 - 135
 	recordVisitField:insert(imgTextFieldReason)
 	
-	txtRecordVisitReason = native.newTextBox( intW/4 + 65, lastY, 340, 120 )
+	txtRecordVisitReason = native.newTextField( intW/4 + 65, lastY, 340, 60 )
     txtRecordVisitReason.hasBackground = false
 	txtRecordVisitReason.isEditable = true
 	txtRecordVisitReason.placeholder = "ASUNTO"
@@ -390,7 +390,7 @@ function scene:create( event )
 	
 	----- campo num. condominio
 	
-	lastY = lastY + 110
+	lastY = lastY + 80
 	
 	local bgTextRecordNumCondo = display.newRoundedRect( intW/4 + 35, lastY, 400, 60, 10 )
 	bgTextRecordNumCondo:setFillColor( 1 )
@@ -420,9 +420,9 @@ function scene:create( event )
 	
 	----- fotos -----
 	
-	lastY = 385
+	lastY = 370
 	
-	local btnRecordCamaraFrontal = display.newRoundedRect( intW/1.61, lastY, 190, 190, 10 )
+	local btnRecordCamaraFrontal = display.newRoundedRect( intW/1.61, lastY, 170, 170, 10 )
 	btnRecordCamaraFrontal:setFillColor( 1 )
 	btnRecordCamaraFrontal.type = 1
 	recordVisitField:insert(btnRecordCamaraFrontal)
@@ -435,19 +435,19 @@ function scene:create( event )
 	imgRecordCamaraFrontal.y = lastY
 	recordVisitField:insert(imgRecordCamaraFrontal)
 	
-	local bgRecordCamaraFrontal = display.newRect( intW/1.61, lastY + 140, 190, 40 )
+	local bgRecordCamaraFrontal = display.newRect( intW/1.61, lastY + 130, 170, 40 )
 	bgRecordCamaraFrontal:setFillColor( 1 )
 	bgRecordCamaraFrontal.type = 1
 	recordVisitField:insert(bgRecordCamaraFrontal)
 	
 	local labelRecordCamaraFrontal= display.newText( {   
-        x = intW/1.61, y = lastY + 140, width = 120,
+        x = intW/1.61, y = lastY + 130, width = 120,
         text = "Frente",  font = fontLatoRegular, fontSize = 20, align = "center",
 	})
 	labelRecordCamaraFrontal:setFillColor( 0 )
 	recordVisitField:insert(labelRecordCamaraFrontal)
 	
-	local btnRecordCamaraBack = display.newRoundedRect( intW/1.21, lastY, 190, 190, 10 )
+	local btnRecordCamaraBack = display.newRoundedRect( intW/1.21, lastY, 170, 170, 10 )
 	btnRecordCamaraBack:setFillColor( 1 )
 	btnRecordCamaraBack.type = 2
 	recordVisitField:insert(btnRecordCamaraBack)
@@ -458,19 +458,19 @@ function scene:create( event )
 	imgRecordCamaraBack.y = lastY
 	recordVisitField:insert(imgRecordCamaraBack)
 	
-	local bgRecordCamaraBack = display.newRect( intW/1.21, lastY + 140, 190, 40 )
+	local bgRecordCamaraBack = display.newRect( intW/1.21, lastY + 130, 170, 40 )
 	bgRecordCamaraBack:setFillColor( 1 )
 	bgRecordCamaraBack.type = 1
 	recordVisitField:insert(bgRecordCamaraBack)
 	
 	local labelRecordCamaraVuelta= display.newText( {   
-        x =  intW/1.21, y = lastY + 140, width = 120,
+        x =  intW/1.21, y = lastY + 130, width = 120,
         text = "Vuelta",  font = fontLatoRegular, fontSize = 20, align = "center",
 	})
 	labelRecordCamaraVuelta:setFillColor( 0 )
 	recordVisitField:insert(labelRecordCamaraVuelta)
 	
-	lastY = lastY + 250
+	lastY = lastY + 210
 	
 	local paint = {
 		type = "gradient",

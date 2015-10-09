@@ -118,6 +118,7 @@ function scene:create( event )
 	})
 	labelArrowBack:setFillColor( 1 )
 	homeScreen:insert(labelArrowBack)
+	labelArrowBack:addEventListener( 'tap', returnLoginGuard)
 	
 	local labelWeolcomeGuard= display.newText( {   
         x = intW/2, y = h + 40,
@@ -128,7 +129,7 @@ function scene:create( event )
 	
 	lastY = h + 150
 	
-	local msgInfoHome = "Seleciona lo que deaseas registrar. \nPuedes regresarte a la pantalla anterior seleccionando el icono      en la esquina superior derecha."
+	local msgInfoHome = "Selecciona lo que deseas registrar. \nPuedes regresarte a la pantalla anterior seleccionando el icono      en la esquina superior derecha."
 	
 	local labelInfoHome = display.newText( {   
         x = intW/2, y = lastY, width = intW - 100,
@@ -139,7 +140,9 @@ function scene:create( event )
 	labelInfoHome.y = labelInfoHome.y + labelInfoHome.contentHeight/2
 	
 	local imgArrowInfoHome = display.newImage( "img/btn/seleccionOpcion-regresarTexto.png" )
-	imgArrowInfoHome.x = 99 * 8.05
+	imgArrowInfoHome.anchorX = 0
+	imgArrowInfoHome.x = 98 * 8
+	--imgArrowInfoHome.x = intW/2
 	imgArrowInfoHome.y =  h + 195
 	homeScreen:insert(imgArrowInfoHome)
 	
@@ -159,7 +162,7 @@ function scene:create( event )
 	--btnMessageAdmi:addEventListener( 'tap', selectOptionHome )
 	btnMessageAdmi:addEventListener( 'tap', aceptOptionHome)
 	
-	local imgMessageAdmi = display.newImage( "img/btn/seleccionOpcion-Mensaje.png" )
+	local imgMessageAdmi = display.newImage( "img/btn/envioMensaje.png" )
 	imgMessageAdmi.x =	intW/2 - 150
 	imgMessageAdmi.y =  h + 420
 	homeScreen:insert(imgMessageAdmi)
@@ -181,7 +184,7 @@ function scene:create( event )
 	--btnRecordVisits:addEventListener( 'tap', selectOptionHome )
 	btnRecordVisits:addEventListener( 'tap', aceptOptionHome)
 	
-	local imgMessageAdmi = display.newImage( "img/btn/seleccionOpcion-registro.png" )
+	local imgMessageAdmi = display.newImage( "img/btn/RegistroVisita.png" )
 	imgMessageAdmi.x =	intW/2 + 150
 	imgMessageAdmi.y =  h + 420
 	homeScreen:insert(imgMessageAdmi)
