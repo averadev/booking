@@ -5,39 +5,16 @@
 
 settings =
 {
-	
-	orientation =
-	{
-		-- Supported values for orientation:
-		-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
 
-		--default = "portrait",
-		--supported = { "portrait", }
-		
-		default = "landscape",
-		supported = { "landscape", }
-	},
-	
-	excludeFiles =
-	{
-		-- Include only the necessary icon files on each platform
-		iphone = { "Icon-*dpi.png", },
-		android = { "Icon.png", "Icon-Small-*.png", "Icon*@2x.png", },
-	},
-
-	--
-	-- iOS Section
-	--
-	iphone =
+    iphone =
 	{
 		plist =
 		{
 			NSAppTransportSecurity ={
 				NSExceptionDomains ={
-					["http://geekbucket.com.mx"] ={
+					["geekbucket.com.mx"] ={
 						NSIncludesSubdomains = true,
-						NSThirdPartyExceptionAllowsInsecureHTTPLoads = true,
-						NSExceptionRequiresForwardSecrecy = false
+						NSThirdPartyExceptionAllowsInsecureHTTPLoads = true
 					},
 				},
 			},
@@ -88,6 +65,30 @@ settings =
             "Lato-Bold.ttf",
         },
 	},
+	
+	orientation =
+	{
+		-- Supported values for orientation:
+		-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
+
+		--default = "portrait",
+		--supported = { "portrait", }
+		
+		default = "landscape",
+		supported = { "landscape", }
+	},
+	
+	excludeFiles =
+	{
+		-- Include only the necessary icon files on each platform
+		iphone = { "Icon-*dpi.png", },
+		android = { "Icon.png", "Icon-Small-*.png", "Icon*@2x.png", },
+	},
+
+	--
+	-- iOS Section
+	--
+	
 	
 	
 	--
