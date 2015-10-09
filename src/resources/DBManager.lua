@@ -196,18 +196,19 @@ local dbManager = {}
 	end
 	
 	--guarda el mensaje antes de ser enviado
-	dbManager.saveRecordVisit = function(subject,message,idCondominius,dateTime, imagen)
+	dbManager.saveRecordVisit = function(subject,message,idCondominius,dateTime, imagen, provider)
 	
 		local settingsGuard = dbManager.getGuardActive()
 		local nameImage1 = imagen .. 1 .. settingsGuard.id .. ".jpg"
 		local nameImage2 = imagen .. 2 .. settingsGuard.id .. ".jpg"
 		
-		print('nameImage3 ' .. nameImage1)
+		print(provider)
+		
 		openConnection( )
 		
 		local idMSG = 1
 		
-		local query = "INSERT INTO registro_visitas (idRV, empleadosId, nombreVisitante, motivo, idFrente, idVuelta, condominiosId, fechaHora, enviado) VALUES ('0', '" .. settingsGuard.id .."', '" .. subject .."', '" .. message .."', '" .. nameImage1 .."', '" .. nameImage2 .."', '" .. idCondominius .."', '" .. dateTime .."', '0');"
+		local query = "INSERT INTO registro_visitas (idRV, empleadosId, nombreVisitante, motivo, idFrente, idVuelta, condominiosId, fechaHora, enviado, proveedor) VALUES ('0', '" .. settingsGuard.id .."', '" .. subject .."', '" .. message .."', '" .. nameImage1 .."', '" .. nameImage2 .."', '" .. idCondominius .."', '" .. dateTime .."', '0', '" .. provider .."');"
 		db:exec( query )
 		
 		local idRV = db:last_insert_rowid()

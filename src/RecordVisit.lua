@@ -43,6 +43,11 @@ local typePhoto = 0
 local timeStampPhoto
 local idLastMSG
 
+local imgUnCheckesRecordVisit
+local imgCheckesRecordVisit
+
+local provider = 0
+
 fontDefault = native.systemFont
 local fontLatoBold, fontLatoLight, fontLatoRegular
 local environment = system.getInfo( "environment" )
@@ -96,21 +101,11 @@ end
 
 --envia el mensaje
 function sendRecordVisit( event )
-	
-	--print(RestManager.getDateCompound())
-
-	--print(os.date( "%x" ) )
-	--local TimeStamp = RestManager.getTimeStamp('2015-09-21T17:50:36.03-0400')
-	--print(TimeStamp)
-	--print(os.time())
+	local dateS2 = RestManager.getDate()
 
 	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
 	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
 		
-		--[[NewAlert("Visitante registrado.", 600, 200)
-		timeMarker = timer.performWithDelay( 2000, function()
-			deleteNewAlert()
-		end, 1 )]]
 		NewAlert("Booking","Enviando mensaje.", 0)
 		
 		for i = 1, 2, 1 do
@@ -136,8 +131,8 @@ function sendRecordVisit( event )
 		
 		local dateS2 = RestManager.getDate()
 		
-		idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto)
-		--idLastMSG = DBManager.saveRecordVisit("arturo jimenez", "visita a la empresa geek", labelNumCondominius.id, dateS2, "1111")
+		idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto, provider)
+		--idLastMSG = DBManager.saveRecordVisit("arturo jimenez", "visita a la empresa geek", labelNumCondominius.id, dateS2, "1111", provider)
 		
 		RestManager.sendMSGRecordVisit()
 		--RestManager.uploadImage()
@@ -262,6 +257,23 @@ function onTxtFocusRecord( event )
 
 end
 
+--function para el chechBock
+function userChechProvider( event )
+
+	if event.target.typeC == 0 then
+		provider = 1
+		imgUnCheckesRecordVisit.alpha = 0
+		imgCheckesRecordVisit.alpha = 1
+	elseif event.target.typeC == 1 then
+		provider = 0
+		imgUnCheckesRecordVisit.alpha = 1
+		imgCheckesRecordVisit.alpha = 0
+	end
+	
+	return true
+
+end
+
 ---------------------------------------------------
 --------------Funciones defaults-------------------
 ---------------------------------------------------
@@ -344,9 +356,28 @@ function scene:create( event )
 	lineRecordVisit.strokeWidth = 6
 	recordVisitField:insert(lineRecordVisit)
 	
+	lastY = 230
+	
+	---chechBock
+	
+	imgUnCheckesRecordVisit = display.newImage( "img/btn/uncheckes.png" )
+	imgUnCheckesRecordVisit.y = lastY
+	imgUnCheckesRecordVisit.x =  intW/4 - 135
+	imgUnCheckesRecordVisit.typeC = 0
+	recordVisitField:insert(imgUnCheckesRecordVisit)
+	imgUnCheckesRecordVisit:addEventListener( 'tap', userChechProvider)
+	
+	imgCheckesRecordVisit = display.newImage( "img/btn/checked.png" )
+	imgCheckesRecordVisit.y = lastY
+	imgCheckesRecordVisit.x =  intW/4 - 135
+	imgCheckesRecordVisit.alpha = 0
+	imgCheckesRecordVisit.typeC = 1
+	recordVisitField:insert(imgCheckesRecordVisit)
+	imgCheckesRecordVisit:addEventListener( 'tap', userChechProvider)
+	
 	---- campo nombre del visitante
 	
-	lastY = 320
+	lastY = 310
 	
 	local bgTextRecordVisitName = display.newRoundedRect( intW/4 + 35, lastY, 400, 60, 10 )
 	bgTextRecordVisitName:setFillColor( 1 )

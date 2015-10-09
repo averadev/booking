@@ -327,6 +327,7 @@ local RestManager = {}
 		url = url.."/idFrente/"..urlencode(items[posc].idFrente)
 		url = url.."/idVuelta/"..urlencode(items[posc].idVuelta)
 		url = url.."/condominiosId/"..urlencode(items[posc].condominiosId)
+		url = url.."/provider/"..urlencode(items[posc].proveedor)
 		url = url.."/dateS/"..urlencode(items[posc].fechaHora)
 		
         local function callback(event)
