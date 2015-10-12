@@ -237,8 +237,8 @@ function onTxtFocusRecord( event )
 
 	if ( event.phase == "began" ) then
 		bgTextField.y = h + 30
-		recordVisitField.y = - 150
-		grpTextFieldRV.y = - 150
+		recordVisitField.y = h - 165
+		grpTextFieldRV.y = h - 165
     elseif ( event.phase == "ended" ) then
 		native.setKeyboardFocus( nil )
 		labelWelcomeRecordVisit. y = h + 120
