@@ -241,14 +241,12 @@ function onTxtFocusRecord( event )
 		grpTextFieldRV.y = h - 165
     elseif ( event.phase == "ended" ) then
 		native.setKeyboardFocus( nil )
-		labelWelcomeRecordVisit. y = h + 120
-		bgTextField.y = h + 200
+		bgTextField.y = h + 150
 		recordVisitField.y = 0
 		grpTextFieldRV.y = 0
     elseif ( event.phase == "submitted" ) then
 		native.setKeyboardFocus( nil )
-		labelWelcomeRecordVisit. y = h + 120
-		bgTextField.y = h + 200
+		bgTextField.y = h + 150
 		recordVisitField.y = 0
 		grpTextFieldRV.y = 0
     elseif event.phase == "editing" then
@@ -344,7 +342,7 @@ function scene:create( event )
 	labelGuardTurn:setFillColor( 1 )
 	recordVisitScreen:insert(labelGuardTurn)
 	
-	bgTextField = display.newRoundedRect( intW/2, h + 150, intW - 100, 450, 5 )
+	bgTextField = display.newRoundedRect( intW/2, h + 150, intW - 100, 460, 5 )
 	bgTextField.anchorY = 0
 	bgTextField:setFillColor( 6/255, 58/255, 98/255 )
 	bgTextField.strokeWidth = 4
