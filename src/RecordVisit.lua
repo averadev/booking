@@ -236,9 +236,9 @@ end
 function onTxtFocusRecord( event )
 
 	if ( event.phase == "began" ) then
-		bgTextField.y = h + 90
-		recordVisitField.y = - 130
-		grpTextFieldRV.y = - 130
+		bgTextField.y = h + 30
+		recordVisitField.y = - 150
+		grpTextFieldRV.y = - 150
     elseif ( event.phase == "ended" ) then
 		native.setKeyboardFocus( nil )
 		labelWelcomeRecordVisit. y = h + 120
@@ -374,6 +374,14 @@ function scene:create( event )
 	imgCheckesRecordVisit.typeC = 1
 	recordVisitField:insert(imgCheckesRecordVisit)
 	imgCheckesRecordVisit:addEventListener( 'tap', userChechProvider)
+	
+	labelProviderRecordVisit = display.newText( {
+		x = intW/4, y = lastY,
+		width = 200,
+        text = "ES PROVEEDOR",  font = fontDefault, fontSize = 20, align = "left"
+	})
+	labelProviderRecordVisit:setFillColor( 1 )
+	recordVisitField:insert(labelProviderRecordVisit)
 	
 	---- campo nombre del visitante
 	
