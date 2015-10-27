@@ -307,20 +307,17 @@ function scene:create( event )
 	loginScreen:insert(bgLogin)
 	
 	local lastY = 100 + h
-	
-	labelWelcomeLogin = display.newText( {   
-        --x = intW/3, y = lastY,
-		x = intW/3.5, y = lastY,
-        text = "¡BIENVENIDO!",  font = fontLatoBold, fontSize = 60, align = "left"
-	})
-	labelWelcomeLogin:setFillColor( 1 )
-	loginScreen:insert(labelWelcomeLogin)
-	
+    
+    local imgLogo = display.newImage( "img/btn/logoSmall.png" )
+	imgLogo.y = lastY - 20
+	imgLogo.x = intW/2
+	loginScreen:insert(imgLogo)
+    
 	lastY = lastY + 75
 	
 	labelIdentifyLogin = display.newText( {   
         --x = intW/3, y = lastY,
-		x = intW/3, y = lastY,
+		x = intW/2, y = lastY,
         text = "Antes de iniciar, por favor identificate:",  font = fontLatoLight, fontSize = 30, align = "left"
 	})
 	labelIdentifyLogin:setFillColor( 1 )
@@ -333,7 +330,7 @@ function scene:create( event )
 	
 	------campos usuario
 	
-	local bgTextFieldUser = display.newRoundedRect( intW/5, lastY, 270, 60, 10 )
+	local bgTextFieldUser = display.newRoundedRect( intW/2 - 170, lastY, 270, 60, 10 )
 	bgTextFieldUser:setFillColor( 1 )
 	bgTextFieldUser:setStrokeColor( 54/255, 80/255, 131/255 )
 	bgTextFieldUser.strokeWidth = 2
@@ -341,10 +338,10 @@ function scene:create( event )
 	
 	local imgTextFieldUser = display.newImage( "img/btn/icono-user.png" )
 	imgTextFieldUser.y = lastY
-	imgTextFieldUser.x =  intW/5 - 100
+	imgTextFieldUser.x =  intW/2 - 270
 	loginScreen:insert(imgTextFieldUser)
 	
-	txtSignEmail = native.newTextField( intW/5 + 30, lastY, 200, 60 )
+	txtSignEmail = native.newTextField( intW/2 - 140, lastY, 200, 60 )
     txtSignEmail.inputType = "email"
     txtSignEmail.hasBackground = false
 	txtSignEmail.placeholder = "USUARIO"
@@ -358,7 +355,7 @@ function scene:create( event )
 	
 	--lastY = intH/1.4
 	
-	local bgTextFieldPassword = display.newRoundedRect( intW/2, lastY, 270, 60, 10 )
+	local bgTextFieldPassword = display.newRoundedRect( intW/2 + 170, lastY, 270, 60, 10 )
 	bgTextFieldPassword:setFillColor( 1 )
 	bgTextFieldPassword:setStrokeColor( 54/255, 80/255, 131/255 )
 	bgTextFieldPassword.strokeWidth = 2
@@ -366,10 +363,10 @@ function scene:create( event )
 	
 	local imgTextFieldPassword = display.newImage( "img/btn/icono-password.png" )
 	imgTextFieldPassword.y = lastY
-	imgTextFieldPassword.x =  intW/2 - 100
+	imgTextFieldPassword.x =  intW/2 + 70
 	loginScreen:insert(imgTextFieldPassword)
 	
-	txtSignPassword = native.newTextField( intW/2 + 30, lastY, 200, 60 )
+	txtSignPassword = native.newTextField( intW/2 + 200, lastY, 200, 60 )
     txtSignPassword.inputType = "password"
     txtSignPassword.hasBackground = false
 	txtSignPassword.placeholder = "CONTRASEÑA"
@@ -422,7 +419,7 @@ function scene:create( event )
 		direction = "down"
 	}
 	
-	local btnSignLogin = display.newRoundedRect( intW/5 + 165, lastY, 600, 70, 10 )
+	local btnSignLogin = display.newRoundedRect( intW/2, lastY, 600, 70, 10 )
 	btnSignLogin:setFillColor( 50/255, 175/255, 45/255 )
 	loginScreen:insert(btnSignLogin)
 	btnSignLogin:addEventListener( 'tap', doSignIn)
@@ -430,7 +427,7 @@ function scene:create( event )
 	
 	
 	local labelSignLogin = display.newText( {   
-        x = intW/5 - 50, y = lastY,
+        x = intW/2 - 180, y = lastY,
         text = "ENTRAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelSignLogin:setFillColor( 1 )
@@ -438,7 +435,7 @@ function scene:create( event )
 	
 	local imgSignLogin = display.newImage( "img/btn/loginGuardias-iconoEntrar.png" )
 	imgSignLogin.y = lastY
-	imgSignLogin.x =  intW/5 + 440
+	imgSignLogin.x =  intW/2 + 240
 	loginScreen:insert(imgSignLogin)
 	
 	RestManager.getCity()
