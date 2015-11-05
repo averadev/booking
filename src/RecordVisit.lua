@@ -116,8 +116,10 @@ function sendRecordVisit( event )
 		
 			local grupoA =  display.newGroup()
 			local photo1 = display.newImage( namePhoto, system.TemporaryDirectory )
-			photo1.height = photo1.contentHeight/2
-			photo1.width = photo1.contentWidth/2
+			--photo1.height = photo1.contentHeight/2
+			--photo1.width = photo1.contentWidth/2
+			photo1.width = (200 * photo1.contentWidth) / photo1.contentHeight
+			photo1.height = 200
 			photo1.x = intW/2
 			photo1.y = intH/2
 			grupoA:insert(photo1)
