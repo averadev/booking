@@ -58,9 +58,6 @@ end
 ---------------------------------------------------
 
 function gotoHome(idGuard, name, photo)
-	--[[Globals.idGuard = idGuard
-	Globals.nameGuard = name
-	Globals.photoGuard = photo]]
 	composer.removeScene("src.Home")
 	composer.gotoScene("src.Home")
 end
@@ -69,10 +66,6 @@ end
 function buildItemsGuard()
 	
 	local lastY = h + 150
-	
-	--local nameGuarda = {'Guardia'}
-	
-	--local groupGuardList = display.newGroup()
 	
 	local lastX = 150
 	
@@ -109,8 +102,6 @@ end
 
 function doSignInGuard( event )
 	if txtSignPasswordGuard.text ~= '' and currentGuard ~= nil then
-		--RestManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
-		--RestManager.validateGuard('123',GuardCondo[currentGuard].id)
 		--local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
 		local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		if result == 1 then
@@ -120,7 +111,6 @@ function doSignInGuard( event )
 			composer.gotoScene("src.Home")
 		end
 	else
-		--native.showAlert( "Booking", "Campos vacios", { "OK"})
 		local msgError = "Por favor Introduce los siguientes datos faltantes: "
 		if currentGuard == nil then
 			msgError = msgError .. "\nSelecionar un guardia "
@@ -130,9 +120,6 @@ function doSignInGuard( event )
 		end
 		NewAlert("Datos Faltantes", msgError, 1)
 	end
-	
-	--composer.removeScene("src.Home")
-	--composer.gotoScene("src.Home")
 	
 end
 
@@ -155,7 +142,6 @@ function changeCondo( event )
 		RestManager.signOut(txtSignPasswordChangeCondo.text)
 		--RestManager.signOut("123")
 	else
-		--native.showAlert( "Booking", "Campos vacios", { "OK"})
 		NewAlert("Booking","Campo Vacio.", 1)
 	end
 	

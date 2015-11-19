@@ -56,6 +56,7 @@ function aceptOptionHome( event )
 		composer.removeScene("src.MessageAdmin")
 		composer.gotoScene("src.MessageAdmin")
 	elseif event.target.option == 2 then
+		composer.removeScene("src.ListCondominium")
 		composer.removeScene("src.RecordVisit")
 		composer.gotoScene("src.RecordVisit")
 	end
