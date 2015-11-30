@@ -39,6 +39,7 @@ local labelWelcomeRecordVisit
 local photoFrontal = nil
 local photoBack = nil
 local typePhoto = 0
+local residencial
 
 local timeStampPhoto
 local idLastMSG
@@ -102,39 +103,56 @@ end
 --envia el mensaje
 function sendRecordVisit( event )
 	local dateS2 = RestManager.getDate()
+	
+	local requireFoto = 0
+	if residencial == 0 then
+		requireFoto = 1
+	else
+		requireFoto = residencial[1].requireFoto
+	end
+	
+	if requireFoto == 0 then
+		photoFrontal = ""
+		photoBack = ""
+		timeStampPhoto = ""
+	end
 
-	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
-	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
+	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
+	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
 		
 		NewAlert("Booking","Enviando mensaje.", 0)
 		
-		for i = 1, 2, 1 do
+		if requireFoto == 1 then
+		
+			for i = 1, 2, 1 do
 			
-			local namePhoto = "tempFotos/" .. timeStampPhoto .. i .. settingsGuard.id .. ".jpg"
-			
-			--local namePhoto =  "tempFotos/1111" .. i .. settingsGuard.id .. ".jpg"
+				local namePhoto = "tempFotos/" .. timeStampPhoto .. i .. settingsGuard.id .. ".jpg"
+				
+				--local namePhoto =  "tempFotos/1111" .. i .. settingsGuard.id .. ".jpg"
 		
-			local grupoA =  display.newGroup()
-			local photo1 = display.newImage( namePhoto, system.TemporaryDirectory )
-			--photo1.height = photo1.contentHeight/2
-			--photo1.width = photo1.contentWidth/2
-			photo1.width = (400 * photo1.contentWidth) / photo1.contentHeight
-			photo1.height = 400
-			photo1.x = intW/2
-			photo1.y = intH/2
-			grupoA:insert(photo1)
+				local grupoA =  display.newGroup()
+				local photo1 = display.newImage( namePhoto, system.TemporaryDirectory )
+				--photo1.height = photo1.contentHeight/2
+				--photo1.width = photo1.contentWidth/2
+				photo1.width = (400 * photo1.contentWidth) / photo1.contentHeight
+				photo1.height = 400
+				photo1.x = intW/2
+				photo1.y = intH/2
+				grupoA:insert(photo1)
 		
-			display.save( grupoA, { filename=namePhoto, baseDir=system.TemporaryDirectory, isFullResolution=false, backgroundColor={0, 0, 0, 0} } )
+				display.save( grupoA, { filename=namePhoto, baseDir=system.TemporaryDirectory, isFullResolution=false, backgroundColor={0, 0, 0, 0} } )
 		
-			grupoA:removeSelf()
-			grupoA = nil
+				grupoA:removeSelf()
+				grupoA = nil
+		
+			end
 		
 		end
 		
 		local dateS2 = RestManager.getDate()
 		
 		idLastMSG = DBManager.saveRecordVisit(txtRecordVisitName.text, txtRecordVisitReason.text, labelNumCondominius.id, dateS2, timeStampPhoto, provider)
-		--idLastMSG = DBManager.saveRecordVisit("arturo jimenez", "visita a la empresa geek", labelNumCondominius.id, dateS2, "1111", provider)
+		--idLastMSG = DBManager.saveRecordVisit("arturo jimenez", "visita a la empresa geek", labelNumCondominius.id, dateS2, timeStampPhoto, provider)
 		
 		RestManager.sendMSGRecordVisit()
 		--RestManager.uploadImage()
@@ -461,6 +479,16 @@ function scene:create( event )
 	
 	----- fotos -----
 	
+	residencial = DBManager.getResidential()
+	local requireFoto = 0
+	if residencial == 0 then
+		requireFoto = 1
+	else
+		requireFoto = residencial[1].requireFoto
+	end
+	
+	if requireFoto == 1 then
+	
 	lastY = 370
 	
 	local btnRecordCamaraFrontal = display.newRoundedRect( intW/1.61, lastY, 170, 170, 10 )
@@ -510,6 +538,8 @@ function scene:create( event )
 	})
 	labelRecordCamaraVuelta:setFillColor( 0 )
 	recordVisitField:insert(labelRecordCamaraVuelta)
+	
+	end
 	
 	lastY = lastY + 210
 	

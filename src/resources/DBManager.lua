@@ -100,6 +100,20 @@ local dbManager = {}
 		end
 	end
 	
+	dbManager.getResidential = function()
+		local result = {}
+		openConnection( )
+		for row in db:nrows("SELECT * FROM residencial;") do
+			result[#result + 1] = row
+		end
+		closeConnection( )
+		if #result > 0 then
+			return result
+		else
+			return 0
+		end
+	end
+	
 	--obtiene los datos de registro visitante por id
 	dbManager.getRecordVisitById = function(id)
 		local result = {}
@@ -181,6 +195,14 @@ local dbManager = {}
 		closeConnection( )
 	end
 	
+	--inserta los datos de la residencia
+	dbManager.insertResidential = function(items)
+		openConnection( )
+		local query = "INSERT INTO residencial VALUES ('" .. items[1].id .."', '" .. items[1].nombre .."', '" .. items[1].requiereFoto .."');"
+		db:exec( query )
+		closeConnection( )
+	end
+	
 	--guarda el mensaje antes de ser enviado
 	dbManager.saveMessageGuard = function(subject,message,dateTime)
 	
@@ -202,7 +224,10 @@ local dbManager = {}
 		local nameImage1 = imagen .. 1 .. settingsGuard.id .. ".jpg"
 		local nameImage2 = imagen .. 2 .. settingsGuard.id .. ".jpg"
 		
-		print(provider)
+		if imagen == "" then
+			nameImage1 = "0"
+			nameImage2 = "0"
+		end
 		
 		openConnection( )
 		
@@ -278,6 +303,8 @@ local dbManager = {}
         db:exec( query2 )
 		query3 = "delete from condominios;"
         db:exec( query3 )
+		query4 = "delete from residencial;"
+        db:exec( query4 )
 		closeConnection( )
     end
 
@@ -301,6 +328,9 @@ local dbManager = {}
 		
 		local query = "CREATE TABLE IF NOT EXISTS registro_visitas (id INTEGER PRIMARY KEY AUTOINCREMENT, idRV INTEGER, empleadosId INTEGER, nombreVisitante TEXT, motivo TEXT," ..
 		"idFrente TEXT, idVuelta TEXT, condominiosId INTEGER, fechaHora TEXT, enviado INTEGER );"
+		db:exec( query )
+		
+		local query = "CREATE TABLE IF NOT EXISTS residencial (id INTEGER, nombre TEXT, requireFoto INTEGER );"
 		db:exec( query )
 		
 		local oldVersion = true

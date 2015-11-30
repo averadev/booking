@@ -40,6 +40,7 @@ local RestManager = {}
 					DBManager.updateUser(data.items[1].id, data.items[1].email, data.items[1].contrasena, data.items[1].nombre, data.items[1].ciudadesId, data.items[1].residencialId)
 					DBManager.insertGuard(data.items2)
 					DBManager.insertCondominium(data.items3)
+					DBManager.insertResidential(data.items4)
 					setItemsGuard(data.items2)
                 else
                     --native.showAlert( "Booking", data.message, { "OK"})
@@ -285,12 +286,24 @@ local RestManager = {}
 	
 	--envia los mensaje de visitas
 	RestManager.sendMSGRecordVisit = function()
+	
+		local residencial = DBManager.getResidential()
+		local requireFoto = 0
+		if residencial == 0 then
+			requireFoto = 1
+		else
+			requireFoto = residencial[1].requireFoto
+		end		
 		
 		if Globals.ItIsUploading == 0 then
 			if networkConnection() then 
 				Globals.ItIsUploading = 1
 				local messagesSend = DBManager.getMessageUnsent(2)
+				if residencial == 1 then
 				uploadImage(1,messagesSend,1, 1)
+				else
+					sendMRecordVisit(1, messagesSend ,1)
+				end
 			else
 				NewAlert("Booking","Mensaje enviado.", 600, 200)
 				timeMarker = timer.performWithDelay( 2000, function()
@@ -315,6 +328,14 @@ local RestManager = {}
 	
         local settings = DBManager.getSettings()
 		local settingsuard = DBManager.getSettings()
+		
+		local residencial = DBManager.getResidential()
+		local requireFoto = 0
+		if residencial == 0 then
+			requireFoto = 1
+		else
+			requireFoto = residencial[1].requireFoto
+		end	
 		
         -- Set url
         local url = settings.url
@@ -363,7 +384,11 @@ local RestManager = {}
 								Globals.ItIsUploading = 0
 							end
 						else
-							uploadImage(posc + 1, items, 1, typeM)
+							if requireFoto == 1 then
+								uploadImage(posc + 1, items, 1, typeM)
+							else
+								sendMRecordVisit(posc + 1, items, typeM)
+							end
 						end
 						--MessageSendToAdmin()
 						--setItemsGuard(data.items)
@@ -400,7 +425,6 @@ local RestManager = {}
     end
 	
 	function uploadImage(posc, items, numImage, typeM)
-	
 		local settings = DBManager.getSettings()
 	
 		local function networkListener( event )
@@ -419,12 +443,12 @@ local RestManager = {}
 				end
 			else
 				if ( event.phase == "began" ) then
-					print( "Upload started" )
+					--print( "Upload started" )
 				elseif ( event.phase == "progress" ) then
-					print( "Uploading... bytes transferred ", event.bytesTransferred )
+					--print( "Uploading... bytes transferred ", event.bytesTransferred )
 				elseif ( event.phase == "ended" ) then
-					print( "Upload ended..." )
-					print( "Status:", event.status )
+					--print( "Upload ended..." )
+					--print( "Status:", event.status )
 					--print( "Response:", event.response )
 					
 					if event.status == 201 then
