@@ -68,7 +68,7 @@ end
 	
 --envia el mensaje al administrador
 function sendMessageToadmin( event )
-	native.showAlert( "Booking", "Mensaje enviado", { "OK"})
+	native.showAlert( "Plantec Security", "Mensaje enviado", { "OK"})
 	composer.gotoScene("src.Home")
 end
 
@@ -120,7 +120,7 @@ function sendRecordVisit( event )
 	if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 and photoFrontal ~= nil and photoBack ~= nil then
 	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
 		
-		NewAlert("Booking","Enviando mensaje.", 0)
+		NewAlert("Plantec Security","Enviando mensaje.", 0)
 		
 		if requireFoto == 1 then
 		
@@ -158,7 +158,7 @@ function sendRecordVisit( event )
 		--RestManager.uploadImage()
 		
 	else
-		--native.showAlert( "Booking", "Campos vacios", { "OK"})
+		--native.showAlert( "Plantec Security", "Campos vacios", { "OK"})
 		local msgError = "Por favor Introduce los siguientes datos faltantes: "
 		if txtRecordVisitName.text == "" then
 			msgError = msgError .. "\n*Visitante "

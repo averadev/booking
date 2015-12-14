@@ -74,11 +74,10 @@ end
 --funcion de logeo
 function doSignIn( event )
 
-	NewAlert("Booking","Comprobando usuario", 0)
+	NewAlert("Plantec Security","Comprobando usuario", 0)
 	
 	--RestManager.validateAdmin('','123','alfredo',1)
 	if txtSignEmail.text == "" or txtSignPassword.text == "" then
-		--native.showAlert( "Booking", "Los campos son requeridos.", { "OK"})
 		local msgError = "Por favor Introduce los siguientes datos faltantes: "
 		if txtSignEmail.text == "" then
 			msgError = msgError .. "\nCorreo del administrador "
@@ -86,17 +85,11 @@ function doSignIn( event )
 		if txtSignPassword.text == "" then
 			msgError = msgError .. "\n*Contraseña del administrador "
 		end
-		--[[if labelComboOpcionCity.id == 0 then
-			msgError = msgError .. " \n*Ciudad del condominio"
-		end]]
-		
 		NewAlert("Datos Faltantes", msgError, 1)
 	else
 		RestManager.validateAdmin(txtSignEmail.text, txtSignPassword.text)
 		--RestManager.validateAdmin('alfredo.conomia@gmail.com','123')
 	end
-	
-	--RestManager.validateAdmin('alfredo.conomia@gmail.com','123',labelComboOpcionCity.id)
 	
 	return true
 end
@@ -108,17 +101,12 @@ function LoadImageGuard(posc)
 	local fhd = io.open( path )
 	if fhd then
 		fhd:close()
-		--if itemsGuard[posc].callback == Globals.noCallbackGlobal then
-			--imageLogos[posc] = display.newImage( itemsGuard[posc].partnerImage, system.TemporaryDirectory )
-			--imageLogos[posc].alpha = 0
 			if posc < #itemsGuard then
 				posc = posc + 1
 				LoadImageGuard(posc)
 			else
 				gotoLoginGuard()
-				--loadImage({posc = 1, screen = 'MainScreen'})
 			end
-		--end
 	else
 		-- Listener de la carga de la imagen del servidor
 		local function loadImageListener( event )
@@ -126,8 +114,6 @@ function LoadImageGuard(posc)
 				native.showAlert( "Go Deals", "Network error :(", { "OK"})
 			else
 				event.target.alpha = 0
-				--if itemsGuard[posc].callback == Globals.noCallbackGlobal then
-					--imageLogos[posc] = event.target
 					if posc < #itemsGuard then
 						posc = posc + 1
 						LoadImageGuard(posc)

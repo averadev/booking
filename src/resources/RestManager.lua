@@ -36,15 +36,15 @@ local RestManager = {}
             else
                 local data = json.decode(event.response)
                 if data.success then
-					NewAlert("Booking","Usuario correcto", 0)
+					NewAlert("Plantec Security","Usuario correcto", 0)
 					DBManager.updateUser(data.items[1].id, data.items[1].email, data.items[1].contrasena, data.items[1].nombre, data.items[1].ciudadesId, data.items[1].residencialId)
 					DBManager.insertGuard(data.items2)
 					DBManager.insertCondominium(data.items3)
 					DBManager.insertResidential(data.items4)
 					setItemsGuard(data.items2)
                 else
-                    --native.showAlert( "Booking", data.message, { "OK"})
-					NewAlert("Booking","Usuario Incorrecto", 0)
+                    --native.showAlert( "Plantec Security", data.message, { "OK"})
+					NewAlert("Plantec Security","Usuario Incorrecto", 0)
 					timeMarker = timer.performWithDelay( 2000, function()
 						deleteNewAlert()
 					end, 1 )
@@ -78,7 +78,7 @@ local RestManager = {}
 					--DBManager.updateUser(data.items[1].id, data.items[1].email, data.items[1].contrasena, data.items[1].nombre, data.items[1].ciudadesId, data.items[1].residencialId)
                     --gotoLoginGuard()
                 else
-                    --native.showAlert( "Booking", data.message, { "OK"})
+                    --native.showAlert( "Plantec Security", data.message, { "OK"})
 					NewAlert(data.message, 600, 200, 2000)
 					timeMarker = timer.performWithDelay( 2000, function()
 						deleteNewAlert()
@@ -109,8 +109,8 @@ local RestManager = {}
 					DBManager.clearUser()
 					signOut()
                 else
-                    --native.showAlert( "Booking", data.message, { "OK"})
-					NewAlert("Booking",data.message, 0)
+                    --native.showAlert( "Plantec Security", data.message, { "OK"})
+					NewAlert("Plantec Security",data.message, 0)
 					timeMarker = timer.performWithDelay( 2000, function()
 						deleteNewAlert()
 					end, 1 )
@@ -139,7 +139,7 @@ local RestManager = {}
                 if data.success then
 					setItemsCity(data.items)
                 else
-					native.showAlert( "Booking", data.message, { "OK"})
+					native.showAlert( "Plantec Security", data.message, { "OK"})
                 end
             end
             return true
@@ -168,7 +168,7 @@ local RestManager = {}
                 if data.success then
 					setItemsGuard(data.items)
                 else
-                    native.showAlert( "Booking", data.message, { "OK"})
+                    native.showAlert( "Plantec Security", data.message, { "OK"})
                 end
             end
             return true
@@ -186,14 +186,14 @@ local RestManager = {}
 				sendMessageGuard(1,messagesSend,1)
 			else
 				Globals.ItIsUploading = 0
-				NewAlert("Booking","Mensaje enviado.", 0)
+				NewAlert("Plantec Security","Mensaje enviado.", 0)
 				timeMarker = timer.performWithDelay( 2000, function()
 					deleteNewAlert()
 					goToLoginGuardMSGAdmin()
 				end, 1 )
 			end
 		else
-			NewAlert("Booking","Mensaje enviado.", 0)
+			NewAlert("Plantec Security","Mensaje enviado.", 0)
 			timeMarker = timer.performWithDelay( 2000, function()
 				deleteNewAlert()
 				goToLoginGuardMSGAdmin()
@@ -220,7 +220,7 @@ local RestManager = {}
         local function callback(event)
             if ( event.isError ) then
 				if typeM == 1 then
-					NewAlert("Booking","Mensaje enviado.", 0)
+					NewAlert("Plantec Security","Mensaje enviado.", 0)
 					timeMarker = timer.performWithDelay( 2000, function()
 						Globals.ItIsUploading = 0
 						deleteNewAlert()
@@ -238,7 +238,7 @@ local RestManager = {}
 						DBManager.updateMessageGuard(data.items)
 						if posc == #items then
 							if typeM == 1 then
-								NewAlert("Booking","Mensaje enviado.", 0)
+								NewAlert("Plantec Security","Mensaje enviado.", 0)
 								timeMarker = timer.performWithDelay( 2000, function()
 									Globals.ItIsUploading = 0
 									deleteNewAlert()
@@ -253,9 +253,9 @@ local RestManager = {}
 						--MessageSendToAdmin()
 						--setItemsGuard(data.items)
 					else
-						--native.showAlert( "Booking", data.message, { "OK"})
+						--native.showAlert( "Plantec Security", data.message, { "OK"})
 						if typeM == 1 then
-							NewAlert("Booking","Mensaje enviado.", 0)
+							NewAlert("Plantec Security","Mensaje enviado.", 0)
 							timeMarker = timer.performWithDelay( 2000, function()
 								Globals.ItIsUploading = 0
 								deleteNewAlert()
@@ -305,7 +305,7 @@ local RestManager = {}
 					sendMRecordVisit(1, messagesSend ,1)
 				end
 			else
-				NewAlert("Booking","Mensaje enviado.", 600, 200)
+				NewAlert("Plantec Security","Mensaje enviado.", 600, 200)
 				timeMarker = timer.performWithDelay( 2000, function()
 					Globals.ItIsUploading = 0
 					deleteNewAlert()
@@ -313,7 +313,7 @@ local RestManager = {}
 				end, 1 )
 			end
 		else
-			NewAlert("Booking","Mensaje enviado.", 600, 200)
+			NewAlert("Plantec Security","Mensaje enviado.", 600, 200)
 			timeMarker = timer.performWithDelay( 2000, function()
 				--Globals.ItIsUploading = 0
 				deleteNewAlert()
@@ -354,7 +354,7 @@ local RestManager = {}
         local function callback(event)
             if ( event.isError ) then
 				if typeM == 1 then
-					NewAlert("Booking","Mensaje enviado.", 600, 200)
+					NewAlert("Plantec Security","Mensaje enviado.", 600, 200)
 					timeMarker = timer.performWithDelay( 2000, function()
 						Globals.ItIsUploading = 0
 						deleteNewAlert()
@@ -374,7 +374,7 @@ local RestManager = {}
 						end
 						if posc == #items then
 							if typeM == 1 then
-								NewAlert("Booking","Mensaje enviado.", 600, 200)
+								NewAlert("Plantec Security","Mensaje enviado.", 600, 200)
 								timeMarker = timer.performWithDelay( 2000, function()
 									Globals.ItIsUploading = 0
 									deleteNewAlert()
@@ -393,9 +393,9 @@ local RestManager = {}
 						--MessageSendToAdmin()
 						--setItemsGuard(data.items)
 					else
-						--native.showAlert( "Booking", data.message, { "OK"})
+						--native.showAlert( "Plantec Security", data.message, { "OK"})
 						if typeM == 1 then
-							NewAlert("Booking","Mensaje enviado.", 600, 200)
+							NewAlert("Plantec Security","Mensaje enviado.", 600, 200)
 							timeMarker = timer.performWithDelay( 2000, function()
 								Globals.ItIsUploading = 0
 								deleteNewAlert()
@@ -407,7 +407,7 @@ local RestManager = {}
 					end
 				else
 					if typeM == 1 then
-						NewAlert("Booking","Mensaje enviado.", 600, 200)
+						NewAlert("Plantec Security","Mensaje enviado.", 600, 200)
 						timeMarker = timer.performWithDelay( 2000, function()
 							Globals.ItIsUploading = 0
 							deleteNewAlert()
@@ -432,7 +432,7 @@ local RestManager = {}
 			if ( event.isError ) then
 				print( "Network Error." )
 				if typeM == 1 then
-					NewAlert("Booking","Mensaje enviado.", 600, 200)
+					NewAlert("Plantec Security","Mensaje enviado.", 600, 200)
 						timeMarker = timer.performWithDelay( 2000, function()
 						Globals.ItIsUploading = 0
 						deleteNewAlert()
@@ -461,7 +461,7 @@ local RestManager = {}
 						
 					else
 						if typeM == 1 then
-							NewAlert("Booking","Mensaje enviado.", 600, 200)
+							NewAlert("Plantec Security","Mensaje enviado.", 600, 200)
 							timeMarker = timer.performWithDelay( 2000, function()
 								Globals.ItIsUploading = 0
 								deleteNewAlert()

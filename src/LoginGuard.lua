@@ -88,13 +88,6 @@ function buildItemsGuard()
 		imgGuard.x = 0
 		imgGuard.y = 0
 		GuardCondo[i]:insert(imgGuard)
-		
-		--[[local labelNameGuard = display.newText( {   
-			x = intW/5.7 * i - 45, y = lastY + 85,
-			text = itemsGuard[i].nombre,  font = fontDefault, fontSize = 24
-		})
-		labelNameGuard:setFillColor( 0 )
-		loginGuardScreen:insert(labelNameGuard)]]
 	
 	end
 	
@@ -105,7 +98,7 @@ function doSignInGuard( event )
 		--local result = DBManager.validateGuard('123',GuardCondo[currentGuard].id)
 		local result = DBManager.validateGuard(txtSignPasswordGuard.text,GuardCondo[currentGuard].id)
 		if result == 1 then
-			NewAlert("Booking","Contraseña incorrecta.", 1)
+			NewAlert("Plantec Security","Contraseña incorrecta.", 1)
 		else
 			composer.removeScene("src.Home")
 			composer.gotoScene("src.Home")
@@ -142,7 +135,7 @@ function changeCondo( event )
 		RestManager.signOut(txtSignPasswordChangeCondo.text)
 		--RestManager.signOut("123")
 	else
-		NewAlert("Booking","Campo Vacio.", 1)
+		NewAlert("Plantec Security","Campo Vacio.", 1)
 	end
 	
 end
