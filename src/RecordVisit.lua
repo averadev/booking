@@ -87,6 +87,11 @@ function showListCondominium( event )
 	composer.gotoScene("src.ListCondominium")
 end
 
+--muestra la pantalla de condominio
+function showListSubject( event )
+	composer.gotoScene("src.ListSubject")
+end
+
 --regresa a la pantalla de home
 function returnHomeRecordVisit( event )
 	composer.gotoScene("src.Home")
@@ -307,13 +312,10 @@ function scene:create( event )
 	
 	local settingsGuard = DBManager.getGuardActive()
 	
-	local bgRecordVisit = display.newImage( "img/btn/fondo.png" )
-	bgRecordVisit.anchorX = 0
-	bgRecordVisit.anchorY = 0
-	bgRecordVisit.width = intW
-	bgRecordVisit.height = intH - h
-	bgRecordVisit.y = h
-	recordVisitScreen:insert(bgRecordVisit)
+	local bgLogin = display.newRect( intW/2, h, intW, intH )
+    bgLogin.fill = { type="image", filename="img/btn/fillPattern.jpg" }
+	bgLogin.anchorY = 0
+	recordVisitScreen:insert(bgLogin)
 	
 	local imgArrowBack = display.newImage( "img/btn/seleccionOpcion-regresarSuperior.png" )
 	imgArrowBack.x = 30
@@ -325,7 +327,7 @@ function scene:create( event )
         x = 125, y = h + 40,
         text = "REGRESAR",  font = fontLatoBold, fontSize = 26
 	})
-	labelArrowBack:setFillColor( 1 )
+	labelArrowBack:setFillColor( .2 )
 	recordVisitScreen:insert(labelArrowBack)
 	labelArrowBack:addEventListener( 'tap', returnHomeRecordVisit)
 	
@@ -333,7 +335,7 @@ function scene:create( event )
         x = intW/2, y = h + 110,
         text = "Registro de visita",  font = fontLatoRegular, fontSize = 36
 	})
-	labelWelcomeRecordVisit:setFillColor( 150/255, 254/255, 255/255 )
+	labelWelcomeRecordVisit:setFillColor( .2 )
 	recordVisitScreen:insert(labelWelcomeRecordVisit)
 	
 	--img guard
@@ -428,23 +430,32 @@ function scene:create( event )
 	
 	lastY = lastY + 80
 	
-	local bgTextRecordVisitReason = display.newRoundedRect( intW/4 + 35, lastY, 400, 60, 10 )
-	bgTextRecordVisitReason:setFillColor( 1 )
-	recordVisitField:insert(bgTextRecordVisitReason)
+	txtRecordVisitReason = display.newRoundedRect( intW/4 + 35, lastY, 400, 60, 10 )
+    txtRecordVisitReason.text = ''
+	txtRecordVisitReason:setFillColor( 1 )
+	recordVisitField:insert(txtRecordVisitReason)
+	txtRecordVisitReason:addEventListener( 'tap', showListSubject)
 	
 	local imgTextFieldReason = display.newImage( "img/btn/registro-asunto.png" )
 	imgTextFieldReason.y = lastY
 	imgTextFieldReason.x =  intW/4 - 135
 	recordVisitField:insert(imgTextFieldReason)
+    
+    local imgAsunto = display.newImage( "img/btn/optionCondo.png" )
+	imgAsunto.x = intW/4 + 190
+	imgAsunto.y = lastY
+	imgAsunto.height = 35
+	imgAsunto.width = 40
+	recordVisitField:insert(imgAsunto)
 	
-	txtRecordVisitReason = native.newTextField( intW/4 + 65, lastY, 340, 60 )
-    txtRecordVisitReason.hasBackground = false
-	txtRecordVisitReason.isEditable = true
-	txtRecordVisitReason.placeholder = "ASUNTO"
-	txtRecordVisitReason:addEventListener( "userInput", onTxtFocusRecord )
-	--txtSignEmail:setReturnKey(  "next"  )
-	txtRecordVisitReason.size = 24
-	grpTextFieldRV:insert(txtRecordVisitReason)
+	labelAsunto = display.newText( {
+		x = intW/4, y = lastY,
+		width = 200,
+        text = "MOTIVO VISITA",  font = fontDefault, fontSize = 20, align = "left"
+	})
+	labelAsunto:setFillColor( 64/255, 90/255, 139/255 )
+	labelAsunto.id = 0
+	recordVisitField:insert(labelAsunto)
 	
 	----- campo num. condominio
 	
@@ -584,7 +595,15 @@ function scene:show( event )
 			labelNumCondominius.id = Globals.idCondominium
 		end
 	end
-	
+
+    if labelAsunto then
+        print("Globals.numSubjectminium: "..Globals.numSubjectminium)
+        print("Globals.idSubjectminium: "..Globals.idSubjectminium)
+        if not (Globals.numSubjectminium == 0) then
+            labelAsunto.text = Globals.numSubjectminium
+            txtRecordVisitReason.text = Globals.numSubjectminium
+        end
+	end
 end
 
 -- "scene:hide()"

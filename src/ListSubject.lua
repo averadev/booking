@@ -14,7 +14,7 @@ local RestManager = require('src.resources.RestManager')
 local scene = composer.newScene()
 
 --variables
-local listCondominiumScreen = display.newGroup()
+local listSubjectScr = display.newGroup()
 
 --variables para el tamaño del entorno
 local intW = display.contentWidth
@@ -25,14 +25,14 @@ fontDefault = native.systemFont
 
 ----elementos
 
-local svListCondo
+local svListSubject
 
-local containerListCondo = {}
+local conListSubject = {}
 
-local lasPoscCondo = 1
+local idxSubject = 1
 
-local NumCondo = 0
-local idCondo = 0
+local numSubject = 0
+local idSubject = 0
 
 fontDefault = native.systemFont
 local fontLatoBold, fontLatoLight, fontLatoRegular
@@ -52,11 +52,10 @@ end
 ---------------------------------------------------
 
 --asignamos el numero al condominio
-function getNumCondominium( event )
+function getnumSubjectminium( event )
 	
-	Globals.numCondominium = NumCondo
-	Globals.idCondominium = idCondo
-	
+	Globals.numSubjectminium = numSubject
+	Globals.idSubjectminium = idSubject
 	composer.gotoScene("src.RecordVisit")
 
 	return true
@@ -66,64 +65,62 @@ end
 --selecionamos el condominio
 function selectCondo( event )
 
-	containerListCondo[lasPoscCondo].alpha = 1
-	lasPoscCondo = event.target.posc
+	conListSubject[idxSubject].alpha = 1
+	idxSubject = event.target.posc
 	event.target.alpha = .7
-	NumCondo = event.target.num
-	idCondo = event.target.id
+	numSubject = event.target.num
+	idSubject = event.target.id
 
 end
 
 --pinta los condominios
-function getNumCondo()
+function getnumSubject()
 
-	local listCondo = DBManager.getCondominiums()
+	local listSubject = DBManager.getAsuntos()
 
 	local contX = 1
 	local contY = 100
-	local numMax = svListCondo.contentWidth / 150
+	local numMax = svListSubject.contentWidth / 280
 	local mult = 10^(idp or 0)
 	numMax = math.round(numMax * mult + 0.5)
 	numMax = numMax - 2
 	
-	for i = 1, #listCondo, 1 do
+	for i = 1, #listSubject, 1 do
 		
-		containerListCondo[i] = display.newContainer( 130, 130 )
-        containerListCondo[i].x = (contX * 170) - 40
-        containerListCondo[i].y = contY
-		containerListCondo[i].num = listCondo[i].nombre
-		containerListCondo[i].id = listCondo[i].id
-		containerListCondo[i].posc = i
-        svListCondo:insert( containerListCondo[i] )
-		containerListCondo[i]:addEventListener( 'tap', selectCondo )
+		conListSubject[i] = display.newContainer( 260, 100 )
+        conListSubject[i].x = (contX * 300) - 40
+        conListSubject[i].y = contY
+		conListSubject[i].num = listSubject[i].name
+		conListSubject[i].id = listSubject[i].id
+		conListSubject[i].posc = i
+        svListSubject:insert( conListSubject[i] )
+		conListSubject[i]:addEventListener( 'tap', selectCondo )
 		
-		local btnNumCondo = display.newRoundedRect( 0, 0, 130, 130, 10 )
-		btnNumCondo:setFillColor( 1 )
-		containerListCondo[i]:insert(btnNumCondo)
+		local btnnumSubject = display.newRoundedRect( 0, 0, 260, 100, 10 )
+		btnnumSubject:setFillColor( 1 )
+		conListSubject[i]:insert(btnnumSubject)
 		
-		local imgNumCondo = display.newImage( "img/btn/CONDOMINIO.png" )
-		imgNumCondo.x =	0
-		imgNumCondo.y = 0
-		imgNumCondo.width = 80
-		imgNumCondo.height = 80
-		imgNumCondo.alpha = .5
-		containerListCondo[i]:insert(imgNumCondo)
+		local imgnumSubject = display.newImage( "img/btn/iconSubject.png" )
+		imgnumSubject.x = 100
+		imgnumSubject.y = -30
+		imgnumSubject.alpha = .5
+		conListSubject[i]:insert(imgnumSubject)
 		
-		local labelNumCondo = display.newText( {
-            text = listCondo[i].nombre,   
-            x = 0, y = 0,
-            font = fontDefault, fontSize = 60, align = "center"
+		local labelnumSubject = display.newText( {
+            text = listSubject[i].name,   
+            x = 0, y = 0, width = 250,
+            font = fontLatoBold, fontSize = 30, align = "center"
 		})
-		labelNumCondo:setFillColor( 0, 110/255, 0 )
-		containerListCondo[i]:insert(labelNumCondo)
+		labelnumSubject:setFillColor( 0, 110/255, 0 )
+		conListSubject[i]:insert(labelnumSubject)
 	
 		if i%numMax == 0 then
 			contX = 0
-			contY = contY + 170
+			contY = contY + 140
 		end		
 		contX = contX + 1
 		
-		svListCondo:setScrollHeight(contY + 150)
+		svListSubject:setScrollHeight(contY + 150)
 		
 	end
 	
@@ -147,18 +144,17 @@ end
 function scene:create( event )
 
 	local screen = self.view
+	screen:insert(listSubjectScr)
 	
-	screen:insert(listCondominiumScreen)
-	
-    local bgLogin = display.newRect( intW/2, h, intW, intH )
+	local bgLogin = display.newRect( intW/2, h, intW, intH )
     bgLogin.fill = { type="image", filename="img/btn/fillPattern.jpg" }
 	bgLogin.anchorY = 0
-	listCondominiumScreen:insert(bgLogin)
+	listSubjectScr:insert(bgLogin)
 	
 	local imgArrowBack = display.newImage( "img/btn/seleccionOpcion-regresarSuperior.png" )
 	imgArrowBack.x = 30
 	imgArrowBack.y = h + 40
-	listCondominiumScreen:insert(imgArrowBack)
+	listSubjectScr:insert(imgArrowBack)
 	imgArrowBack:addEventListener( 'tap', returnRecordVisit)
 	
 	local labelArrowBack = display.newText( {   
@@ -166,22 +162,22 @@ function scene:create( event )
         text = "REGRESAR",  font = fontLatoBold, fontSize = 26
 	})
 	labelArrowBack:setFillColor( .2 )
-	listCondominiumScreen:insert(labelArrowBack)
+	listSubjectScr:insert(labelArrowBack)
 	labelArrowBack:addEventListener( 'tap', returnRecordVisit)
 	
-	local labelWelcomeListCondo = display.newText( {   
+	local labelWelcomelistSubject = display.newText( {   
         x = intW/2, y = h + 100, 
-        text = "Selecciona el condominio",  font = fontLatoRegular, fontSize = 36
+        text = "Selecciona el asunto",  font = fontLatoRegular, fontSize = 36
 	})
-	labelWelcomeListCondo:setFillColor( .2 )
-	listCondominiumScreen:insert(labelWelcomeListCondo)
+	labelWelcomelistSubject:setFillColor( .2 )
+	listSubjectScr:insert(labelWelcomelistSubject)
 	
-	local bgSvListCondo = display.newRect( intW/2, h + intH/2 + 40, intW - 96, 586 )
-	bgSvListCondo:setFillColor( 54/255, 80/255, 131/255 )
-	listCondominiumScreen:insert(bgSvListCondo)
+	local bgsvListSubject = display.newRect( intW/2, h + intH/2 + 40, intW - 96, 586 )
+	bgsvListSubject:setFillColor( 54/255, 80/255, 131/255 )
+	listSubjectScr:insert(bgsvListSubject)
 	
 	--scroll
-	svListCondo = widget.newScrollView
+	svListSubject = widget.newScrollView
 	{
 		x = intW/2,
 		y = h + intH/2 + 40,
@@ -192,10 +188,10 @@ function scene:create( event )
 		isBounceEnabled = false,
 		backgroundColor = { 6/255, 58/255, 98/255 }
 	}
-	listCondominiumScreen:insert(svListCondo)
-	--svListCondo:addEventListener( 'tap', noAction)
+	listSubjectScr:insert(svListSubject)
+	--svListSubject:addEventListener( 'tap', noAction)
 	
-	getNumCondo()
+	getnumSubject()
 	
 	local paint = {
 		type = "gradient",
@@ -207,15 +203,15 @@ function scene:create( event )
 	local btnContinue = display.newRoundedRect( intW/2, intH - 70, 200, 70, 10 )
 	btnContinue:setFillColor( 51/255, 176/255, 46/255 )
 	btnContinue.fill = paint
-	listCondominiumScreen:insert(btnContinue)
-	btnContinue:addEventListener( 'tap', getNumCondominium )
+	listSubjectScr:insert(btnContinue)
+	btnContinue:addEventListener( 'tap', getnumSubjectminium )
 	
 	local labelChangeCodo = display.newText( {   
         x = intW/2, y = intH - 75,
         text = "CONTINUAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelChangeCodo:setFillColor( 1 )
-	listCondominiumScreen:insert(labelChangeCodo)
+	listSubjectScr:insert(labelChangeCodo)
    
 end
 

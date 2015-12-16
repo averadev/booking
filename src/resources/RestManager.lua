@@ -41,7 +41,9 @@ local RestManager = {}
 					DBManager.insertGuard(data.items2)
 					DBManager.insertCondominium(data.items3)
 					DBManager.insertResidential(data.items4)
+                    DBManager.insertAsuntos(data.asuntos)
 					setItemsGuard(data.items2)
+                    --admin@booking.com
                 else
                     --native.showAlert( "Plantec Security", data.message, { "OK"})
 					NewAlert("Plantec Security","Usuario Incorrecto", 0)

@@ -114,6 +114,20 @@ local dbManager = {}
 		end
 	end
 	
+	dbManager.getAsuntos = function()
+		local result = {}
+		openConnection( )
+		for row in db:nrows("SELECT * FROM asuntos;") do
+			result[#result + 1] = row
+		end
+		closeConnection( )
+		if #result > 0 then
+			return result
+		else
+			return 0
+		end
+	end
+	
 	--obtiene los datos de registro visitante por id
 	dbManager.getRecordVisitById = function(id)
 		local result = {}
@@ -200,6 +214,17 @@ local dbManager = {}
 		openConnection( )
 		local query = "INSERT INTO residencial VALUES ('" .. items[1].id .."', '" .. items[1].nombre .."', '" .. items[1].requiereFoto .."');"
 		db:exec( query )
+		closeConnection( )
+	end
+
+    --inserta los datos de los asuntos
+	dbManager.insertAsuntos = function(items)
+		openConnection( )
+        local query = ""
+        for i = 1, #items, 1 do
+            query = "INSERT INTO asuntos VALUES ('" .. items[i].id .."', '" .. items[i].name .."');"
+            db:exec( query )
+        end
 		closeConnection( )
 	end
 	
@@ -305,6 +330,8 @@ local dbManager = {}
         db:exec( query3 )
 		query4 = "delete from residencial;"
         db:exec( query4 )
+		query5 = "delete from asuntos;"
+        db:exec( query5 )
 		closeConnection( )
     end
 
@@ -331,6 +358,9 @@ local dbManager = {}
 		db:exec( query )
 		
 		local query = "CREATE TABLE IF NOT EXISTS residencial (id INTEGER, nombre TEXT, requireFoto INTEGER );"
+		db:exec( query )
+		
+		local query = "CREATE TABLE IF NOT EXISTS asuntos (id INTEGER, name TEXT );"
 		db:exec( query )
 		
 		local oldVersion = true

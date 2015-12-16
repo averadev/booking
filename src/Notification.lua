@@ -88,13 +88,10 @@ function scene:create( event )
 	
 	screen:insert(notificationScreen)
 	
-	local bgNotification = display.newImage( "img/btn/fondo.png" )
-	bgNotification.anchorX = 0
-	bgNotification.anchorY = 0
-	bgNotification.width = intW
-	bgNotification.height = intH - h
-	bgNotification.y = h
-	notificationScreen:insert(bgNotification)
+    local bgLogin = display.newRect( intW/2, h, intW, intH )
+    bgLogin.fill = { type="image", filename="img/btn/fillPattern.jpg" }
+	bgLogin.anchorY = 0
+	notificationScreen:insert(bgLogin)
 	
 	local lastY = 100 + h
 	
@@ -102,7 +99,7 @@ function scene:create( event )
         x = intW/2, y = lastY,
         text = "La visita ha sido registrada",  font = fontLatoRegular, fontSize = 38
 	})
-	labelMsgConfirmation:setFillColor( 1 )
+	labelMsgConfirmation:setFillColor( .2 )
 	notificationScreen:insert(labelMsgConfirmation)
 	
 	lastY = lastY + 60
@@ -111,7 +108,7 @@ function scene:create( event )
         x = intW/2, y = lastY,
         text = "Se ha notificado al condóminio mediante mensaje a su aplicación",  font = fontLatoLight, fontSize = 30
 	})
-	labelMsgNotiConfirm:setFillColor( 1 )
+	labelMsgNotiConfirm:setFillColor( .2 )
 	notificationScreen:insert(labelMsgNotiConfirm)
 	
 	lastY = lastY + 40

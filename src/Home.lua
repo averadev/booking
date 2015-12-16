@@ -99,13 +99,10 @@ function scene:create( event )
 	
 	screen:insert(homeScreen)
 	
-	local bgHome = display.newImage( "img/btn/fondo.png" )
-	bgHome.anchorX = 0
-	bgHome.anchorY = 0
-	bgHome.width = intW
-	bgHome.height = intH - h
-	bgHome.y = h
-	homeScreen:insert(bgHome)
+	local bgLogin = display.newRect( intW/2, h, intW, intH )
+    bgLogin.fill = { type="image", filename="img/btn/fillPattern.jpg" }
+	bgLogin.anchorY = 0
+	homeScreen:insert(bgLogin)
 	
 	local imgArrowBack = display.newImage( "img/btn/seleccionOpcion-regresarSuperior.png" )
 	imgArrowBack.x = 30
@@ -117,7 +114,7 @@ function scene:create( event )
         x = 125, y = h + 40,
         text = "REGRESAR",  font = fontLatoBold, fontSize = 26
 	})
-	labelArrowBack:setFillColor( 1 )
+	labelArrowBack:setFillColor( .2 )
 	homeScreen:insert(labelArrowBack)
 	labelArrowBack:addEventListener( 'tap', returnLoginGuard)
 	
@@ -125,27 +122,21 @@ function scene:create( event )
         x = intW/2, y = h + 40,
         text = "Bienvenido " .. settingsGuard.nombre,  font = fontLatoBold, fontSize = 40
 	})
-	labelWeolcomeGuard:setFillColor( 1 )
+	labelWeolcomeGuard:setFillColor( .2 )
 	homeScreen:insert(labelWeolcomeGuard)
 	
 	lastY = h + 150
 	
-	local msgInfoHome = "Selecciona lo que deseas registrar. \nPuedes regresarte a la pantalla anterior seleccionando el icono      en la esquina superior derecha."
+	local msgInfoHome = "Selecciona lo que deseas registrar. \nPuedes regresar a la pantalla anterior seleccionando la opción 'REGRESAR'."
 	
 	local labelInfoHome = display.newText( {   
         x = intW/2, y = lastY, width = intW - 100,
         text = msgInfoHome,  font = fontLatoRegular, fontSize = 26
 	})
-	labelInfoHome:setFillColor( 1 )
+	labelInfoHome:setFillColor( .2 )
 	homeScreen:insert(labelInfoHome)
 	labelInfoHome.y = labelInfoHome.y + labelInfoHome.contentHeight/2
 	
-	local imgArrowInfoHome = display.newImage( "img/btn/seleccionOpcion-regresarTexto.png" )
-	imgArrowInfoHome.anchorX = 0
-	imgArrowInfoHome.x = 98 * 8
-	--imgArrowInfoHome.x = intW/2
-	imgArrowInfoHome.y =  h + 195
-	homeScreen:insert(imgArrowInfoHome)
 	
 	local bgOpcionMsg = display.newRoundedRect( intW/2, h + 300, 800, 300, 10 )
 	bgOpcionMsg.anchorY = 0
