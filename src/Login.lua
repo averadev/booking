@@ -111,7 +111,7 @@ function LoadImageGuard(posc)
 		-- Listener de la carga de la imagen del servidor
 		local function loadImageListener( event )
 			if ( event.isError ) then
-				native.showAlert( "Go Deals", "Network error :(", { "OK"})
+				native.showAlert( "Plantec Security", "Network error :(", { "OK"})
 			else
 				event.target.alpha = 0
 					if posc < #itemsGuard then
