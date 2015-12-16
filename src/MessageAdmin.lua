@@ -112,13 +112,10 @@ function scene:create( event )
 	screen:insert(messageAdminScreen)
 	screen:insert(messageAdminField)
 	
-	local bgSendMessage = display.newImage( "img/btn/fondo.png" )
-	bgSendMessage.anchorX = 0
-	bgSendMessage.anchorY = 0
-	bgSendMessage.width = intW
-	bgSendMessage.height = intH - h
-	bgSendMessage.y = h
-	messageAdminScreen:insert(bgSendMessage)
+	local bgLogin = display.newRect( intW/2, h, intW, intH )
+    bgLogin.fill = { type="image", filename="img/btn/fillPattern.jpg" }
+	bgLogin.anchorY = 0
+	messageAdminScreen:insert(bgLogin)
 	
 	local imgArrowBack = display.newImage( "img/btn/seleccionOpcion-regresarSuperior.png" )
 	imgArrowBack.x = 30
@@ -130,7 +127,7 @@ function scene:create( event )
         x = 125, y = h + 40,
         text = "REGRESAR",  font = fontLatoBold, fontSize = 26
 	})
-	labelArrowBack:setFillColor( 1 )
+	labelArrowBack:setFillColor( .2 )
 	messageAdminScreen:insert(labelArrowBack)
 	labelArrowBack:addEventListener( 'tap', returnHomeMSGAdmin)
 	
@@ -138,7 +135,7 @@ function scene:create( event )
         x = intW/2, y = h + 100, 
         text = "Envío de mensaje a administración",  font = fontLatoRegular, fontSize = 36
 	})
-	labelWelcomeMsgAdmin:setFillColor( 1 )
+	labelWelcomeMsgAdmin:setFillColor( .2 )
 	messageAdminScreen:insert(labelWelcomeMsgAdmin)
 	
 	local bgImgGuard = display.newRoundedRect( intW/2, h + 180, 650, 400, 5 )

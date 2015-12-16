@@ -5,8 +5,10 @@ return {
               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'},
     
 	numCondominium = 0,
-	
 	idCondominium = 0,
+    
+    numSubjectminium = 0,
+	idSubjectminium = 0,
 	
 	numResidencial = 0,
 	

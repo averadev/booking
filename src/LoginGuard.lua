@@ -303,12 +303,9 @@ function scene:create( event )
 	screen:insert(groupInfoGuard)
 	screen:insert(groupPassScreen)
 	
-	local bgLogin = display.newImage( "img/btn/fondo.png" )
-	bgLogin.anchorX = 0
+	local bgLogin = display.newRect( intW/2, h, intW, intH )
+    bgLogin.fill = { type="image", filename="img/btn/fillPattern.jpg" }
 	bgLogin.anchorY = 0
-	bgLogin.width = intW
-	bgLogin.height = intH - h
-	bgLogin.y = h
 	loginGuardScreen:insert(bgLogin)
 	
 	local bgImgGuard = display.newRoundedRect( intW/2, h + 30, intW - 50, 200, 5 )
@@ -453,7 +450,7 @@ function scene:create( event )
         x = intW/2, y = lastY, width = intW - 100,
         text = "En caso de no contar con esos datos, favor de comunicarse a administración",  font = fontLatoLight, fontSize = 22
 	})
-	labelNoPasswordLoginG:setFillColor( 1 )
+	labelNoPasswordLoginG:setFillColor( .2 )
 	loginGuardScreen:insert(labelNoPasswordLoginG)
 	
 	local imgSignOut = display.newImage( "img/btn/loginGuardias-iconoSalir.png" )
