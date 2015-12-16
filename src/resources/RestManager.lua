@@ -288,18 +288,22 @@ local RestManager = {}
 	RestManager.sendMSGRecordVisit = function()
 	
 		local residencial = DBManager.getResidential()
+		print(residencial)
 		local requireFoto = 0
 		if residencial == 0 then
 			requireFoto = 1
 		else
 			requireFoto = residencial[1].requireFoto
-		end		
+		end	
+		print("requireFoto")
+		print(requireFoto)
 		
 		if Globals.ItIsUploading == 0 then
 			if networkConnection() then 
 				Globals.ItIsUploading = 1
 				local messagesSend = DBManager.getMessageUnsent(2)
-				if residencial == 1 then
+				if requireFoto == 1 then
+				print('holalsaaasdadas')
 				uploadImage(1,messagesSend,1, 1)
 				else
 					sendMRecordVisit(1, messagesSend ,1)

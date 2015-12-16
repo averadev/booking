@@ -121,8 +121,7 @@ function sendRecordVisit( event )
 	--if txtRecordVisitName.text ~= '' and txtRecordVisitReason.text ~= '' and labelNumCondominius.id ~= 0 then
 		
 		NewAlert("Plantec Security","Enviando mensaje.", 0)
-		
-		if requireFoto == 1 then
+		if requireFoto == 1 or requireFoto == '1' then
 		
 			for i = 1, 2, 1 do
 			
