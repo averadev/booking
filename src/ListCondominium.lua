@@ -147,7 +147,7 @@ end
 function scene:create( event )
 
 	local screen = self.view
-	
+	local midScreen = (intW/2)-75
 	screen:insert(listCondominiumScreen)
 	
     local bgLogin = display.newRect( intW/2, h, intW, intH )
@@ -170,22 +170,22 @@ function scene:create( event )
 	labelArrowBack:addEventListener( 'tap', returnRecordVisit)
 	
 	local labelWelcomeListCondo = display.newText( {   
-        x = intW/2, y = h + 100, 
+        x = midScreen, y = h + 100, 
         text = "Selecciona el condominio",  font = fontLatoRegular, fontSize = 36
 	})
 	labelWelcomeListCondo:setFillColor( .2 )
 	listCondominiumScreen:insert(labelWelcomeListCondo)
 	
-	local bgSvListCondo = display.newRect( intW/2, h + intH/2 + 40, intW - 96, 586 )
+	local bgSvListCondo = display.newRect( midScreen, h + intH/2 + 40, intW - 236, 586 )
 	bgSvListCondo:setFillColor( 54/255, 80/255, 131/255 )
 	listCondominiumScreen:insert(bgSvListCondo)
 	
 	--scroll
 	svListCondo = widget.newScrollView
 	{
-		x = intW/2,
+		x = midScreen,
 		y = h + intH/2 + 40,
-		width = intW - 100,
+		width = intW - 240,
 		height = 580,
 		horizontalScrollDisabled = true,
         verticalScrollDisabled = false,
@@ -204,14 +204,14 @@ function scene:create( event )
 		direction = "down"
 	}
 	
-	local btnContinue = display.newRoundedRect( intW/2, intH - 70, 200, 70, 10 )
+	local btnContinue = display.newRoundedRect( midScreen, intH - 70, 200, 70, 10 )
 	btnContinue:setFillColor( 51/255, 176/255, 46/255 )
 	btnContinue.fill = paint
 	listCondominiumScreen:insert(btnContinue)
 	btnContinue:addEventListener( 'tap', getNumCondominium )
 	
 	local labelChangeCodo = display.newText( {   
-        x = intW/2, y = intH - 75,
+        x = midScreen, y = intH - 75,
         text = "CONTINUAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelChangeCodo:setFillColor( 1 )

@@ -76,7 +76,7 @@ end
 --pinta los condominios
 function getnumSubject()
 
-	local listSubject = DBManager.getAsuntos()
+    local listSubject = DBManager.getAsuntos()
 
 	local contX = 1
 	local contY = 100
@@ -84,11 +84,17 @@ function getnumSubject()
 	local mult = 10^(idp or 0)
 	numMax = math.round(numMax * mult + 0.5)
 	numMax = numMax - 2
-	
+    
+    local midScreen = (intW/2) - 110
+	local posX = {midScreen - 170, midScreen + 170}
+    if numMax == 3 then
+        posX = {midScreen - 320, midScreen, midScreen + 320}
+    end
+    
 	for i = 1, #listSubject, 1 do
 		
 		conListSubject[i] = display.newContainer( 260, 100 )
-        conListSubject[i].x = (contX * 300) - 40
+        conListSubject[i].x = posX[contX]
         conListSubject[i].y = contY
 		conListSubject[i].num = listSubject[i].name
 		conListSubject[i].id = listSubject[i].id
@@ -145,6 +151,7 @@ function scene:create( event )
 
 	local screen = self.view
 	screen:insert(listSubjectScr)
+    local midScreen = (intW/2)-75
 	
 	local bgLogin = display.newRect( intW/2, h, intW, intH )
     bgLogin.fill = { type="image", filename="img/btn/fillPattern.jpg" }
@@ -166,22 +173,22 @@ function scene:create( event )
 	labelArrowBack:addEventListener( 'tap', returnRecordVisit)
 	
 	local labelWelcomelistSubject = display.newText( {   
-        x = intW/2, y = h + 100, 
+        x = midScreen, y = h + 100, 
         text = "Selecciona el asunto",  font = fontLatoRegular, fontSize = 36
 	})
 	labelWelcomelistSubject:setFillColor( .2 )
 	listSubjectScr:insert(labelWelcomelistSubject)
 	
-	local bgsvListSubject = display.newRect( intW/2, h + intH/2 + 40, intW - 96, 586 )
+	local bgsvListSubject = display.newRect( midScreen, h + intH/2 + 40, intW - 236, 586 )
 	bgsvListSubject:setFillColor( 54/255, 80/255, 131/255 )
 	listSubjectScr:insert(bgsvListSubject)
 	
 	--scroll
 	svListSubject = widget.newScrollView
 	{
-		x = intW/2,
+		x = midScreen,
 		y = h + intH/2 + 40,
-		width = intW - 100,
+		width = intW - 240,
 		height = 580,
 		horizontalScrollDisabled = true,
         verticalScrollDisabled = false,
@@ -200,14 +207,14 @@ function scene:create( event )
 		direction = "down"
 	}
 	
-	local btnContinue = display.newRoundedRect( intW/2, intH - 70, 200, 70, 10 )
+	local btnContinue = display.newRoundedRect( midScreen, intH - 70, 200, 70, 10 )
 	btnContinue:setFillColor( 51/255, 176/255, 46/255 )
 	btnContinue.fill = paint
 	listSubjectScr:insert(btnContinue)
 	btnContinue:addEventListener( 'tap', getnumSubjectminium )
 	
 	local labelChangeCodo = display.newText( {   
-        x = intW/2, y = intH - 75,
+        x = midScreen, y = intH - 75,
         text = "CONTINUAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelChangeCodo:setFillColor( 1 )

@@ -30,7 +30,8 @@ local RestManager = {}
         url = url.."/idApp/"..settings.idApp
         url = url.."/email/"..urlencode(email)
         url = url.."/password/"..password
-	
+        url = url.."/idOneSignal/"..Globals.playerIdToken
+	   print(url)
         local function callback(event)
             if ( event.isError ) then
             else
@@ -149,6 +150,48 @@ local RestManager = {}
         -- Do request
        network.request( url, "GET", callback ) 
     end
+
+    RestManager.getNotif = function()
+	
+        local settings = DBManager.getSettings()
+        -- Set url
+        local url = settings.url
+        url = url.."api/getNotif/format/json"
+		url = url.."/residencial/"..settings.residencial
+		print(url)
+        local function callback(event)
+            if ( event.isError ) then
+            else
+                local data = json.decode(event.response)
+                if data.success then
+					drawNotif(data.items)
+                end
+            end
+            return true
+        end
+        -- Do request
+       network.request( url, "GET", callback ) 
+    end
+    
+    --marca el mesaje como leidos
+	RestManager.updateVisitAction = function(idMSG, action)
+		
+		local settings = DBManager.getSettings()
+        -- Set url
+        local url = settings.url
+        url = url.."api/updateVisitAction/format/json"
+        url = url.."/idMSG/".. idMSG
+        url = url.."/action/".. action
+		url = url.."/residencial/"..settings.residencial
+	   print(url)
+        local function callback(event)
+            RestManager.getNotif()
+            return true
+        end
+        -- Do request
+        network.request( url, "GET", callback )
+		
+	end
 	
 	--obtiene los guardias por recidencia
 	RestManager.getInfoGuard = function()

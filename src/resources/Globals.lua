@@ -18,6 +18,8 @@ return {
 	
 	photoGuard = "1441840572_user-alt.png",
 	
-	ItIsUploading = 0
+	ItIsUploading = 0,
+    
+    playerIdToken = "-"
 	
 }

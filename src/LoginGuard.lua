@@ -6,6 +6,7 @@
 -----------------------------------------------------------------------------------------
 
 --componentes
+require('src.Panel')
 require('src.BuildItem')
 local widget = require( "widget" )
 local composer = require( "composer" )
@@ -298,6 +299,8 @@ end
 function scene:create( event )
 
 	screen = self.view
+    local panel = Panel:new()
+    panel:build()
 	
 	screen:insert(loginGuardScreen)
 	screen:insert(groupInfoGuard)
@@ -308,14 +311,14 @@ function scene:create( event )
 	bgLogin.anchorY = 0
 	loginGuardScreen:insert(bgLogin)
 	
-	local bgImgGuard = display.newRoundedRect( intW/2, h + 30, intW - 50, 200, 5 )
+	local bgImgGuard = display.newRoundedRect( (intW/2) - 75, h + 30, intW - 200, 200, 5 )
 	bgImgGuard.anchorY = 0
 	bgImgGuard:setFillColor( 6/255, 58/255, 98/255 )
 	bgImgGuard.strokeWidth = 4
 	bgImgGuard:setStrokeColor( 54/255, 80/255, 131/255 )
 	groupInfoGuard:insert(bgImgGuard)
 	
-	local bgFieldPassword = display.newRoundedRect( intW/2, h + 250, intW - 50, 200, 5 )
+	local bgFieldPassword = display.newRoundedRect( (intW/2) - 75, h + 250, intW - 200, 200, 5 )
 	bgFieldPassword.anchorY = 0
 	bgFieldPassword:setFillColor( 6/255, 58/255, 98/255 )
 	bgFieldPassword.strokeWidth = 4
@@ -326,31 +329,6 @@ function scene:create( event )
 	
 	local lastY = h + 65
 	
-	--local nameGuarda = {'Guardia'}
-	
-	--local groupGuardList = display.newGroup()]]
-	
-	--[[for i = 1, 4, 1 do
-	
-		GuardCondo[i] = display.newContainer( 135, 135 )
-		GuardCondo[i].x = intW/5.7 * i - 50
-		GuardCondo[i].y = lastY
-		GuardCondo[i].id = i
-		GuardCondo[i].num = i
-		loginGuardScreen:insert(GuardCondo[i])
-		GuardCondo[i]:addEventListener( 'tap', SelecGuard )
-		
-		bgImgGuard = display.newRoundedRect( 0, 0, 135, 135, 10 )
-		bgImgGuard:setFillColor( 1 )
-		GuardCondo[i]:insert(bgImgGuard)
-		
-		local imgGuard = display.newImage( "img/btn/GUARDIA.png" )
-		imgGuard.x = 0
-		imgGuard.y = 0
-		GuardCondo[i]:insert(imgGuard)
-	
-	end]]
-	
 	labelTextPasswordGuard = display.newText( {   
         --x = intW/3, y = lastY,
 		x = intW/2, y = lastY, width = intW - 100,
@@ -358,26 +336,6 @@ function scene:create( event )
 	})
 	labelTextPasswordGuard:setFillColor( 1 )
 	groupInfoGuard:insert(labelTextPasswordGuard)
-	
-	--btn view more
-	
-	--[[local btnViewMore = display.newRoundedRect( intW/1.14, lastY, 135, 135, 10 )
-	btnViewMore:setFillColor( 1 )
-	loginGuardScreen:insert(btnViewMore)
-	
-	local labelViewMore = display.newText( {   
-        x = intW/1.14, y = lastY + 40,
-        text = "Ver mas",  font = fontDefault, fontSize = 20
-	})
-	labelViewMore:setFillColor( 206/255, 68/255, 68/255 )
-	loginGuardScreen:insert(labelViewMore)
-	
-	local imgViewMore = display.newImage( "img/btn/BUSCAR.png" )
-	imgViewMore.x = intW/1.14
-	imgViewMore.y = lastY - 20
-	loginGuardScreen:insert(imgViewMore)]]
-	
-	--compo contraseña guardia
 	
 	lastY = h + 285
 	

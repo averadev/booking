@@ -81,13 +81,12 @@ end
 function scene:create( event )
 
 	lastId = event.params.lastId
-	
 	local infoRecordVisit = DBManager.getRecordVisitById(lastId)
-
+    
 	local screen = self.view
-	
 	screen:insert(notificationScreen)
 	
+    local midScreen = (intW/2)-75
     local bgLogin = display.newRect( intW/2, h, intW, intH )
     bgLogin.fill = { type="image", filename="img/btn/fillPattern.jpg" }
 	bgLogin.anchorY = 0
@@ -96,7 +95,7 @@ function scene:create( event )
 	local lastY = 100 + h
 	
 	labelMsgConfirmation = display.newText( {   
-        x = intW/2, y = lastY,
+        x = midScreen, y = lastY,
         text = "La visita ha sido registrada",  font = fontLatoRegular, fontSize = 38
 	})
 	labelMsgConfirmation:setFillColor( .2 )
@@ -105,7 +104,7 @@ function scene:create( event )
 	lastY = lastY + 60
 	
 	local labelMsgNotiConfirm = display.newText( {   
-        x = intW/2, y = lastY,
+        x = midScreen, y = lastY,
         text = "Se ha notificado al condóminio mediante mensaje a su aplicación",  font = fontLatoLight, fontSize = 30
 	})
 	labelMsgNotiConfirm:setFillColor( .2 )
@@ -113,7 +112,7 @@ function scene:create( event )
 	
 	lastY = lastY + 40
 	
-	local bgNotiMSG = display.newRoundedRect( intW/2, lastY, 800, 430, 10 )
+	local bgNotiMSG = display.newRoundedRect( midScreen, lastY, 800, 430, 10 )
 	bgNotiMSG.anchorY = 0
 	bgNotiMSG:setFillColor( 6/255, 58/255, 98/255 )
 	bgNotiMSG.strokeWidth = 4
@@ -122,14 +121,14 @@ function scene:create( event )
 
 	lastY = lastY + 30
 	
-	local bgInfoNotiMSG = display.newRoundedRect( intW/2, lastY, 740, 300, 10 )
+	local bgInfoNotiMSG = display.newRoundedRect( midScreen, lastY, 740, 300, 10 )
 	bgInfoNotiMSG.anchorY = 0
 	bgInfoNotiMSG:setFillColor( 1 )
 	notificationScreen:insert(bgInfoNotiMSG)
 	
 	
 	labelMsgDate = display.newText( {   
-        x = intW/2, y = lastY + 30,
+        x = midScreen, y = lastY + 30,
 		width = 690,
         text = "09 de septiembre del 2015 05:57 pm",  font = fontLatoRegular, fontSize = 22, align = "right",
 	})
@@ -137,7 +136,7 @@ function scene:create( event )
 	notificationScreen:insert(labelMsgDate)
 	
 	labelTiTleNameVisit = display.newText( {   
-        x = intW/2, y = lastY + 75,
+        x = midScreen, y = lastY + 75,
 		width = 700,
         text = "VISITANTE: ",  font = fontLatoBold, fontSize = 24
 	})
@@ -145,7 +144,7 @@ function scene:create( event )
 	notificationScreen:insert(labelTiTleNameVisit)
 	
 	labelMsgNameVisit = display.newText( {   
-        x = intW/2 + 75, y = lastY + 73,
+        x = midScreen + 75, y = lastY + 73,
 		width = 550,
         text = infoRecordVisit.nombreVisitante,  font = fontLatoRegular, fontSize = 26
 	})
@@ -154,7 +153,7 @@ function scene:create( event )
 	labelMsgNameVisit.y = labelMsgNameVisit.y + labelMsgNameVisit.contentHeight/2 - 13
 	
 	labelTitleReasonVisit = display.newText( {   
-        x = intW/2, y = lastY + 125,
+        x = midScreen, y = lastY + 125,
 		width = 700,
         text = "MOTIVO : ",  font = fontLatoBold, fontSize = 24
 	})
@@ -162,7 +161,7 @@ function scene:create( event )
 	notificationScreen:insert(labelTitleReasonVisit)
 	
 	labelMsgReasonVisit = display.newText( {   
-        x = intW/2 + 75, y = lastY + 123,
+        x = midScreen + 75, y = lastY + 123,
 		width = 550,
         text = infoRecordVisit.motivo,  font = fontLatoRegular, fontSize = 24
 	})
@@ -180,14 +179,14 @@ function scene:create( event )
 		direction = "down"
 	}
 	
-	btnMsgContinue = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
+	btnMsgContinue = display.newRoundedRect( midScreen, lastY, 200, 70, 10 )
 	btnMsgContinue:setFillColor( 205/255, 69/255, 69/255 )
 	notificationScreen:insert(btnMsgContinue)
 	btnMsgContinue.fill = paint
 	btnMsgContinue:addEventListener( 'tap', returnHomeMsg )
 	
 	local labelMsgContinue = display.newText( {   
-        x = intW/2, y = lastY,
+        x = midScreen, y = lastY,
         text = "ACEPTAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelMsgContinue:setFillColor( 1 )

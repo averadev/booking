@@ -131,14 +131,15 @@ function scene:create( event )
 	messageAdminScreen:insert(labelArrowBack)
 	labelArrowBack:addEventListener( 'tap', returnHomeMSGAdmin)
 	
+    local midScreen = (intW/2)-75
 	labelWelcomeMsgAdmin = display.newText( {   
-        x = intW/2, y = h + 100, 
+        x = midScreen, y = h + 100, 
         text = "Envío de mensaje a administración",  font = fontLatoRegular, fontSize = 36
 	})
 	labelWelcomeMsgAdmin:setFillColor( .2 )
 	messageAdminScreen:insert(labelWelcomeMsgAdmin)
 	
-	local bgImgGuard = display.newRoundedRect( intW/2, h + 180, 650, 400, 5 )
+	local bgImgGuard = display.newRoundedRect( midScreen, h + 180, 650, 400, 5 )
 	bgImgGuard.anchorY = 0
 	bgImgGuard:setFillColor( 6/255, 58/255, 98/255 )
 	bgImgGuard.strokeWidth = 4
@@ -149,11 +150,11 @@ function scene:create( event )
 	
 	lastY = 300
 	
-	local bgTextFieldMsgSubject = display.newRoundedRect( intW/2, lastY, 550, 60, 10 )
+	local bgTextFieldMsgSubject = display.newRoundedRect( midScreen, lastY, 550, 60, 10 )
 	bgTextFieldMsgSubject:setFillColor( 1 )
 	messageAdminField:insert(bgTextFieldMsgSubject)
 	
-	txtMsgSubject = native.newTextField( intW/2, lastY, 550, 60 )
+	txtMsgSubject = native.newTextField( midScreen, lastY, 550, 60 )
     txtMsgSubject.inputType = "email"
     txtMsgSubject.hasBackground = false
 	txtMsgSubject.placeholder = "ASUNTO"
@@ -166,11 +167,11 @@ function scene:create( event )
 	
 	lastY = lastY + 115
 	
-	local bgTextBoxdMsgMessage = display.newRoundedRect( intW/2, lastY, 550, 120, 10 )
+	local bgTextBoxdMsgMessage = display.newRoundedRect( midScreen, lastY, 550, 120, 10 )
 	bgTextBoxdMsgMessage:setFillColor( 1 )
 	messageAdminField:insert(bgTextBoxdMsgMessage)
 	
-	txtMsgMessage = native.newTextBox( intW/2, lastY, 550, 120 )
+	txtMsgMessage = native.newTextBox( midScreen, lastY, 550, 120 )
 	txtMsgMessage.isEditable = true
 	txtMsgMessage.hasBackground = false
 	txtMsgMessage.placeholder = "MENSAJE"
@@ -189,14 +190,14 @@ function scene:create( event )
 		direction = "down"
 	}
 	
-	local btnSendMessage = display.newRoundedRect( intW/2, lastY, 200, 70, 10 )
+	local btnSendMessage = display.newRoundedRect( midScreen, lastY, 200, 70, 10 )
 	btnSendMessage:setFillColor( 205/255, 69/255, 69/255 )
 	messageAdminField:insert(btnSendMessage)
 	btnSendMessage.fill = paint
 	btnSendMessage:addEventListener( 'tap', sendMessageToadmin)
 	
 	local labelSendMessage = display.newText( {   
-        x = intW/2, y = lastY,
+        x = midScreen, y = lastY,
         text = "ENVIAR",  font = fontLatoRegular, fontSize = 28
 	})
 	labelSendMessage:setFillColor( 1 )

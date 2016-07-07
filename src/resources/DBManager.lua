@@ -388,7 +388,7 @@ local dbManager = {}
 		
         -- Populate config
 		query = "INSERT INTO config VALUES (1, 0, '', '', '', '', '', 'http://www.plantecsafe.com/');"
-		--query = "INSERT INTO config VALUES (1, 0, '', '', '', '', '', 'http://localhost:8080/booking/');"
+		--query = "INSERT INTO config VALUES (1, 0, '', '', '', '', '', 'http://192.168.1.66/plantec_api/');"
 		
 		db:exec( query )
     

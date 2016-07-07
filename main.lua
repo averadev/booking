@@ -37,6 +37,24 @@ function createFolderPhoto(name)
 	
 end
 
+function DidReceiveRemoteNotification(message, additionalData, isActive)
+    if isActive then
+		system.vibrate()
+        reloadPanel()
+	else
+		--reloadPanel()
+	end
+end
+
+local OneSignal = require("plugin.OneSignal")
+OneSignal.Init("d5a06f1e-b4c1-424a-8964-52458c9045a6", 585019552300, DidReceiveRemoteNotification)
+
+function IdsAvailable(userID, pushToken)
+    Globals.playerIdToken = userID
+end
+OneSignal.IdsAvailableCallback(IdsAvailable)
+OneSignal.EnableNotificationsWhenActive(true)
+
 createFolderPhoto('fotos')
 createFolderPhoto('tempFotos')
 

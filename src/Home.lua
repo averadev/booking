@@ -119,7 +119,7 @@ function scene:create( event )
 	labelArrowBack:addEventListener( 'tap', returnLoginGuard)
 	
 	local labelWeolcomeGuard= display.newText( {   
-        x = intW/2, y = h + 40,
+        x = (intW/2) - 25, y = h + 40,
         text = "Bienvenido " .. settingsGuard.nombre,  font = fontLatoBold, fontSize = 40
 	})
 	labelWeolcomeGuard:setFillColor( .2 )
@@ -130,7 +130,7 @@ function scene:create( event )
 	local msgInfoHome = "Selecciona lo que deseas registrar. \nPuedes regresar a la pantalla anterior seleccionando la opción 'REGRESAR'."
 	
 	local labelInfoHome = display.newText( {   
-        x = intW/2, y = lastY, width = intW - 100,
+        x = (intW/2) - 50, y = lastY, width = intW - 225,
         text = msgInfoHome,  font = fontLatoRegular, fontSize = 26
 	})
 	labelInfoHome:setFillColor( .2 )
@@ -138,14 +138,14 @@ function scene:create( event )
 	labelInfoHome.y = labelInfoHome.y + labelInfoHome.contentHeight/2
 	
 	
-	local bgOpcionMsg = display.newRoundedRect( intW/2, h + 300, 800, 300, 10 )
+	local bgOpcionMsg = display.newRoundedRect( (intW/2)-75, h + 300, 800, 300, 10 )
 	bgOpcionMsg.anchorY = 0
 	bgOpcionMsg:setFillColor( 1, 1, 1, 0 )
 	bgOpcionMsg.strokeWidth = 5
 	bgOpcionMsg:setStrokeColor( 15/255, 68/255, 108/255 )
 	homeScreen:insert(bgOpcionMsg)
 	
-	btnMessageAdmi = display.newRoundedRect( intW/2 - 150, h + 450, 200, 200, 12 )
+	btnMessageAdmi = display.newRoundedRect( intW/2 - 225, h + 450, 200, 200, 12 )
 	btnMessageAdmi.option = 1
 	btnMessageAdmi:setFillColor( 15/255, 68/255, 108/255 )
 	btnMessageAdmi.strokeWidth = 4
@@ -155,19 +155,19 @@ function scene:create( event )
 	btnMessageAdmi:addEventListener( 'tap', aceptOptionHome)
 	
 	local imgMessageAdmi = display.newImage( "img/btn/envioMensaje.png" )
-	imgMessageAdmi.x =	intW/2 - 150
+	imgMessageAdmi.x =	intW/2 - 225
 	imgMessageAdmi.y =  h + 420
 	homeScreen:insert(imgMessageAdmi)
 	
 	local labelMessageAdmi = display.newText( {   
         --x = intW/3, y = lastY,
-		x = intW/2 - 150, y = h + 510, width = 200,
+		x = intW/2 - 225, y = h + 510, width = 200,
         text = "Mensaje a Administración",  font = fontLatoRegular, fontSize = 22, align = "center",
 	})
 	labelMessageAdmi:setFillColor( 1 )
 	homeScreen:insert(labelMessageAdmi)
 	
-	btnRecordVisits = display.newRoundedRect( intW/2 + 150, h + 450, 200, 200, 12 )
+	btnRecordVisits = display.newRoundedRect( intW/2 + 75, h + 450, 200, 200, 12 )
 	btnRecordVisits.option = 2
 	btnRecordVisits:setFillColor( 15/255, 68/255, 108/255 )
 	btnRecordVisits.strokeWidth = 4
@@ -177,13 +177,13 @@ function scene:create( event )
 	btnRecordVisits:addEventListener( 'tap', aceptOptionHome)
 	
 	local imgMessageAdmi = display.newImage( "img/btn/RegistroVisita.png" )
-	imgMessageAdmi.x =	intW/2 + 150
+	imgMessageAdmi.x =	intW/2 + 75
 	imgMessageAdmi.y =  h + 420
 	homeScreen:insert(imgMessageAdmi)
 	
 	local labelRecordVisits = display.newText( {   
         --x = intW/3, y = lastY,
-		x = intW/2 + 150, y = h + 510, width = 200,
+		x = intW/2 + 75, y = h + 510, width = 200,
         text = "REGISTRO DE VISITAS",  font = fontLatoRegular, fontSize = 22, align = "center",
 	})
 	labelRecordVisits:setFillColor( 1 )
