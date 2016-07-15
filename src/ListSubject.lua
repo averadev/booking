@@ -80,7 +80,7 @@ function getnumSubject()
 
 	local contX = 1
 	local contY = 100
-	local numMax = svListSubject.contentWidth / 280
+	local numMax = svListSubject.contentWidth / 260
 	local mult = 10^(idp or 0)
 	numMax = math.round(numMax * mult + 0.5)
 	numMax = numMax - 2
@@ -120,13 +120,14 @@ function getnumSubject()
 		labelnumSubject:setFillColor( 0, 110/255, 0 )
 		conListSubject[i]:insert(labelnumSubject)
 	
+        svListSubject:setScrollHeight(contY + 100)
 		if i%numMax == 0 then
 			contX = 0
 			contY = contY + 140
 		end		
 		contX = contX + 1
 		
-		svListSubject:setScrollHeight(contY + 150)
+		
 		
 	end
 	
@@ -179,7 +180,7 @@ function scene:create( event )
 	labelWelcomelistSubject:setFillColor( .2 )
 	listSubjectScr:insert(labelWelcomelistSubject)
 	
-	local bgsvListSubject = display.newRect( midScreen, h + intH/2 + 40, intW - 236, 586 )
+	local bgsvListSubject = display.newRect( midScreen, h + intH/2 - 20, intW - 236, 446 )
 	bgsvListSubject:setFillColor( 54/255, 80/255, 131/255 )
 	listSubjectScr:insert(bgsvListSubject)
 	
@@ -187,9 +188,9 @@ function scene:create( event )
 	svListSubject = widget.newScrollView
 	{
 		x = midScreen,
-		y = h + intH/2 + 40,
+		y = h + intH/2 - 20,
 		width = intW - 240,
-		height = 580,
+		height = 440,
 		horizontalScrollDisabled = true,
         verticalScrollDisabled = false,
 		isBounceEnabled = false,

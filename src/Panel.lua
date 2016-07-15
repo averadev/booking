@@ -65,7 +65,12 @@ function Panel:new()
             
             local btnNotif = display.newRect( 0, 0, 150, 98 )
             notif[idx]:insert(btnNotif)
-            if items[z].action == "2" then
+            if items[z].action == "0" then
+                btnNotif:setFillColor( .7)
+                btnNotif.strokeWidth = 8
+                btnNotif:setStrokeColor( .5 )
+                btnNotif.idVisit = items[z].id
+            elseif items[z].action == "2" then
                 btnNotif:setFillColor( 0, 102/255, 0 )
                 btnNotif.strokeWidth = 8
                 btnNotif:setStrokeColor( 0, 50/255, 0 )
@@ -88,19 +93,31 @@ function Panel:new()
                 btnNotif.strokeWidth = 8
                 btnNotif:setStrokeColor( 50/255, 0, 0, .2 )
             end 
-            --[[
-            local btnNumCondo = display.newRect( 0, 0, 150, 98 )
-            btnNumCondo:setFillColor( 0, .5 )
-            notif[idx]:insert(btnNumCondo)
-            ]]
             
-            local labelNumCondo = display.newText( {
-                text = items[z].nombre,   
-                x = 0, y = 0,
-                font = fontDefaultBold, fontSize = 50, align = "center"
-            })
-            labelNumCondo:setFillColor( 1 )
-            notif[idx]:insert(labelNumCondo)
+            if items[z].action == "0" then
+                local labelNumCondo = display.newText( {
+                    text = items[z].nombre,   
+                    x = 0, y = -10,
+                    font = fontDefaultBold, fontSize = 50, align = "center"
+                })
+                labelNumCondo:setFillColor( 1 )
+                notif[idx]:insert(labelNumCondo)
+                local labelNumCondo = display.newText( {
+                    text = "Pendiente",   
+                    x = 0, y = 22,
+                    font = fontDefault, fontSize = 18, align = "center"
+                })
+                labelNumCondo:setFillColor( 1 )
+                notif[idx]:insert(labelNumCondo)
+            else
+                local labelNumCondo = display.newText( {
+                    text = items[z].nombre,   
+                    x = 0, y = 0,
+                    font = fontDefaultBold, fontSize = 50, align = "center"
+                })
+                labelNumCondo:setFillColor( 1 )
+                notif[idx]:insert(labelNumCondo)
+            end
         end
         
     end

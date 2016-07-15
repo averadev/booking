@@ -194,12 +194,12 @@ function scene:create( event )
 	
 	local dateNoti = getDateNoti(infoRecordVisit.fechaHora)
 	labelMsgDate.text = dateNoti
-   
+    
+   reloadPanel()
 end
 
 -- "scene:show()"
 function scene:show( event )
-	
 end
 
 -- "scene:hide()"

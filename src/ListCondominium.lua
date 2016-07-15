@@ -117,13 +117,12 @@ function getNumCondo()
 		labelNumCondo:setFillColor( 0, 110/255, 0 )
 		containerListCondo[i]:insert(labelNumCondo)
 	
+        svListCondo:setScrollHeight(contY + 100)
 		if i%numMax == 0 then
 			contX = 0
 			contY = contY + 170
 		end		
 		contX = contX + 1
-		
-		svListCondo:setScrollHeight(contY + 150)
 		
 	end
 	
@@ -176,7 +175,7 @@ function scene:create( event )
 	labelWelcomeListCondo:setFillColor( .2 )
 	listCondominiumScreen:insert(labelWelcomeListCondo)
 	
-	local bgSvListCondo = display.newRect( midScreen, h + intH/2 + 40, intW - 236, 586 )
+	local bgSvListCondo = display.newRect( midScreen, h + intH/2 - 20, intW - 236, 446 )
 	bgSvListCondo:setFillColor( 54/255, 80/255, 131/255 )
 	listCondominiumScreen:insert(bgSvListCondo)
 	
@@ -184,9 +183,9 @@ function scene:create( event )
 	svListCondo = widget.newScrollView
 	{
 		x = midScreen,
-		y = h + intH/2 + 40,
+		y = h + intH/2 - 20,
 		width = intW - 240,
-		height = 580,
+		height = 440,
 		horizontalScrollDisabled = true,
         verticalScrollDisabled = false,
 		isBounceEnabled = false,

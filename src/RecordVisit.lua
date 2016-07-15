@@ -211,7 +211,8 @@ function takePhotography( event )
 		photo.y = intH/2.04]]
 		
 		--media.save( namePhoto, namePhoto, system.TemporaryDirectory )
-		
+		local leftMid = (intW - 200) / 4
+        local rightMid = (leftMid * 3) + 30
 		if typePhoto == 1 then
 			
 			if photoFrontal then
@@ -220,10 +221,10 @@ function takePhotography( event )
 			end
 			
 			photoFrontal = display.newImage( "tempFotos/" .. namePhoto, system.TemporaryDirectory ) 
-			photoFrontal.height = 190
-			photoFrontal.width = 190
-			photoFrontal.x = intW/1.61
-			photoFrontal.y = 385
+			photoFrontal.height = 127
+			photoFrontal.width = 170
+			photoFrontal.x = rightMid - 95
+			photoFrontal.y = 370
 			--photoFrontal.width = (255 * photoFrontal.contentWidth) / photoFrontal.contentHeight
 			--photoFrontal.height = 255
 			recordVisitField:insert(photoFrontal)
@@ -235,10 +236,10 @@ function takePhotography( event )
 				photoBack = nil
 			end
 			photoBack = display.newImage( "tempFotos/" .. namePhoto, system.TemporaryDirectory )
-			photoBack.height = 190
-			photoBack.width = 190
-			photoBack.x = intW/1.21
-			photoBack.y = 385
+			photoBack.height = 127
+			photoBack.width = 170
+			photoBack.x = rightMid + 95
+			photoBack.y = 370
 			recordVisitField:insert(photoBack)
 		end
 		
@@ -410,7 +411,7 @@ function scene:create( event )
 	
 	local imgTextFieldName = display.newImage( "img/btn/icono-user.png" )
 	imgTextFieldName.y = lastY
-	imgTextFieldName.x =  intW/4 - 135
+	imgTextFieldName.x =  leftMid - 135
 	recordVisitField:insert(imgTextFieldName)
 	
 	txtRecordVisitName = native.newTextField( leftMid + 65, lastY, 340, 60 )
@@ -538,7 +539,7 @@ function scene:create( event )
 
         local bgRecordCamaraBack = display.newRect( rightMid + 95, lastY + 130, 170, 40 )
         bgRecordCamaraBack:setFillColor( 1 )
-        bgRecordCamaraBack.type = 1
+        bgRecordCamaraBack.type = 2
         recordVisitField:insert(bgRecordCamaraBack)
 
         local labelRecordCamaraVuelta= display.newText( {   
